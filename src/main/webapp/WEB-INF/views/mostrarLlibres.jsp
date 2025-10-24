@@ -1,5 +1,5 @@
 <%-- 
-    Document   : mostrarPelicules.jsp
+    Document   : mostrarLlibres.jsp
     Created on : 28 sept 2025, 7:01:42
     Author     : jmiro
 --%>

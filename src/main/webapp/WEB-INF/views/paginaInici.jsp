@@ -13,9 +13,13 @@
     </head>
     <body>
         <h1>Hola equip de TotEsBook. Aquesta és la pàgina d'inici</h1>
-         <h1> ${benvinguda} </h1>
+        <h1> ${benvinguda} </h1>
         <form action="${pageContext.request.contextPath}/mostrarLlibres" method="get">
             <button type="submit">Veure el llistat de llibres</button>
+        </form>
+            
+        <form action="${pageContext.request.contextPath}/mostrarUsuaris" method="get">
+            <button type="submit">Veure el llistat de usuaris</button>
         </form>
     </body>
 </html>

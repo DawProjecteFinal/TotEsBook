@@ -1,23 +1,4 @@
 services:
-  app:
-    build: .
-    container_name: totesbook_app
-    ports:
-      - "8080:8080"
-      - "4848:4848"
-    depends_on:
-      - db
-    environment:
-      - JAVA_OPTS=-Xmx512m
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_NAME=totesbook
-      - DB_USER=totesuser
-      - DB_PASS=totespass
-    #volumes:
-      # WAR en autodeploy
-    #  - ./target/TotEsBook-1.0-SNAPSHOT.war:/opt/glassfish7/glassfish/domains/domain1/autodeploy/TotEsBook.war
-
   db:
     image: mysql:8.0
     container_name: totesbook_db
@@ -32,6 +13,31 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  app:
+    build: .
+    container_name: totesbook_app
+    ports:
+      - "8080:8080"
+      - "4848:4848"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      JAVA_OPTS: "-Xmx512m"
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: totesbook
+      DB_USER: totesuser
+      DB_PASS: totespass
+    #volumes:
+    #  - ./target/TotEsBook-1.0-SNAPSHOT.war:/opt/glassfish7/glassfish/domains/domain1/autodeploy/TotEsBook.war
 
   adminer:
     image: adminer

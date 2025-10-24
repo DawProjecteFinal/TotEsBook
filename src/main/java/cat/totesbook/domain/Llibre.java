@@ -10,23 +10,29 @@ import jakarta.persistence.Id;
 public class Llibre {
 
     @Id
-    String isbn;    //Codi dels llibres
-    String titol;
-    String autor;
-    String editorial;
-    String categoria;
+    private String isbn;    //Codi dels llibres
+    
+    @Column(nullable = false)
+    private String titol;
+    
+    @Column(nullable = false)
+    private String autor;
+    private String editorial;
+    private String categoria;
 
     @Column(columnDefinition = "TEXT")
-    String sinopsis;
+    private String sinopsis;
 
-    String imatgeUrl;
+    private String imatgeUrl;
+    private int exemplars;
+    private int disponibles;
 
     // Constructor buit requerit per JPA
     public Llibre() {
 
     }
 
-    // Constructor
+    // Constructor que crea llibre venint de la API
     public Llibre(String isbn, String titol, String autor, String editorial, String categoria, String sinopsis, String imatgeUrl) {
         this.isbn = isbn;
         this.titol = titol;
@@ -35,6 +41,7 @@ public class Llibre {
         this.categoria = categoria;
         this.sinopsis = sinopsis;
         this.imatgeUrl = imatgeUrl;
+
     }
 
     // Getters i Setters
@@ -92,6 +99,22 @@ public class Llibre {
 
     public void setImatgeUrl(String imatgeUrl) {
         this.imatgeUrl = imatgeUrl;
+    }
+
+    public int getExemplars() {
+        return exemplars;
+    }
+
+    public void setExemplars(int exemplars) {
+        this.exemplars = exemplars;
+    }
+
+    public int getDisponibles() {
+        return disponibles;
+    }
+
+    public void setDisponibles(int disponibles) {
+        this.disponibles = disponibles;
     }
 
     @Override

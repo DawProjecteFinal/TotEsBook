@@ -21,10 +21,9 @@ public class LlibreController {
 
     // mapping relatiu a l'arrel de l'aplicació: /TotEsBook/mostrarLlibres
     @RequestMapping("/mostrarLlibres")
-    public ModelAndView pagina2() {
+    public ModelAndView mostrarLlibres() {
         ModelAndView modelview = new ModelAndView("mostrarLlibres");
-        
-        //System.out.println("Hola Josep");
+
 
         modelview.addObject("llibres", llibreService.getAllLlibres());
         return modelview;
