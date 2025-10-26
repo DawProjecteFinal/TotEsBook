@@ -2,6 +2,8 @@ package cat.totesbook.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 
@@ -11,10 +13,10 @@ public class Llibre {
 
     @Id
     private String isbn;    //Codi dels llibres
-    
+
     @Column(nullable = false)
     private String titol;
-    
+
     @Column(nullable = false)
     private String autor;
     private String editorial;
@@ -27,13 +29,16 @@ public class Llibre {
     private int exemplars;
     private int disponibles;
 
+    @Column(nullable = false)
+    private String idioma;   // La Api respòn:(es, ca, en, fr, …)
+
     // Constructor buit requerit per JPA
     public Llibre() {
 
     }
 
     // Constructor que crea llibre venint de la API
-    public Llibre(String isbn, String titol, String autor, String editorial, String categoria, String sinopsis, String imatgeUrl) {
+    public Llibre(String isbn, String titol, String autor, String editorial, String categoria, String sinopsis, String imatgeUrl, String idioma) {
         this.isbn = isbn;
         this.titol = titol;
         this.autor = autor;
@@ -41,7 +46,7 @@ public class Llibre {
         this.categoria = categoria;
         this.sinopsis = sinopsis;
         this.imatgeUrl = imatgeUrl;
-
+        this.idioma = idioma;
     }
 
     // Getters i Setters
@@ -115,6 +120,14 @@ public class Llibre {
 
     public void setDisponibles(int disponibles) {
         this.disponibles = disponibles;
+    }
+
+    public String getIdioma() {
+        return idioma;
+    }
+
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
     @Override

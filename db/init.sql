@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS Llibres (
     sinopsis TEXT,
     imatgeUrl VARCHAR(255),
     exemplars INT NOT NULL DEFAULT 0,
-    disponibles INT NOT NULL DEFAULT 0
+    disponibles INT NOT NULL DEFAULT 0,
+    idioma VARCHAR(10) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Prestecs (

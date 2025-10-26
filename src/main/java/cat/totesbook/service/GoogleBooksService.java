@@ -22,6 +22,7 @@ public class GoogleBooksService {
     }
 
     // Mètode que retorna un Llibre si el troba a Google Books
+    // Només consulta llibres a la Api
     public Optional<Llibre> getLlibreByIsbn(String isbn) {
         try {
             // Treure guions dels ISBN
@@ -53,9 +54,9 @@ public class GoogleBooksService {
                             .map(JsonNode::asText)
                             .findFirst().orElse("Sense categoria");
                 }
-
+                String idioma = volumeInfo.path("language").asText("desconegut");
                 // Creem l’objecte Llibre
-                return Optional.of(new Llibre(cleanIsbn, titol, autors, editorial, categoria, sinopsis, imatgeUrl));
+                return Optional.of(new Llibre(cleanIsbn, titol, autors, editorial, categoria, sinopsis, imatgeUrl, idioma));
             }
 
         } catch (Exception e) {
@@ -65,10 +66,10 @@ public class GoogleBooksService {
         return Optional.empty();
     }
 
-    // Mètode que consulta l'API i GUARDA el llibre a BD
+    // Mètode que crida al primer mètode de la classe per consultar i GUARDA el llibre a BD
     public void importarILlibrePerIsbn(String isbn) {
         try {
-            Optional<Llibre> optLlibre = getLlibreByIsbn(isbn);
+            Optional<Llibre> optLlibre = getLlibreByIsbn(isbn); // cridem al mètode de consulta anterior
             if (optLlibre.isPresent()) {
                 Llibre llibre = optLlibre.get();
 

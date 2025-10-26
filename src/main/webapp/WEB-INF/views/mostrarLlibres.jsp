@@ -13,8 +13,10 @@
     </head>
     <body>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
         <h1>Aquesta és la pàgina dels llibres que hi ha a la Base de dades!</h1>
-        <!--<h2>${llibres}</h2>-->
+        <p><strong>Total de llibres:</strong> ${fn:length(llibres)}</p>
+        
         <c:forEach var="llibre" items="${llibres}">
             <div>
                 <p><strong>ISBN:</strong> ${llibre.isbn}</p>
@@ -29,4 +31,3 @@
         </c:forEach>
     </body>
 </html>
-               
