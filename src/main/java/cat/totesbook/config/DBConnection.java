@@ -16,8 +16,8 @@ public class DBConnection {
 
     // Aquestes dades han de coincidir amb les del teu docker-compose.yml
     private static final String URL = "jdbc:mysql://totesbook-db:3306/totesbookdb";
-    private static final String USER = "root"; // L'usuari 'MYSQL_USER' del docker-compose
-    private static final String PASSWORD = "rootpassword"; // La 'MYSQL_PASSWORD' del docker-compose
+    private static final String USER = "totesuser"; // L'usuari 'MYSQL_USER' del docker-compose
+    private static final String PASSWORD = "totespass"; // La 'MYSQL_PASSWORD' del docker-compose
 
     // Bloc estàtic per carregar el driver de MySQL
     static {

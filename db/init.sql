@@ -94,17 +94,19 @@ CREATE TABLE IF NOT EXISTS PropostesAdquisicio (
 -- DADES INICIALS PER A LA BASE DE DADES 
 
 -- USUARIS
+-- Generat amb BCrypt.hashpw("1234", BCrypt.gensalt(12))
+-- El hash és: $2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO
 INSERT INTO Usuaris (nom, cognoms, telefon, email, llibresFavorits, contrasenya) VALUES
-('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep', '1234'),
-('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa', '1234'),
-('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici', '1234'),
-('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL, '1234'),
-('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL, '1234'),
-('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL, '1234'),
-('Carla', 'Serra Bosch', '677889900', 'carla@totesbook.cat', NULL, '1234'),
-('Nil', 'Costa Mora', '688990011', 'nil@totesbook.cat', NULL, '1234'),
-('Eva', 'Vidal Prat', '699100122', 'eva@totesbook.cat', NULL, '1234'),
-('Roger', 'Balcells Ruiz', '600111233', 'roger@totesbook.cat', NULL, '1234');
+('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Carla', 'Serra Bosch', '677889900', 'carla@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Nil', 'Costa Mora', '688990011', 'nil@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Eva', 'Vidal Prat', '699100122', 'eva@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Roger', 'Balcells Ruiz', '600111233', 'roger@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
 
 -- BIBLIOTEQUES
 INSERT INTO Biblioteques (nom, adreca, telefon, email) VALUES
@@ -114,10 +116,10 @@ INSERT INTO Biblioteques (nom, adreca, telefon, email) VALUES
 
 -- AGENTS
 INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
-('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari', '1234'),
-('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari', '1234'),
-('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '1234'),
-('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador', '1234');
+('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
 
 -- PRESTECS
 INSERT INTO Prestecs (idUsuari, isbn, idBiblioteca, dataPrestec, dataDevolucio, idAgentPrestec, estat)

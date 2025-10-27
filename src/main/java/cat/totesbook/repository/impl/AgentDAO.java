@@ -31,9 +31,9 @@ public class AgentDAO implements AgentRepository {
             
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String passwordHashejatDeLaDB = rs.getString("contrasenya");
+                    String contrasenyaHashejatDeLaDB = rs.getString("contrasenya");
 
-                    if (BCrypt.checkpw(passwordPla, passwordHashejatDeLaDB)) {
+                    if (BCrypt.checkpw(passwordPla, contrasenyaHashejatDeLaDB)) {
                         Agent agent = new Agent();
                         agent.setIdAgent(rs.getInt("idAgent"));
                         agent.setNom(rs.getString("nom"));
