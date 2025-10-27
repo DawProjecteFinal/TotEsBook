@@ -37,6 +37,8 @@ public class Agent {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipusAgent tipus;
+    
+    private String contrasenya;
 
     public Agent() {
     }
@@ -88,5 +90,13 @@ public class Agent {
 
     public void setTipus(TipusAgent tipus) {
         this.tipus = tipus;
+    }
+    
+    public String getContrasenya() {
+        return contrasenya;
+    }
+    
+    public void setContrasenya(String contrasenya) {
+        this.contrasenya = contrasenya;
     }
 }

@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS Biblioteques (
     adreca VARCHAR(255),
     telefon VARCHAR(20),
     email VARCHAR(150),
-    contrasenya VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
@@ -23,7 +22,8 @@ CREATE TABLE IF NOT EXISTS Agents (
     cognoms VARCHAR(150) NOT NULL,
     telefon VARCHAR(20),
     email VARCHAR(150),
-    tipus ENUM('bibliotecari', 'administrador') NOT NULL
+    tipus ENUM('bibliotecari', 'administrador') NOT NULL,
+    contrasenya VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Llibres (
