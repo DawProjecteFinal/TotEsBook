@@ -24,8 +24,6 @@ public class UsuariController {
     public ModelAndView mostrarUsuaris() {
         ModelAndView modelview = new ModelAndView("mostrarUsuaris");
         
-
-
         modelview.addObject("usuaris", usuariService.getAllUsuaris());
         return modelview;
     }

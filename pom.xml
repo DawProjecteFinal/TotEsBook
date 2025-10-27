@@ -99,7 +99,7 @@
             <version>5.2.1</version>
         </dependency>
         
-        <!-- Edi: Aquesta dependencia afegeix la llibreria JBCRYPT per encriptar la contrasenya -->
+        <!-- Aquesta dependencia afegeix la llibreria JBCRYPT per encriptar la contrasenya -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>

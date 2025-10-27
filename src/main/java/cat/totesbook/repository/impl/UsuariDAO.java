@@ -18,11 +18,11 @@ import java.util.List;
  */
 public class UsuariDAO implements UsuariRepository {
 
-    @Override // <-- Ara això és correcte
-    public Usuari getUsuariByEmailAndPassword(String email, String passwordPla) {
+    @Override 
+    public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
         String sql = "SELECT * FROM Usuaris WHERE email = ?";
         
-        try (Connection conn = DBConnection.getConnection(); // <-- Corregit
+        try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, email);
@@ -31,7 +31,7 @@ public class UsuariDAO implements UsuariRepository {
                 if (rs.next()) {
                     String passwordHashejatDeLaDB = rs.getString("contrasenya");
                     
-                    if (BCrypt.checkpw(passwordPla, passwordHashejatDeLaDB)) {
+                    if (BCrypt.checkpw(contrasenyaPlana, passwordHashejatDeLaDB)) {
                         Usuari usuari = new Usuari();
                         usuari.setId(rs.getInt("id"));
                         usuari.setNom(rs.getString("nom"));
@@ -52,8 +52,8 @@ public class UsuariDAO implements UsuariRepository {
 
     @Override
     public void saveUsuari(Usuari usuari) {
-        String sql = "INSERT INTO Usuaris (nom, cognoms, email, password, telefon) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection(); // <-- Corregit
+        String sql = "INSERT INTO Usuaris (nom, cognoms, email, contrasenya, telefon) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, usuari.getNom());

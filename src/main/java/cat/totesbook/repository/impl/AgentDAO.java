@@ -22,10 +22,11 @@ public class AgentDAO implements AgentRepository {
     /**
      *
      * @param email
-     * @param passwordPla
+     * @param contrasenyaPlana
      * @return
      */
-    public Agent getAgentByEmailAndContrasenya(String email, String passwordPla) {
+    @Override
+    public Agent getAgentByEmailAndContrasenya(String email, String contrasenyaPlana) {
         
         String sql = "SELECT * FROM Agents WHERE email = ?";
         
@@ -38,7 +39,7 @@ public class AgentDAO implements AgentRepository {
                 if (rs.next()) {
                     String contrasenyaHashejatDeLaDB = rs.getString("contrasenya");
 
-                    if (BCrypt.checkpw(passwordPla, contrasenyaHashejatDeLaDB)) {
+                    if (BCrypt.checkpw(contrasenyaPlana, contrasenyaHashejatDeLaDB)) {
                         Agent agent = new Agent();
                         agent.setIdAgent(rs.getInt("idAgent"));
                         agent.setNom(rs.getString("nom"));

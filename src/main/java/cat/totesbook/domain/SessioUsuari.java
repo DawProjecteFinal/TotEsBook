@@ -1,9 +1,8 @@
-package cat.totesbook.domain;
-
 /**
  *
  * @author edinsonioc
  */
+package cat.totesbook.domain;
 
 // Aquest objecte és el que guardarem a la sessió de l'usuari.
 // Unifica la informació de 'Usuaris' i 'Agents'.

@@ -14,7 +14,7 @@ public interface UsuariRepository {
      * @param passwordPla La contrasenya en TEXT PLA del formulari.
      * @return L'objecte Usuari si és correcte, o null si no ho és.
      */
-    Usuari getUsuariByEmailAndPassword(String email, String passwordPla);
+    Usuari getUsuariByEmailAndContrasenya(String email, String passwordPla);
 
     /**
      * Desa un nou usuari a la base de dades.
