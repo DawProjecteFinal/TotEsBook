@@ -73,7 +73,7 @@
                             </button>
                         </form>
 
-                        <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió</a>
+                        <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió <i class="bi bi-person-circle"></i></a>
                     </div>
                 </div>
             </div>

@@ -52,11 +52,11 @@
                             <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
+                                <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
                                 <li>
                                     <hr class="dropdown-divider" />
                                 </li>
-                                <li><a class="dropdown-item active" href="#!">Autoajuda</a></li>
+                                <li><a class="dropdown-item" href="#!">Autoajuda</a></li>
                                 <li><a class="dropdown-item" href="#!">Ficció</a></li>
                                 <li><a class="dropdown-item" href="#!">Juvenil</a></li>
                                 <li><a class="dropdown-item" href="#!">Novel·la</a></li>
@@ -74,7 +74,7 @@
                             </button>
                         </form>
 
-                        <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió</a>
+                        <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió <i class="bi bi-person-circle"></i></a>
                     </div>
                 </div>
             </div>

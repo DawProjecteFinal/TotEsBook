@@ -3,6 +3,18 @@
     Author     : roserruizrojas
 */
 
+.dropdown-item.active, 
+.dropdown-item:active {
+  background-color: #92dbe6; 
+  color: white;              
+}
+
+
+.dropdown-item:hover {
+  background-color: #eefcfe; 
+  color: #92dbe6;            
+}
+
 .bg-totlight {
     --bs-bg-opacity: 1;
     background-color: #eefcfe;
@@ -57,5 +69,7 @@
     object-fit: cover;
     object-position: center;
 }
+
+
 
 

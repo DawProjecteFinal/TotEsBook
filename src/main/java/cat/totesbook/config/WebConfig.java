@@ -28,17 +28,18 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
-     * Mètode que li diu al DispatcherServlet que no intercepti les rutes dels 
+     * Mètode que li diu al DispatcherServlet que no intercepti les rutes dels
      * recursos estàtics (com /css/, /js/, /images/).
-     * @param registry 
+     *
+     * @param registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("/css/");
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("/js/");
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("/images/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+        registry.addResourceHandler("/images/**").addResourceLocations(
+                "classpath:/static/images/",
+                "/images/",
+                "file:src/main/webapp/images/");
     }
 }
