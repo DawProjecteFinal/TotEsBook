@@ -47,11 +47,15 @@
     color: #324b4f;
 }
 
+.text-tot-isbn{
+    color: #7bbcc7;
+}
+
 .img-fixed {
     width: 300px;
     height: 450px;
-    object-fit: cover; 
-    object-position: center; 
+    object-fit: cover;
+    object-position: center;
 }
 
 

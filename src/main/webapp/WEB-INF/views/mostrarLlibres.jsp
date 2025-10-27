@@ -58,6 +58,10 @@
             .text-tot-light {
                 color: #324b4f;
             }
+            
+            .text-tot-isbn{
+                color: #7bbcc7;
+            }
 
             .text-tot-principal{
                 font-weight: bold;
@@ -144,9 +148,9 @@
                         <div class="card h-100 shadow-sm">
                             <img src="${llibre.imatgeUrl}" class="card-img-top img-fixed mx-auto d-block" alt="Portada de ${llibre.titol}">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-1"><c:out value="${llibre.titol}"/></h5>
-                                <p class="text-muted mb-2"><c:out value="${llibre.autor}"/></p>                            
-                                <ul class="list-unstyled small mb-3"> 
+                                <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
+                                <p class="text-muted mb-2 text-tot-light"><c:out value="${llibre.autor}"/></p>                            
+                                <ul class="list-unstyled small mb-3 text-tot-isbn"> 
                                     <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
                                 </ul>
                                 <div class="mt-auto">
