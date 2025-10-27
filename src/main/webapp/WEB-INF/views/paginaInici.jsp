@@ -11,25 +11,75 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>TotEsBook</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+        <!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css"> -->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+        <style>
+            .bg-totlight {
+                --bs-bg-opacity: 1;
+                background-color: #eefcfe;
+            }
+
+
+            .bg-tot {
+                background-color: #92dbe6;
+            }
+
+
+            .btn-tot {
+                background-color: #eefcfe;
+                border: 1px solid #35818b;
+                color: #35818b;
+                border-radius: 6px;
+                transition: background-color 0.2s ease;
+            }
+
+
+            .btn-tot:hover,
+            .btn-tot:focus,
+            .btn-tot:active {
+                background-color: #92dbe6;
+                border: none;
+                color: white;
+                box-shadow: none;
+            }
+
+
+            .text-tot-bold {
+                font-weight: bold;
+                color: #324b4f;
+            }
+
+
+            .text-tot-light {
+                color: #324b4f;
+            }
+
+            .img-fixed {
+                width: 189px;
+                height: 200px;
+                object-fit: cover;
+                object-position: center;
+            }
+        </style>
     </head>
     <body>
 
-
+        <!-- Encapçalat -->
         <header class="bg-tot py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">TotEsBook</h1>
                     <p class="lead fw-normal text-white-50 mb-0">La biblioteca de tothom</p>
-                    <img src="${pageContext.request.contextPath}/assets/logo-gran.jpeg" alt="Logo">
+                    <img src="assets/logo-gran.jpeg" alt="Logo">
                 </div>
             </div>
         </header>
-
+                
+        
+        <!-- Menu -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight">
             <div class="container px-4 px-lg-5">
 
@@ -43,13 +93,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Inici</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Biblioteques</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">Totes les categories</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
                                 <li>
                                     <hr class="dropdown-divider" />
                                 </li>
@@ -76,6 +126,7 @@
                 </div>
             </div>
         </nav>
+        
 
         <section class="py-5">
 
@@ -115,7 +166,7 @@
         </section>
 
 
-
+        <!-- peu de pàgina -->
         <footer class="bg-tot text-center text-lg-start border-top mt-5 py-3">
             <div class="container">
                 <div class="row align-items-center">
@@ -146,6 +197,8 @@
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
         </footer>
+        
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     </body>
