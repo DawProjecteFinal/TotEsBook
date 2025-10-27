@@ -1,6 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ *
+ * @author edinsonioc
  */
 package cat.totesbook.config;
 
@@ -8,18 +8,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- *
- * @author edinsonioc
- */
 public class DBConnection {
 
-    // Aquestes dades han de coincidir amb les del teu docker-compose.yml
-    private static final String URL = "jdbc:mysql://totesbook-db:3306/totesbookdb";
-    private static final String USER = "totesuser"; // L'usuari 'MYSQL_USER' del docker-compose
-    private static final String PASSWORD = "totespass"; // La 'MYSQL_PASSWORD' del docker-compose
+    private static final String DB_HOST = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+    private static final String DB_PORT = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+    private static final String DB_NAME = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "totesbook";
+    private static final String USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "totesuser";
+    private static final String PASSWORD = System.getenv("DB_PASS") != null ? System.getenv("DB_PASS") : "totespass";
 
-    // Bloc estàtic per carregar el driver de MySQL
+    private static final String URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -28,12 +26,8 @@ public class DBConnection {
         }
     }
 
-    /**
-     * Obté una connexió a la base de dades.
-     * @return una connexió SQL
-     * @throws SQLException si hi ha un error de connexió
-     */
     public static Connection getConnection() throws SQLException {
+        System.out.println("Connectant a: " + URL + " amb usuari: " + USER); 
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

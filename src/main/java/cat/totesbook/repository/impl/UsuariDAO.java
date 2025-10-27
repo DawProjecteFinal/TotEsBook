@@ -2,6 +2,7 @@ package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.UsuariRepository; // <-- Implementem la interfície
+import cat.totesbook.repository.*;
 import cat.totesbook.config.DBConnection; 
 import org.mindrot.jbcrypt.BCrypt; // <-- Import per a BCrypt
 
@@ -11,11 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
 /**
  * Implementació del DAO per a la taula Usuaris.
  * 
  */
+
+@Repository
 public class UsuariDAO implements UsuariRepository {
 
     @Override 
