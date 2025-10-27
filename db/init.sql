@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS Usuaris (
     cognoms VARCHAR(150) NOT NULL,
     telefon VARCHAR(20),
     email VARCHAR(150) UNIQUE,
-    llibresFavorits TEXT
+    llibresFavorits TEXT,
+    contrasenya VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Biblioteques (
@@ -12,7 +13,8 @@ CREATE TABLE IF NOT EXISTS Biblioteques (
     nom VARCHAR(150) NOT NULL,
     adreca VARCHAR(255),
     telefon VARCHAR(20),
-    email VARCHAR(150)
+    email VARCHAR(150),
+    contrasenya VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
@@ -92,17 +94,17 @@ CREATE TABLE IF NOT EXISTS PropostesAdquisicio (
 -- DADES INICIALS PER A LA BASE DE DADES 
 
 -- USUARIS
-INSERT INTO Usuaris (nom, cognoms, telefon, email, llibresFavorits) VALUES
-('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep'),
-('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa'),
-('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici'),
-('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL),
-('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL),
-('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL),
-('Carla', 'Serra Bosch', '677889900', 'carla@totesbook.cat', NULL),
-('Nil', 'Costa Mora', '688990011', 'nil@totesbook.cat', NULL),
-('Eva', 'Vidal Prat', '699100122', 'eva@totesbook.cat', NULL),
-('Roger', 'Balcells Ruiz', '600111233', 'roger@totesbook.cat', NULL);
+INSERT INTO Usuaris (nom, cognoms, telefon, email, llibresFavorits, contrasenya) VALUES
+('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep', '1234'),
+('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa', '1234'),
+('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici', '1234'),
+('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL, '1234'),
+('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL, '1234'),
+('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL, '1234'),
+('Carla', 'Serra Bosch', '677889900', 'carla@totesbook.cat', NULL, '1234'),
+('Nil', 'Costa Mora', '688990011', 'nil@totesbook.cat', NULL, '1234'),
+('Eva', 'Vidal Prat', '699100122', 'eva@totesbook.cat', NULL, '1234'),
+('Roger', 'Balcells Ruiz', '600111233', 'roger@totesbook.cat', NULL, '1234');
 
 -- BIBLIOTEQUES
 INSERT INTO Biblioteques (nom, adreca, telefon, email) VALUES
@@ -111,11 +113,11 @@ INSERT INTO Biblioteques (nom, adreca, telefon, email) VALUES
 ('Biblioteca Sud', 'Passeig del Mar 12', '934334455', 'sud@totesbook.cat');
 
 -- AGENTS
-INSERT INTO Agents (nom, cognoms, telefon, email, tipus) VALUES
-('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari'),
-('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari'),
-('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador'),
-('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador');
+INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
+('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari', '1234'),
+('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari', '1234'),
+('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '1234'),
+('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador', '1234');
 
 -- PRESTECS
 INSERT INTO Prestecs (idUsuari, isbn, idBiblioteca, dataPrestec, dataDevolucio, idAgentPrestec, estat)
