@@ -26,6 +26,8 @@ public class Usuari {
     private String email;
 
     private String llibresFavorits;
+    
+    private String contrasenya;
 
     public Usuari() {
     }
@@ -77,5 +79,13 @@ public class Usuari {
 
     public void setLlibresFavorits(String llibresFavorits) {
         this.llibresFavorits = llibresFavorits;
+    }
+    
+    public String getContrasenya() {
+        return contrasenya;
+    }
+    
+    public void setContrasenya(String contrasenya) {
+        this.contrasenya = contrasenya;
     }
 }
