@@ -7,7 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
-    Aquest fitxer gestion: la comprovació de canvi avis per a que amb la sessió oberta
+    Aquest fitxer gestiona: la comprovació de canvi avis per a que amb la sessió oberta
     la homepage no mostri l'inici de sessió; funcionalitats de control d'accés; el logout segur.
     Comprova la sessió ('usuariLoguejat') i mostra enllaços segons el rol.
 --%>
@@ -40,12 +40,12 @@
                         <%-- El JSP EL pot comparar enums amb strings directament --%>
                         <c:if test="${sessionScope.usuariLoguejat.rol == 'USUARI'}">
                             <li class="nav-item">
-                                <a class="nav-link fw-bold" href="dashboard_usuario.jsp">El Meu Panell</a>
+                                <a class="nav-link fw-bold" href="dashboard_usuari.jsp">El Meu Panell</a>
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.usuariLoguejat.rol == 'BIBLIOTECARI'}">
                             <li class="nav-item">
-                                <a class="nav-link fw-bold" href="dashboard_bibliotecario.jsp">Panell Bibliotecari</a>
+                                <a class="nav-link fw-bold" href="dashboard_bibliotecari.jsp">Panell Bibliotecari</a>
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.usuariLoguejat.rol == 'ADMIN'}">
