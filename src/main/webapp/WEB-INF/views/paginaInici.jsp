@@ -81,6 +81,16 @@
 
             <div class="container px-4 px-lg-5 mt-5">
                 <h1 class="justify-content-center">En construcció!</h1>
+                
+                <form action="${pageContext.request.contextPath}/mostrarLlibres" method="get">
+                    <button type="submit">Veure el llistat de llibres</button>
+                </form>
+
+                <form action="${pageContext.request.contextPath}/mostrarUsuaris" method="get">
+                    <button type="submit">Veure el llistat de usuaris</button>
+                </form>
+                    <br>
+                    <br>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <% for (int i = 0; i < 16; i++) {%>
                     <div class="col mb-5">
@@ -104,13 +114,7 @@
             </div>
         </section>
 
-        <form action="${pageContext.request.contextPath}/mostrarLlibres" method="get">
-            <button type="submit">Veure el llistat de llibres</button>
-        </form>
 
-        <form action="${pageContext.request.contextPath}/mostrarUsuaris" method="get">
-            <button type="submit">Veure el llistat de usuaris</button>
-        </form>
 
         <footer class="bg-tot text-center text-lg-start border-top mt-5 py-3">
             <div class="container">
