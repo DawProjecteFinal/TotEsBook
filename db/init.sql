@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Biblioteques (
     nom VARCHAR(150) NOT NULL,
     adreca VARCHAR(255),
     telefon VARCHAR(20),
-    email VARCHAR(150),
+    email VARCHAR(150)
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
