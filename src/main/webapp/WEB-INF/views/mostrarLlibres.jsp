@@ -12,70 +12,10 @@
         <meta charset="UTF-8">
         <title>Llibres</title>
 
-        <title>Llibres</title>
-        <!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css"> -->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-        <style>
-            .bg-totlight {
-                --bs-bg-opacity: 1;
-                background-color: #eefcfe;
-            }
-
-
-            .bg-tot {
-                background-color: #92dbe6;
-            }
-
-
-            .btn-tot {
-                background-color: #eefcfe;
-                border: 1px solid #35818b;
-                color: #35818b;
-                border-radius: 6px;
-                transition: background-color 0.2s ease;
-            }
-
-
-            .btn-tot:hover,
-            .btn-tot:focus,
-            .btn-tot:active {
-                background-color: #92dbe6;
-                border: none;
-                color: white;
-                box-shadow: none;
-            }
-
-
-            .text-tot-bold {
-                font-weight: bold;
-                color: #324b4f;
-            }
-
-
-            .text-tot-light {
-                color: #324b4f;
-            }
-            
-            .text-tot-isbn{
-                color: #7bbcc7;
-            }
-
-            .text-tot-principal{
-                font-weight: bold;
-                color: #92dbe6;
-            }
-
-            .img-fixed {
-                width: 300px;
-                height: 450px;
-                object-fit: cover;
-                object-position: center;
-            }
-        </style>
-
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 
     </head>
     <body  class="bg-light">
@@ -86,7 +26,7 @@
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">TotEsBook</h1>
                     <p class="lead fw-normal text-white-50 mb-0">La biblioteca de tothom</p>
-                    <img src="${pageContext.request.contextPath}/assets/logo-gran.jpeg" alt="Logo">
+                    <img src="${pageContext.request.contextPath}/images/logo-gran.jpeg" alt="Logo">
                 </div>
             </div>
         </header>

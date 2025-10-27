@@ -11,59 +11,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>TotEsBook</title>
-        <!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css"> -->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 
-        <style>
-            .bg-totlight {
-                --bs-bg-opacity: 1;
-                background-color: #eefcfe;
-            }
-
-
-            .bg-tot {
-                background-color: #92dbe6;
-            }
-
-
-            .btn-tot {
-                background-color: #eefcfe;
-                border: 1px solid #35818b;
-                color: #35818b;
-                border-radius: 6px;
-                transition: background-color 0.2s ease;
-            }
-
-
-            .btn-tot:hover,
-            .btn-tot:focus,
-            .btn-tot:active {
-                background-color: #92dbe6;
-                border: none;
-                color: white;
-                box-shadow: none;
-            }
-
-
-            .text-tot-bold {
-                font-weight: bold;
-                color: #324b4f;
-            }
-
-
-            .text-tot-light {
-                color: #324b4f;
-            }
-
-            .img-fixed {
-                width: 189px;
-                height: 200px;
-                object-fit: cover;
-                object-position: center;
-            }
-        </style>
     </head>
     <body>
 
@@ -73,12 +25,12 @@
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">TotEsBook</h1>
                     <p class="lead fw-normal text-white-50 mb-0">La biblioteca de tothom</p>
-                    <img src="assets/logo-gran.jpeg" alt="Logo">
+                    <img src="${pageContext.request.contextPath}/images/logo-gran.jpeg" alt="Logo">
                 </div>
             </div>
         </header>
-                
-        
+
+
         <!-- Menu -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight">
             <div class="container px-4 px-lg-5">
@@ -126,13 +78,13 @@
                 </div>
             </div>
         </nav>
-        
+
 
         <section class="py-5">
 
             <div class="container px-4 px-lg-5 mt-5">
                 <h1 class="justify-content-center">En construcció!</h1>
-                
+
                 <form action="${pageContext.request.contextPath}/mostrarLlibres" method="get">
                     <button type="submit">Veure el llistat de llibres</button>
                 </form>
@@ -140,8 +92,8 @@
                 <form action="${pageContext.request.contextPath}/mostrarUsuaris" method="get">
                     <button type="submit">Veure el llistat de usuaris</button>
                 </form>
-                    <br>
-                    <br>
+                <br>
+                <br>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <% for (int i = 0; i < 16; i++) {%>
                     <div class="col mb-5">
@@ -197,8 +149,8 @@
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
         </footer>
-        
-        
+
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     </body>
