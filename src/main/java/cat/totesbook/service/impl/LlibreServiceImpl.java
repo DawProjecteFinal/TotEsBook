@@ -33,6 +33,7 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> getAllLlibres() {
         return llibreRepository.getAllLlibres();
     }
+<<<<<<< HEAD
     
     /**
      * Mètode que transaccional que guarda un llibre.
@@ -40,8 +41,11 @@ public class LlibreServiceImpl implements LlibreService {
      * @param llibre 
      */
     @Override
+=======
+
+>>>>>>> feature-login
     @Transactional
-    public void guardarLlibre(Llibre llibre) {
+    public void addLlibre(Llibre llibre) {
         llibreRepository.addLlibre(llibre);
     }
     
@@ -54,5 +58,10 @@ public class LlibreServiceImpl implements LlibreService {
     @Override
     public Optional<Llibre> getLlibreByIsbn(String isbn){
         return llibreRepository.getLlibreByIsbn(isbn);
+    }
+
+    @Override
+    public void guardarLlibre(Llibre llibre) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

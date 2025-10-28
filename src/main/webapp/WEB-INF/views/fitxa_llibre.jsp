@@ -1,18 +1,18 @@
 <%-- 
-    Document   : mostrarUsuaris
-    Created on : 24 oct 2025, 11:48:48
-    Author     : equip TotEsBook
+    Document   : fitxa_llibre
+    Created on : 27 oct 2025, 18:44:37
+    Author     : edinsonioc
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%-- Aquest JSP espera rebre 'llistaUsuaris' i 'llistaAgents' des d'un Servlet --%>
+
 <!DOCTYPE html>
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Llistat d'Usuaris - TotEsBook</title>
+    <title>Fitxa: <c:out value="${llibre.titol}" default="Llibre no trobat"/> - TotEsBook</title>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
                     <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/paginaInici.jsp">Inici</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                        <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">Catàleg</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cataleg">Veure Tot</a></li>
@@ -50,15 +50,14 @@
                     </li>
                      <c:if test="${not empty sessionScope.sessioUsuari}">
                          <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                         <%-- Només visible per Admin? --%>
                          <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                            <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestionar Usuaris</a></li>
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
                          </c:if>
                      </c:if>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
                     <form class="d-flex me-3 my-2 my-lg-0" role="search" action="${pageContext.request.contextPath}/cerca" method="GET">
-                        <input class="form-control form-control-sm me-2" type="search" name="q" 
+                        <input class="form-control form-control-sm me-2" type="search" name="q"
                                placeholder="Cerca ràpida..." aria-label="Search">
                         <button class="btn btn-tot btn-sm" type="submit">
                             <i class="bi bi-search"></i>
@@ -73,7 +72,7 @@
                         <c:otherwise>
                             <div class="dropdown">
                                 <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
                                     <c:choose>
@@ -101,79 +100,106 @@
     </nav>
     <!-- ===== FI CAPÇALERA INCRUSTADA ===== -->
 
-    <!-- Secció Principal de Contingut -->
+    <!-- Secció Principal -->
     <section class="py-5 flex-grow-1">
         <div class="container px-4 px-lg-5 mt-5">
-            <h1 class="text-center text-tot-bold mb-4">Llistat d'Usuaris i Agents</h1>
 
-            <h3 class="text-tot-bold mt-5">Agents</h3>
-             <div class="table-responsive">
-                 <table class="table table-striped table-hover small">
-                     <thead class="table-light">
-                         <tr>
-                             <th>ID</th>
-                             <th>Nom Complet</th>
-                             <th>Email</th>
-                             <th>Telèfon</th>
-                             <th>Rol</th>
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <c:forEach var="agent" items="${llistaAgents}">
-                             <tr>
-                                 <td>${agent.idAgent}</td>
-                                 <td><c:out value="${agent.nom} ${agent.cognoms}"/></td>
-                                 <td><c:out value="${agent.email}"/></td>
-                                 <td><c:out value="${agent.telefon}" default="N/D"/></td>
-                                 <td>
-                                     <c:choose>
-                                         <c:when test="${agent.tipus == 'administrador'}"><span class="badge bg-danger">Admin</span></c:when>
-                                         <c:otherwise><span class="badge bg-info text-dark">Bibliotecari</span></c:otherwise>
-                                     </c:choose>
-                                 </td>
-                             </tr>
-                         </c:forEach>
-                         <c:if test="${empty llistaAgents}">
-                              <tr><td colspan="5" class="text-center text-muted">No hi ha agents registrats.</td></tr>
-                         </c:if>
-                     </tbody>
-                 </table>
-             </div>
+             <c:choose>
+                <c:when test="${not empty llibre}">
+                     <div class="mb-4">
+                        <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Tornar al catàleg
+                        </a>
+                     </div>
 
-            <h3 class="text-tot-bold mt-5">Usuaris Lectors</h3>
-             <div class="table-responsive">
-                 <table class="table table-striped table-hover small">
-                     <thead class="table-light">
-                         <tr>
-                             <th>ID</th>
-                             <th>Nom Complet</th>
-                             <th>Email</th>
-                             <th>Telèfon</th>
-                             <th>Llibres Favorits</th>
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <c:forEach var="usuari" items="${llistaUsuaris}">
-                             <tr>
-                                 <td>${usuari.id}</td>
-                                 <td><c:out value="${usuari.nom} ${usuari.cognoms}"/></td>
-                                 <td><c:out value="${usuari.email}"/></td>
-                                 <td><c:out value="${usuari.telefon}" default="N/D"/></td>
-                                 <td><c:out value="${usuari.llibresFavorits}" default="-"/></td>
-                             </tr>
-                         </c:forEach>
-                         <c:if test="${empty llistaUsuaris}">
-                              <tr><td colspan="5" class="text-center text-muted">No hi ha usuaris registrats.</td></tr>
-                         </c:if>
-                     </tbody>
-                 </table>
-             </div>
+                    <div class="row gx-4 gx-lg-5 align-items-start">
+                        <div class="col-md-5 text-center mb-4 mb-md-0">
+                            <c:choose>
+                                <c:when test="${not empty llibre.imatgeUrl}">
+                                    <img class="img-fluid rounded shadow-sm" src="<c:url value='${llibre.imatgeUrl}' />" alt="Portada de <c:out value='${llibre.titol}' />" style="max-width: 100%; height: auto; max-height: 500px; object-fit: contain;">
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="border rounded bg-light d-flex align-items-center justify-content-center" style="min-height: 400px;">
+                                         <span class="text-muted fs-3">Imatge no disponible</span>
+                                     </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="small mb-1 text-muted">ISBN: <c:out value="${llibre.isbn}"/></div>
+                            <h1 class="display-5 fw-bolder text-tot-bold"><c:out value="${llibre.titol}"/></h1>
+                            <div class="fs-5 mb-3">
+                                <span class="text-tot-light">per <c:out value="${llibre.autor}"/></span>
+                            </div>
+
+                            <h5 class="mt-4">Sinopsi</h5>
+                            <c:choose>
+                                <c:when test="${not empty llibre.sinopsis}">
+                                    <p class="lead"><c:out value="${llibre.sinopsis}" escapeXml="false"/></p> <%-- escapeXml="false" si vols permetre HTML bàsic --%>
+                                </c:when>
+                                <c:otherwise>
+                                    <p class="lead text-muted"><em>No hi ha sinopsi disponible.</em></p>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <hr>
+
+                            <p><strong>Editorial:</strong> <c:out value="${llibre.editorial}" default="No especificada"/></p>
+                            <p><strong>Idioma:</strong> <c:out value="${llibre.idioma}" default="No especificat"/></p>
+
+                            <div class="d-flex align-items-center mb-3">
+                                <strong class="me-3">Disponibilitat:</strong>
+                                <c:if test="${llibre.disponibles > 0}">
+                                    <span class="badge bg-success fs-6">Disponible (<c:out value="${llibre.disponibles}"/> exemplars)</span>
+                                </c:if>
+                                <c:if test="${llibre.disponibles <= 0}">
+                                    <span class="badge bg-danger fs-6">No disponible</span>
+                                </c:if>
+                            </div>
+
+                             <div class="d-flex mt-4">
+                                <c:if test="${not empty sessionScope.sessioUsuari}">
+                                    <c:if test="${llibre.disponibles > 0}">
+                                        <form action="${pageContext.request.contextPath}/prestar" method="POST" class="d-inline me-2">
+                                            <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                            <button type="submit" class="btn btn-tot btn-lg flex-shrink-0" disabled> <%-- TODO: Implementar /prestar --%>
+                                                <i class="bi bi-handbag-fill me-1"></i>
+                                                Demanar en préstec
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${llibre.disponibles <= 0}">
+                                         <form action="${pageContext.request.contextPath}/reservar" method="POST" class="d-inline">
+                                            <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                            <button type="submit" class="btn btn-accent-custom btn-lg flex-shrink-0" disabled> <%-- TODO: Implementar /reservar --%>
+                                                <i class="bi bi-bookmark-plus-fill me-1"></i>
+                                                Reservar
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                </c:if>
+                                 <c:if test="${empty sessionScope.sessioUsuari}">
+                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login.jsp">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
+                                 </c:if>
+                             </div>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-warning text-center" role="alert">
+                      <h4 class="alert-heading">Llibre no trobat</h4>
+                      <p>No s'ha pogut trobar la informació del llibre sol·licitat. Si us plau, comprova l'ISBN o torna al catàleg.</p>
+                      <hr>
+                       <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-secondary">Tornar al catàleg</a>
+                    </div>
+                </c:otherwise>
+             </c:choose>
 
         </div>
     </section>
 
     <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
-    <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
+    <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4 mb-3 mb-md-0">
@@ -182,13 +208,13 @@
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="${pageContext.request.contextPath}/contacte.jsp" class="text-decoration-none text-secondary">Contacte</a></li> 
+                        <li><a href="${pageContext.request.contextPath}/contacte.jsp" class="text-decoration-none text-secondary">Contacte</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <div class="d-flex justify-content-center justify-content-md-end"> 
+                    <div class="d-flex justify-content-center justify-content-md-end">
                         <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
                         <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
                         <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
@@ -202,7 +228,6 @@
     </footer>
     <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
 
-    <!-- Script de Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

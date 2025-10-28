@@ -1,18 +1,18 @@
 <%-- 
-    Document   : mostrarUsuaris
-    Created on : 24 oct 2025, 11:48:48
-    Author     : equip TotEsBook
+    Document   : dashboard_bibliotecari.jsp
+    Created on : 23 oct 2025, 14:27:27
+    Author     : edinsonioc
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%-- Aquest JSP espera rebre 'llistaUsuaris' i 'llistaAgents' des d'un Servlet --%>
+<%-- TODO: Necessitaràs un Servlet que carregui dades rellevants per al bibliotecari --%>
+<%-- (Ex: préstecs pendents de devolució, reserves per preparar, etc.) --%>
 <!DOCTYPE html>
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Llistat d'Usuaris - TotEsBook</title>
+    <title>Panell de Bibliotecari - TotEsBook</title>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -50,10 +50,8 @@
                     </li>
                      <c:if test="${not empty sessionScope.sessioUsuari}">
                          <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                         <%-- Només visible per Admin? --%>
-                         <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                            <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestionar Usuaris</a></li>
-                         </c:if>
+                         <%-- Enllaços específics per a bibliotecari/admin --%>
+                         <li class="nav-item"><a class="nav-link" href="#">Gestionar Préstecs</a></li>
                      </c:if>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
@@ -72,7 +70,7 @@
                         </c:when>
                         <c:otherwise>
                             <div class="dropdown">
-                                <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-tot btn-sm dropdown-toggle active" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false"> <%-- Marcat com actiu --%>
                                     <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
@@ -81,7 +79,7 @@
                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuario.jsp">El Meu Panell</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecario.jsp">Panell Bibliotecari</a></li>
+                                              <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/dashboard_bibliotecario.jsp">Panell Bibliotecari</a></li> <%-- Marcat com actiu --%>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                               <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_admin.jsp">Panell Admin</a></li>
@@ -104,70 +102,71 @@
     <!-- Secció Principal de Contingut -->
     <section class="py-5 flex-grow-1">
         <div class="container px-4 px-lg-5 mt-5">
-            <h1 class="text-center text-tot-bold mb-4">Llistat d'Usuaris i Agents</h1>
+            <h1 class="text-center text-tot-bold mb-5">Panell de Bibliotecari</h1>
 
-            <h3 class="text-tot-bold mt-5">Agents</h3>
-             <div class="table-responsive">
-                 <table class="table table-striped table-hover small">
-                     <thead class="table-light">
-                         <tr>
-                             <th>ID</th>
-                             <th>Nom Complet</th>
-                             <th>Email</th>
-                             <th>Telèfon</th>
-                             <th>Rol</th>
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <c:forEach var="agent" items="${llistaAgents}">
-                             <tr>
-                                 <td>${agent.idAgent}</td>
-                                 <td><c:out value="${agent.nom} ${agent.cognoms}"/></td>
-                                 <td><c:out value="${agent.email}"/></td>
-                                 <td><c:out value="${agent.telefon}" default="N/D"/></td>
-                                 <td>
-                                     <c:choose>
-                                         <c:when test="${agent.tipus == 'administrador'}"><span class="badge bg-danger">Admin</span></c:when>
-                                         <c:otherwise><span class="badge bg-info text-dark">Bibliotecari</span></c:otherwise>
-                                     </c:choose>
-                                 </td>
-                             </tr>
-                         </c:forEach>
-                         <c:if test="${empty llistaAgents}">
-                              <tr><td colspan="5" class="text-center text-muted">No hi ha agents registrats.</td></tr>
-                         </c:if>
-                     </tbody>
-                 </table>
-             </div>
+             <c:if test="${not empty sessionScope.sessioUsuari}">
+                <p class="lead text-center mb-5">Benvingut/da, <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>!</p>
+             </c:if>
 
-            <h3 class="text-tot-bold mt-5">Usuaris Lectors</h3>
-             <div class="table-responsive">
-                 <table class="table table-striped table-hover small">
-                     <thead class="table-light">
-                         <tr>
-                             <th>ID</th>
-                             <th>Nom Complet</th>
-                             <th>Email</th>
-                             <th>Telèfon</th>
-                             <th>Llibres Favorits</th>
-                         </tr>
-                     </thead>
-                     <tbody>
-                         <c:forEach var="usuari" items="${llistaUsuaris}">
-                             <tr>
-                                 <td>${usuari.id}</td>
-                                 <td><c:out value="${usuari.nom} ${usuari.cognoms}"/></td>
-                                 <td><c:out value="${usuari.email}"/></td>
-                                 <td><c:out value="${usuari.telefon}" default="N/D"/></td>
-                                 <td><c:out value="${usuari.llibresFavorits}" default="-"/></td>
-                             </tr>
-                         </c:forEach>
-                         <c:if test="${empty llistaUsuaris}">
-                              <tr><td colspan="5" class="text-center text-muted">No hi ha usuaris registrats.</td></tr>
-                         </c:if>
-                     </tbody>
-                 </table>
+             <%-- Contingut específic del bibliotecari --%>
+             <div class="row gx-lg-5">
+                 <%-- Columna Esquerra: Préstecs/Devolucions --%>
+                 <div class="col-lg-6 mb-4">
+                     <div class="card shadow-sm h-100">
+                          <div class="card-header bg-totlight">
+                             <h4 class="mb-0 text-tot-bold"><i class="bi bi-arrow-down-up me-2"></i> Registrar Préstec / Devolució</h4>
+                          </div>
+                          <div class="card-body">
+                            <%-- TODO: Crear un servlet per gestionar aquest formulari --%>
+                            <form action="${pageContext.request.contextPath}/gestionarPrestec" method="POST">
+                                <div class="mb-3">
+                                    <label for="isbnPrestec" class="form-label">ISBN del Llibre</label>
+                                    <input type="text" class="form-control" id="isbnPrestec" name="isbn" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="emailUsuari" class="form-label">Email de l'Usuari</label>
+                                    <input type="email" class="form-control" id="emailUsuari" name="emailUsuari" required>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="submit" name="accio" value="prestar" class="btn btn-primari-custom">Registrar Préstec</button>
+                                    <button type="submit" name="accio" value="retornar" class="btn btn-secondary">Registrar Devolució</button>
+                                </div>
+                            </form>
+                          </div>
+                     </div>
+                 </div>
+                 
+                 <%-- Columna Dreta: Reserves Pendents --%>
+                 <div class="col-lg-6 mb-4">
+                     <div class="card shadow-sm h-100">
+                          <div class="card-header bg-totlight">
+                             <h4 class="mb-0 text-tot-bold"><i class="bi bi-bookmark-check-fill me-2"></i> Reserves Pendents de Recollida</h4>
+                          </div>
+                          <div class="card-body">
+                            <%-- TODO: Carregar 'reservesPendents' des d'un Servlet --%>
+                             <c:choose>
+                                <c:when test="${not empty reservesPendents}">
+                                     <ul class="list-group list-group-flush">
+                                        <%-- <c:forEach var="reserva" items="${reservesPendents}"> --%>
+                                             <li class="list-group-item">
+                                                 <strong>Llibre Reservat 1 (Exemple)</strong> <%-- ${reserva.llibre.titol} --%>
+                                                 <small class="d-block text-muted">Usuari: Nom Usuari 1</small> <%-- ${reserva.usuari.nomComplet} --%>
+                                                  <small class="d-block text-muted">Data reserva: DD/MM/AAAA</small>
+                                             </li>
+                                              <li class="list-group-item">Exemple 2...</li>
+                                        <%-- </c:forEach> --%>
+                                    </ul>
+                                </c:when>
+                                <c:otherwise>
+                                    <p class="text-muted">No hi ha reserves pendents de recollida.</p>
+                                </c:otherwise>
+                            </c:choose>
+                          </div>
+                     </div>
+                 </div>
              </div>
+             
+             <%-- Altres funcionalitats: Gestionar catàleg, Propostes --%>
 
         </div>
     </section>

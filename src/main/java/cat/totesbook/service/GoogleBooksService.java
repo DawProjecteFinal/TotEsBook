@@ -101,7 +101,7 @@ public class GoogleBooksService {
                     return; // No fem res més per a evitar duplicats a la BD
                 }
 
-                System.out.println("Guardant llibre: " + llibre.getTitol());
+                System.out.println("Emmagatzemant llibre: " + llibre.getTitol());
                 llibreService.guardarLlibre(llibre);  
             } else {
                 System.out.println("No s'ha trobat llibre per ISBN " + isbn);
