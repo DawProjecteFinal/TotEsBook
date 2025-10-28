@@ -2,8 +2,7 @@
  *
  * @author edinsonioc
  */
-
-package cat.totesbook.config; // <-- Paquet actualitzat
+package cat.totesbook.config;
 
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
@@ -17,33 +16,38 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set; // Importem Set
 
-
-/**
- * Filtre de Seguretat (Punts 6 i 7)
- * Controla l'accés a les rutes protegides basant-se en el rol
- * de l'usuari guardat a la sessió.
- */
 @WebFilter("/*")
-public class FiltreSeguretat implements Filter { // <-- Nom de la classe actualitzat
+public class FiltreSeguretat implements Filter {
 
-    // Mapa per definir rutes protegides i rols permesos
+    // Camins protegits i rols permesos
     private static final Map<String, List<Rol>> caminsProtegits = new HashMap<>();
+    
+    // Conjunt de camins públics per a una cerca més ràpida
+    private static final Set<String> caminsPublics = Set.of(
+        "/login.jsp", "/login", "/registre.jsp", "/registre", 
+        "/paginaInici.jsp", "/fitxa_llibre.jsp", "/llibre", 
+        "/", "/logout", "/recuperarPass.jsp"
+    );
+    
+    // Conjunt de camins només per a convidats (no loguejats)
+    private static final Set<String> caminsConvidat = Set.of(
+        "/login.jsp", "/login", "/registre.jsp", "/registre", "/recuperarPass.jsp"
+    );
 
     @Override
     public void init(FilterConfig filterConfig) {
-        // Definim els permisos per a cada ROL del nostre enum
-        
-        // Només ADMIN pot veure això
-        caminsProtegits.put("/dashboard_admin.jsp", List.of(Rol.ADMIN));
+        // Definim permisos
+        caminsProtegits.put("/dashboard_administrador.jsp", List.of(Rol.ADMIN));
+        caminsProtegits.put("/canviRol", List.of(Rol.ADMIN)); // Protegim el servlet de canvi de rol
 
-        // ADMIN i BIBLIOTECARI poden veure això
-        caminsProtegits.put("/dashboard_bibliotecario.jsp", List.of(Rol.ADMIN, Rol.BIBLIOTECARI));
+        caminsProtegits.put("/dashboard_bibliotecari.jsp", List.of(Rol.ADMIN, Rol.BIBLIOTECARI));
 
-        // TOTS els rols loguejats poden veure això
-        caminsProtegits.put("/dashboard_usuario.jsp", List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI));
-        
-        // (Afegeix aquí altres pàgines o servlets a protegir)
+        caminsProtegits.put("/dashboard_usuari.jsp", List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI));
+        // Afegeix aquí altres com /prestar, /reservar si només són per a loguejats
+        // caminsProtegits.put("/prestar", List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI));
+        // caminsProtegits.put("/reservar", List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI));
     }
 
     @Override
@@ -54,48 +58,65 @@ public class FiltreSeguretat implements Filter { // <-- Nom de la classe actuali
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
         String path = req.getServletPath();
+        String contextPath = req.getContextPath(); // Obtenim el context path
 
-        // Llista de rutes públiques (tothom hi pot accedir)
-        boolean esCamiPublic = path.startsWith("/css/") || path.startsWith("/js/") ||
-                               path.startsWith("/img/") || path.equals("/login.jsp") ||
-                               path.equals("/login") || path.equals("/registre.jsp") ||
-                               path.equals("/registre") || path.equals("/paginaInici.jsp") ||
-                               path.equals("/fitxa_llibre.jsp") || path.equals("/llibre") ||
-                               path.equals("/") || path.equals("/logout") || 
-                               path.equals("/recuperarPass.jsp");
+        // Obtenim la sessió (si existeix)
+        SessioUsuari sessioUsuari = (session != null) ? (SessioUsuari) session.getAttribute("sessioUsuari") : null;
 
-        if (esCamiPublic) {
-            chain.doFilter(request, response); // És públic, deixem passar
+        // 1. Comprovem si és un recurs estàtic (CSS, JS, Imatges)
+        if (path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/img/") || path.startsWith("/assets/")) {
+            chain.doFilter(request, response);
             return;
         }
 
-        List<Rol> rolsPermesos = caminsProtegits.get(path);
+        // 2. Si l'usuari està loguejat i intenta accedir a una pàgina de convidat, el redirigim
+        if (sessioUsuari != null && caminsConvidat.contains(path)) {
+            res.sendRedirect(contextPath + "/paginaInici.jsp");
+            return;
+        }
+
+        // 3. Comprovem si el camí està a la llista de públics
+        if (caminsPublics.contains(path)) {
+            chain.doFilter(request, response);
+            return;
+        }
         
-        if (rolsPermesos == null) {
-            chain.doFilter(request, response); // No està a la llista de protegits, deixem passar
+        // 4. El camí no és estàtic ni públic. Comprovem si està protegit.
+        List<Rol> rolsPermesos = null;
+        // Iterem per si hem definit camins amb wildcard (encara que no n'hem fet servir)
+        for (Map.Entry<String, List<Rol>> entry : caminsProtegits.entrySet()) {
+            if (path.equals(entry.getKey()) || path.startsWith(entry.getKey() + "/")) { // Comprova coincidència exacta o inici
+                rolsPermesos = entry.getValue();
+                break;
+            }
+        }
+
+        // 5. Si no està a la llista de protegits, per defecte, el deixem passar? 
+        //    O millor denegar? Per seguretat, millor denegar si no està explícitament permès.
+        //    Però per simplicitat ara, si no està a caminsProtegits, el deixem passar.
+        if (rolsPermesos == null) { 
+             System.out.println("ADVERTÈNCIA FiltreSeguretat: Camí no protegit explícitament: " + path);
+            chain.doFilter(request, response); 
             return;
         }
 
-        // El camí és protegit. Comprovem la sessió.
-        SessioUsuari sessio = (session != null) ? (SessioUsuari) session.getAttribute("sessioUsuari") : null;
-
-        if (sessio == null) {
-            // Punt 7: Redirigir si no té permisos (no loguejat)
-            res.sendRedirect(req.getContextPath() + "/login.jsp");
+        // 6. El camí és protegit. Comprovem la sessió i el rol.
+        if (sessioUsuari == null) {
+            // No loguejat, redirigim al login
+            res.sendRedirect(contextPath + "/login.jsp");
         } else {
-            Rol rolUsuari = sessio.getRol(); // Obtenim el Rol del nostre objecte de sessió
-            
+            Rol rolUsuari = sessioUsuari.getRol(); 
             if (rolsPermesos.contains(rolUsuari)) {
-                chain.doFilter(request, response); // Permís concedit
+                // Té permís
+                chain.doFilter(request, response); 
             } else {
-                // Punt 7: Loguejat, però rol incorrecte. Redirigim a l'inici.
-                res.sendRedirect(req.getContextPath() + "/paginaInici.jsp");
+                // Loguejat, però rol incorrecte. Redirigim a l'inici.
+                 System.out.println("Accés denegat per rol. Usuari: " + sessioUsuari.getEmail() + ", Rol: " + rolUsuari + ", Camí: " + path);
+                res.sendRedirect(contextPath + "/paginaInici.jsp");
             }
         }
     }
     
     @Override
-    public void destroy() {
-        // Mètode de destrucció del filtre
-    }
+    public void destroy() { }
 }

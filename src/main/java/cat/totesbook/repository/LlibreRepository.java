@@ -10,10 +10,10 @@ public interface LlibreRepository {
     // Mètode per obtenir tots els llibres
     List<Llibre> getAllLlibres();
     
-    // Mètode per afegir un llibre
-    void addLlibre(Llibre llibre);
+    // Mètode per afegir o actualitzar un llibre
+    void addLlibre(Llibre llibre); 
     
-    // Comprovem si el ISBN existeix
+    // Comprovem si el ISBN existeix i obtenim el llibre
     Optional<Llibre> getLlibreByIsbn(String isbn);
 
 }

@@ -1,0 +1,136 @@
+/* 
+    Created on : 27 oct 2025, 8:38:21
+    Author     : roserruizrojas
+*/
+
+.dropdown-item.active, 
+.dropdown-item:active {
+  background-color: #92dbe6; 
+  color: white;              
+}
+
+
+.dropdown-item:hover {
+  background-color: #eefcfe; 
+  color: #92dbe6;            
+}
+
+.bg-totlight {
+    --bs-bg-opacity: 1;
+    background-color: #eefcfe;
+}
+
+
+.bg-tot {
+    background-color: #92dbe6;
+}
+
+
+.btn-tot {
+    background-color: #eefcfe;
+    border: 1px solid #35818b;
+    color: #35818b;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+
+.btn-tot:hover,
+.btn-tot:focus,
+.btn-tot:active {
+    background-color: #92dbe6;
+    border: none;
+    color: white;
+    box-shadow: none;
+}
+
+.text-tot-principal{
+    font-weight: bold;
+    color: #92dbe6;
+}
+
+.text-tot-bold {
+    font-weight: bold;
+    color: #324b4f;
+}
+
+
+.text-tot-light {
+    color: #324b4f;
+}
+
+.text-tot-isbn{
+    color: #7bbcc7;
+}
+
+.img-fixed {
+    width: 300px;
+    height: 450px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Afegit Edi */
+
+/* ... (els teus estils existents: .bg-tot, .btn-tot, etc.) ... */
+
+/* ===== ESTILS PER A PÀGINES DE FORMULARI (Login, Registre, etc.) ===== */
+/* Adaptats del teu style.css anterior */
+
+.form-page-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 500px;
+  /* Centrem el formulari verticalment i horitzontalment */
+  margin: 5rem auto; 
+}
+
+.form-page-container h2 {
+  /* Podem fer servir els estils de la nova plantilla si volem */
+  /* color: var(--color-secundario); */ /* Color del teu style.css antic */
+  color: #324b4f; /* Color .text-tot-bold de styles.css */
+  font-weight: bold; /* Coincideix amb .text-tot-bold */
+  text-align: center;
+  margin-bottom: 2rem; 
+}
+
+/* Botó primari per a formularis (si btn-tot no encaixa) */
+.btn-primari-custom {
+  background-color: #92dbe6; /* Color .bg-tot */
+  border: none;
+  color: white; 
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  width: 100%; 
+  transition: background-color 0.2s ease;
+}
+.btn-primari-custom:hover {
+  background-color: #7bbcc7; /* Un to lleugerament més fosc */
+  color: white;
+}
+
+/* Botó d'accent per a formularis (si cal) */
+.btn-accent-custom {
+  background-color: #e07225; /* Color d'accent que teníem */
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
+.btn-accent-custom:hover {
+  background-color: #c75f1e; /* Un to més fosc */
+  color: white;
+}
+
+/* Ajust per al logo a la barra de navegació */
+.navbar-brand .logo {
+    height: 30px; /* Ajusta l'alçada del logo petit */
+    width: auto;
+    margin-right: 5px; /* Petit espai entre logo i text (si hi hagués text) */
+}

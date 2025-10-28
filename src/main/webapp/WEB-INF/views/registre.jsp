@@ -1,6 +1,6 @@
 <%-- 
-    Document   : login
-    Created on : 23 oct 2025, 15:19:16
+    Document   : registre
+    Created on : 28 oct 2025, 12:59:40
     Author     : edinsonioc
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -10,8 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Inici de Sessió - TotEsBook</title>
-    <%-- Enllaços corregits amb contextPath --%>
+    <title>Registre - TotEsBook</title>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -57,8 +56,7 @@
                             <i class="bi bi-search"></i>
                         </button>
                     </form>
-                    <%-- Lògica de Sessió (mostra "Iniciar Sessió" com a actiu) --%>
-                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0 active">
+                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0">
                         Inicia sessió <i class="bi bi-person-circle"></i>
                     </a>
                 </div>
@@ -67,44 +65,46 @@
     </nav>
     <!-- ===== FI CAPÇALERA INCRUSTADA ===== -->
 
-    <!-- Secció Principal de Contingut -->
+    <!-- Secció Principal -->
     <section class="py-5 flex-grow-1">
         <div class="container px-4 px-lg-5">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5">
-
                     <div class="form-page-container mt-5">
-                        <h2>Inici de Sessió</h2>
-
-                        <%-- Mostra error si el LoginServlet en passa un --%>
+                        <h2>Crear un Compte</h2>
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger" role="alert">
                                 <i class="bi bi-exclamation-triangle-fill me-2"></i> <c:out value="${error}" />
                             </div>
                         </c:if>
-
-                        <%-- Formulari que apunta al LoginServlet (URL: /login) --%>
-                        <form action="${pageContext.request.contextPath}/login" method="POST">
+                        <form action="${pageContext.request.contextPath}/registre" method="POST">
+                            <div class="mb-3">
+                                <label for="nom" class="form-label fw-bold">Nom</label>
+                                <input type="text" class="form-control form-control-lg" id="nom" name="nom" required>
+                            </div>
+                             <div class="mb-3">
+                                <label for="cognoms" class="form-label fw-bold">Cognoms</label>
+                                <input type="text" class="form-control form-control-lg" id="cognoms" name="cognoms" required>
+                            </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-bold">Correu Electrònic</label>
                                 <input type="email" class="form-control form-control-lg" id="email" name="email" required>
                             </div>
-
+                            <div class="mb-3">
+                                <label for="telefon" class="form-label fw-bold">Telèfon (Opcional)</label>
+                                <input type="tel" class="form-control form-control-lg" id="telefon" name="telefon">
+                            </div>
                             <div class="mb-4">
                                 <label for="contrasenya" class="form-label fw-bold">Contrasenya</label>
-                                <%-- CORRECCIÓ: El 'name' ha de ser 'contrasenya' per coincidir amb el servlet --%>
                                 <input type="password" class="form-control form-control-lg" id="contrasenya" name="contrasenya" required>
                             </div>
-
-                            <button type="submit" class="btn btn-primari-custom btn-lg w-100">Entrar</button>
+                            <%-- Eliminem el selector de rol, només es registren usuaris normals --%>
+                            <button type="submit" class="btn btn-primari-custom btn-lg w-100">Registrar-se</button>
                         </form>
-
                         <div class="text-center mt-4">
-                            <a href="${pageContext.request.contextPath}/recuperarPass.jsp">Has oblidat la contrasenya?</a>
-                            <p class="mt-2">No tens un compte? <a href="${pageContext.request.contextPath}/registre.jsp">Registra't</a></p>
+                            <p>Ja tens un compte? <a href="${pageContext.request.contextPath}/login.jsp">Inicia sessió</a></p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -121,18 +121,22 @@ INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
 ('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
 
+-- LLIBRES
+-- INSERT INTO Llibres () VALUES
+-- ('', 'Harry Potter')
+
 -- PRESTECS
-INSERT INTO Prestecs (idUsuari, isbn, idBiblioteca, dataPrestec, dataDevolucio, idAgentPrestec, estat)
-VALUES
-(1, '9780439136365', 1, NOW(), NULL, 1, 'actiu'),
-(2, '9780316769488', 1, NOW(), NULL, 2, 'actiu'),
-(3, '9780307474278', 2, NOW(), NULL, 1, 'actiu');
+-- INSERT INTO Prestecs (idUsuari, isbn, idBiblioteca, dataPrestec, dataDevolucio, idAgentPrestec, estat)
+-- VALUES
+-- (1, '9780439136365', 1, NOW(), NULL, 1, 'actiu'),
+-- (2, '9780316769488', 1, NOW(), NULL, 2, 'actiu'),
+-- (3, '9780307474278', 2, NOW(), NULL, 1, 'actiu');
 
 -- RESERVES
-INSERT INTO Reserves (idUsuari, isbn, dataReserva, estat)
-VALUES
-(4, '9780261103573', NOW(), 'pendent'),
-(5, '9781260440232', NOW(), 'pendent');
+-- INSERT INTO Reserves (idUsuari, isbn, dataReserva, estat)
+-- VALUES
+-- (4, '9780261103573', NOW(), 'pendent'),
+-- (5, '9781260440232', NOW(), 'pendent');
 
 -- PROPOSTES D’ADQUISICIÓ
 INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu, dataProposta, estat)

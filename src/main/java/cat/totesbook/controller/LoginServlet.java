@@ -2,7 +2,6 @@
  *
  * @author edinsonioc
  */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -36,17 +35,19 @@ public class LoginServlet extends HttpServlet {
         String contrasenyaPlana = req.getParameter("contrasenya"); // El teu JSP envia 'contrasenya'
 
         // 1. Intentem loguejar com a Agent
-        // CANVI: Cridem al nou mètode
         Agent agent = agentRepo.getAgentByEmailAndContrasenya(email, contrasenyaPlana);
         
         if (agent != null) {
             // ÈXIT COM A AGENT
+            // **** CORRECCIÓ: Passem la variable 'agent', no la classe 'Agent' ****
             SessioUsuari sessio = new SessioUsuari(agent); 
+            // ********************************************************************
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("sessioUsuari", sessio);
 
             if (sessio.getRol() == cat.totesbook.domain.Rol.ADMIN) {
-                resp.sendRedirect("dashboard_administrador.jsp");
+                 // **** CORRECCIÓ: Nom del fitxer JSP correcte ****
+                resp.sendRedirect("dashboard_administrador.jsp"); 
             } else {
                 resp.sendRedirect("dashboard_bibliotecari.jsp");
             }
@@ -54,7 +55,6 @@ public class LoginServlet extends HttpServlet {
         }
         
         // 2. Si no és Agent, intentem loguejar com a Usuari
-        // CANVI: Cridem al nou mètode
         Usuari usuari = usuariRepo.getUsuariByEmailAndContrasenya(email, contrasenyaPlana);
         
         if (usuari != null) {
@@ -72,4 +72,3 @@ public class LoginServlet extends HttpServlet {
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 }
-

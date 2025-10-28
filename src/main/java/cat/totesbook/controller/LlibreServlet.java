@@ -17,47 +17,45 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-// URL dinàmica (ex: /llibre?isbn=...)
 @WebServlet("/llibre")
 public class LlibreServlet extends HttpServlet {
     
-    private final LlibreRepository llibreRepository;
+    // Instanciem el DAO directament
+    private final LlibreRepository llibreRepository = new LlibreDAO();
 
     public LlibreServlet() {
-
-        this.llibreRepository = new LlibreDAO(); 
-        
+        // Constructor buit o inicialització si no fas servir DAO directe
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        String isbn = request.getParameter("isbn");
+        if (isbn == null || isbn.trim().isEmpty()) {
+             response.sendRedirect(request.getContextPath() + "/paginaInici.jsp"); // Redirigim si no hi ha ISBN
+             return;
+        }
+        
         try {
-            String isbn = request.getParameter("isbn");
+            Optional<Llibre> optionalLlibre = llibreRepository.getLlibreByIsbn(isbn); // Mètode corregit
             
-            // 1. Obtenim l'Optional<Llibre> del repositori
-            Optional<Llibre> optionalLlibre = llibreRepository.getLlibreByIsbn(isbn); 
-            
-            // <-- Comprovem un Optional correctament
             if (optionalLlibre.isPresent()) {
-                
-                // 2. Treuem el llibre de dins de l'Optional
                 Llibre llibreTrobat = optionalLlibre.get();
-                
-                // 3. Passem l'objecte Llibre (NO l'Optional) al JSP
                 request.setAttribute("llibre", llibreTrobat);
-                
-                // <-- Fem el forward a la ruta segura dins de WEB-INF
+                // Forward a la ruta segura dins de WEB-INF
                 request.getRequestDispatcher("/WEB-INF/views/fitxa_llibre.jsp").forward(request, response);
             
             } else {
                 // Llibre no trobat
-                response.sendRedirect("paginaInici.jsp");
+                 request.setAttribute("errorLlibre", "No s'ha trobat cap llibre amb l'ISBN " + isbn);
+                 // Podem mostrar un error a la pàgina d'inici o a una pàgina d'error específica
+                 request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response); 
+                 // O redirigir: response.sendRedirect(request.getContextPath() + "/paginaInici.jsp");
             }
         } catch (Exception e) {
-            // En cas d'error (ex: ISBN invàlid), redirigim
-            e.printStackTrace();
-            response.sendRedirect("paginaInci.jsp");
+             System.err.println("Error a LlibreServlet: " + e.getMessage());
+            // e.printStackTrace();
+             response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp"); // Redirigim a l'inici en cas d'error
         }
     }
 }

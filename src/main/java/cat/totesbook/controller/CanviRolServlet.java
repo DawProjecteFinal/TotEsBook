@@ -2,91 +2,103 @@
  *
  * @author edinsonioc
  */
-
 package cat.totesbook.controller;
 
-import cat.totesbook.domain.Agent; // El teu model Agent
-import cat.totesbook.domain.Rol; // El teu Enum de Rols
-import cat.totesbook.repository.AgentRepository; // La interfície
-import cat.totesbook.repository.impl.AgentDAO; // La implementació
+import cat.totesbook.domain.Agent; 
+import cat.totesbook.domain.Rol; 
+import cat.totesbook.repository.AgentRepository; 
+import cat.totesbook.repository.impl.AgentDAO; 
+// Importa UsuariRepository i UsuariDAO si implementes l'ascens/descens
+// import cat.totesbook.repository.UsuariRepository;
+// import cat.totesbook.repository.impl.UsuariDAO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession; // Per a comprovació de seguretat
 
 import java.io.IOException;
 
-
-
-/**
- * Aquest Servlet gestiona la petició del formulari de dashboard_admin.jsp
- * per canviar el rol d'un Usuari o un Agent.
- */
 @WebServlet("/canviRol")
 public class CanviRolServlet extends HttpServlet {
 
-    // Necessitem el repositori per actualitzar la BBDD
     private final AgentRepository agentRepo = new AgentDAO();
-    // TODO: També necessitaràs el UsuariRepository si vols "ascendir" un Usuari a Agent
+    // private final UsuariRepository usuariRepo = new UsuariDAO(); // Descomenta si cal
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        // --- Comprovació de Seguretat Bàsica ---
+        HttpSession session = request.getSession(false);
+        cat.totesbook.domain.SessioUsuari sessioUsuari = (session != null) ? (cat.totesbook.domain.SessioUsuari) session.getAttribute("sessioUsuari") : null;
+        
+        // Només l'ADMIN pot canviar rols
+        if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
+             response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp");
+             return;
+        }
+        // --- Fi Comprovació Seguretat ---
+
+        String feedbackMessage = null; // Missatge per mostrar a l'admin
+        String messageType = "danger"; // Tipus de missatge (danger, success)
+
         try {
-            // Llegim els paràmetres del formulari del dashboard_admin.jsp
             int idCompte = Integer.parseInt(request.getParameter("idCompte"));
-            String nouRolString = request.getParameter("nouRol"); // "USUARI", "BIBLIOTECARI", "ADMIN"
-            String tipusCompte = request.getParameter("tipusCompte"); // "AGENT" o "USUARI"
+            String nouRolString = request.getParameter("nouRol"); 
+            String tipusCompte = request.getParameter("tipusCompte"); 
 
-            // Convertim el String al nostre Enum 'Rol'
-            Rol nouRol = Rol.valueOf(nouRolString);
-
-            // ----- LÒGICA DE CANVI DE ROL -----
-            
-            if ("AGENT".equals(tipusCompte)) {
-                // El compte és un Agent.
-                
-                if (nouRol == Rol.ADMIN || nouRol == Rol.BIBLIOTECARI) {
-                    // Cas Fàcil: Actualitzem el 'tipus' a la taula Agents
-                    
-                    // Convertim el Rol del sistema al TipusAgent de la BBDD
-                    Agent.TipusAgent nouTipusAgent;
-                    if (nouRol == Rol.ADMIN) {
-                        nouTipusAgent = Agent.TipusAgent.administrador;
-                    } else {
-                        nouTipusAgent = Agent.TipusAgent.bibliotecari;
-                    }
-                    
-                    // Cridem al mètode del DAO (que crearem a sota)
-                    agentRepo.updateAgentTipus(idCompte, nouTipusAgent);
-                    
-                } else {
-                    // Cas Difícil: "Degradar" un Agent a Usuari
-                    // Això implicaria esborrar l'Agent i crear un Usuari nou.
-                    // TODO: Implementar la lògica de "degradació" (agentRepo.deleteById... usuariRepo.save...)
-                    System.out.println("LOG: Degradació d'Agent a Usuari no implementada.");
-                }
-                
-            } else if ("USUARI".equals(tipusCompte)) {
-                // El compte és un Usuari (lector).
-                
-                if (nouRol == Rol.ADMIN || nouRol == Rol.BIBLIOTECARI) {
-                    // Cas Difícil: "Ascendir" un Usuari a Agent
-                    // Això implicaria esborrar l'Usuari i crear un Agent nou.
-                    // TODO: Implementar la lògica d'"ascens" (usuariRepo.deleteById... agentRepo.save...)
-                    System.out.println("LOG: Ascens d'Usuari a Agent no implementat.");
-                }
-                // Si el nou rol és USUARI, no fem res (ja ho és).
+            if (nouRolString == null || tipusCompte == null) {
+                 throw new IllegalArgumentException("Paràmetres 'nouRol' o 'tipusCompte' no rebuts.");
             }
 
+            Rol nouRol = Rol.valueOf(nouRolString);
+
+            System.out.println("Canviant rol per a " + tipusCompte + " ID: " + idCompte + " al rol: " + nouRol);
+
+            if ("AGENT".equals(tipusCompte)) {
+                if (nouRol == Rol.ADMIN || nouRol == Rol.BIBLIOTECARI) {
+                    Agent.TipusAgent nouTipusAgent = (nouRol == Rol.ADMIN) ? Agent.TipusAgent.administrador : Agent.TipusAgent.bibliotecari;
+                    agentRepo.updateAgentTipus(idCompte, nouTipusAgent); // Mètode corregit
+                    feedbackMessage = "Rol de l'agent ID " + idCompte + " actualitzat a " + nouRolString;
+                    messageType = "success";
+                } else { // Degradació a USUARI
+                    feedbackMessage = "ERROR: La degradació d'Agent a Usuari no està implementada.";
+                    System.err.println("LOG: Intent de degradació d'Agent ID " + idCompte + " a Usuari.");
+                    // TODO: agentRepo.deleteById(idCompte); usuariRepo.save(nouUsuariCreatAPartirDeAgent);
+                }
+            } else if ("USUARI".equals(tipusCompte)) {
+                if (nouRol == Rol.ADMIN || nouRol == Rol.BIBLIOTECARI) { // Ascens a AGENT
+                    feedbackMessage = "ERROR: L'ascens d'Usuari a Agent no està implementat.";
+                     System.err.println("LOG: Intent d'ascens d'Usuari ID " + idCompte + " a " + nouRolString);
+                    // TODO: usuariRepo.deleteById(idCompte); agentRepo.save(nouAgentCreatAPartirDeUsuari);
+                }
+                // Si nouRol == Rol.USUARI, no fem res.
+            }
+
+        } catch (NumberFormatException e) {
+             System.err.println("Error a CanviRolServlet: ID de compte invàlid.");
+             feedbackMessage = "Error: L'ID del compte no és vàlid.";
+             // e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+             System.err.println("Error a CanviRolServlet: Rol o Tipus de compte invàlid/nul.");
+             feedbackMessage = "Error: Rol o tipus de compte rebut no és vàlid.";
+             // e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+             System.err.println("Error inesperat a CanviRolServlet: " + e.getMessage());
+             feedbackMessage = "Error inesperat processant la sol·licitud.";
+            // e.printStackTrace();
         }
         
-        // Un cop processat, redirigim de tornada al panell d'admin
-        response.sendRedirect("dashboard_admin.jsp");
+        // Guardem el missatge a la sessió per mostrar-lo al dashboard
+        if (feedbackMessage != null && session != null) {
+             session.setAttribute("feedbackMessage", feedbackMessage);
+             session.setAttribute("messageType", messageType);
+        }
+
+        // Redirigim sempre de tornada al panell d'admin
+        response.sendRedirect(request.getContextPath() + "/dashboard_administrador.jsp");
     }
 }

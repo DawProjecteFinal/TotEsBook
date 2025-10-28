@@ -1,8 +1,9 @@
 <%-- 
-    Document   : login
-    Created on : 23 oct 2025, 15:19:16
+    Document   : recuperarPass
+    Created on : 28 oct 2025, 14:49:40
     Author     : edinsonioc
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -10,8 +11,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Inici de Sessió - TotEsBook</title>
-    <%-- Enllaços corregits amb contextPath --%>
+    <title>Recuperar Contrasenya - TotEsBook</title>
+    <%-- Enllaços CSS amb contextPath --%>
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,7 +20,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
+    <!-- ===== INICI CAPÇALERA INCRUSTADA (Versió per a Convidat) ===== -->
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/paginaInici.jsp">
@@ -47,7 +48,6 @@
                             <li><a class="dropdown-item" href="#">True crime</a></li>
                         </ul>
                     </li>
-                     <%-- L'usuari no està loguejat, no mostrem enllaços de sessió --%>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
                     <form class="d-flex me-3 my-2 my-lg-0" role="search" action="${pageContext.request.contextPath}/cerca" method="GET">
@@ -57,8 +57,8 @@
                             <i class="bi bi-search"></i>
                         </button>
                     </form>
-                    <%-- Lògica de Sessió (mostra "Iniciar Sessió" com a actiu) --%>
-                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0 active">
+                    <%-- Mostra "Iniciar Sessió" ja que l'usuari no està loguejat --%>
+                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0">
                         Inicia sessió <i class="bi bi-person-circle"></i>
                     </a>
                 </div>
@@ -74,34 +74,33 @@
                 <div class="col-md-8 col-lg-6 col-xl-5">
 
                     <div class="form-page-container mt-5">
-                        <h2>Inici de Sessió</h2>
+                        <h2>Recuperar Contrasenya</h2>
+                        <p class="text-center text-muted mb-4">Introdueix el teu correu electrònic i t'enviarem les instruccions per restablir-la.</p>
 
-                        <%-- Mostra error si el LoginServlet en passa un --%>
+                        <%-- Mostra missatge d'èxit/error (si un futur Servlet els envia) --%>
+                        <c:if test="${not empty missatge}">
+                            <div class="alert alert-success" role="alert">
+                                <c:out value="${missatge}" />
+                            </div>
+                        </c:if>
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger" role="alert">
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i> <c:out value="${error}" />
+                                <c:out value="${error}" />
                             </div>
                         </c:if>
 
-                        <%-- Formulari que apunta al LoginServlet (URL: /login) --%>
-                        <form action="${pageContext.request.contextPath}/login" method="POST">
+                        <%-- TODO: Crear un servlet per a "/recuperar" --%>
+                        <form action="${pageContext.request.contextPath}/recuperar" method="POST">
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-bold">Correu Electrònic</label>
                                 <input type="email" class="form-control form-control-lg" id="email" name="email" required>
                             </div>
-
-                            <div class="mb-4">
-                                <label for="contrasenya" class="form-label fw-bold">Contrasenya</label>
-                                <%-- CORRECCIÓ: El 'name' ha de ser 'contrasenya' per coincidir amb el servlet --%>
-                                <input type="password" class="form-control form-control-lg" id="contrasenya" name="contrasenya" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primari-custom btn-lg w-100">Entrar</button>
+                            
+                            <button type="submit" class="btn btn-accent-custom btn-lg w-100 mt-3">Enviar Instruccions</button>
                         </form>
 
                         <div class="text-center mt-4">
-                            <a href="${pageContext.request.contextPath}/recuperarPass.jsp">Has oblidat la contrasenya?</a>
-                            <p class="mt-2">No tens un compte? <a href="${pageContext.request.contextPath}/registre.jsp">Registra't</a></p>
+                            <a href="${pageContext.request.contextPath}/login.jsp">Tornar a l'inici de sessió</a>
                         </div>
                     </div>
 
