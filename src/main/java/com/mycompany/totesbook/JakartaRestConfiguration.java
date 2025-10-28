@@ -4,8 +4,11 @@ import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 
 /**
- * Configures Jakarta RESTful Web Services for the application.
- * @author Juneau
+ * Classe de configuració Jakarta RESTful Web Services.
+ * 
+ * Defineix la ruta base dels recursos REST en "/resources"
+ * 
+ * @author equip TotEsBook
  */
 @ApplicationPath("resources")
 public class JakartaRestConfiguration extends Application {

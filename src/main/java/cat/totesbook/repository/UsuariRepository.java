@@ -5,12 +5,18 @@ import cat.totesbook.domain.Usuari;
 import java.util.List;
 
 /**
- *
- * @author jmiro
+ * Interfície de la capa repositori que gestiona les operacions de l'accés de 
+ * dades dels usuaris.
+ * 
+ * @author equip TotEsBook
  */
 
-// Interfaces de la capa repositori
 public interface UsuariRepository {
-    // Mètode per obtenir tots els usuaris
+    
+    /**
+     * Mètode que obté tots els usuaris.
+     * 
+     * @return 
+     */
     List<Usuari> getAllUsuaris();
 }

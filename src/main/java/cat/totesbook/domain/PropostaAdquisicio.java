@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.domain;
 
 /**
- *
- * @author jmiro
+ * Classse que representa l'entitat PropostaAdquisició a la BD.
+ * 
+ * @author equip TotEsBook
  */
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

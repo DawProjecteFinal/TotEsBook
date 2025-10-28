@@ -9,15 +9,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/**
+ * Classe que inicialitza les dades de la BD quan es desplega l'aplicació.
+ * 
+ * @author equip TotEsBook
+ */
 @Component
 public class DataInitializer {
 
+    /**
+     * Repositori de llibres que serveix per accedir a les dades de la API de
+     * Google Books Service.
+     */
     @Autowired
     private GoogleBooksService googleBooksService;
 
+    /**
+     * Repositori de llibres que serveix per accedir a les dades de la BD.
+     */
     @Autowired
     private LlibreService llibreService;
 
+    /**
+     * Mètode que buscar les dades quan es desplega l'aplicació.
+     * 
+     */
     @PostConstruct
     @Transactional
     public void initData() {

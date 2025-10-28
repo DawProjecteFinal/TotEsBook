@@ -4,16 +4,34 @@ import cat.totesbook.domain.Llibre;
 import java.util.Optional;
 
 
-// Interfaces de la capa repositori
+/**
+ * Interfície de la capa repositori que gestiona les operacions de l'accés de dades dels llibres.
+ * 
+ * @author equip TotEsBook
+ */
+
 public interface LlibreRepository {
     
-    // Mètode per obtenir tots els llibres
+    /**
+     * Mètode que obté tots els llibres.
+     * 
+     * @return llista de llibres.
+     */
     List<Llibre> getAllLlibres();
     
-    // Mètode per afegir un llibre
+    /**
+     * Mètode que serveix per afegir un llibre.
+     * 
+     * @param llibre 
+     */
     void addLlibre(Llibre llibre);
     
-    // Comprovem si el ISBN existeix
+    /**
+     * Mètode que comprova si el ISBN existeix
+     * 
+     * @param isbn
+     * @return el llibre amb l'ISBN.
+     */
     Optional<Llibre> getLlibreByIsbn(String isbn);
 
 }

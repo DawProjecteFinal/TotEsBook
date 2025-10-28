@@ -1,16 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Usuari;
 import java.util.List;
 
 /**
- *
- * @author jmiro
+ * Interfície del servei d'usuaris.
+ * 
+ * @author equip TotEsBook
  */
 public interface UsuariService {
+    /**
+     * Mètode que retorna tots els usuaris.
+     * 
+     * @return tots els usuaris.
+     */
     List<Usuari> getAllUsuaris();
 }

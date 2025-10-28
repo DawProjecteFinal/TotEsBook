@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Usuari;
@@ -12,15 +8,24 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 /**
- *
- * @author jmiro
+ * Mètode que obté tots els usuaris de la BD mitjançant EntityManager.
+ * 
+ * @author equip TotEsBook
  */
 @Repository
 public class UsuariDAO implements UsuariRepository{
-    // Creem EntityManager gestionat Spring
+    
+    /**
+     * Creem EntityManager gestionat Spring
+     */
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Mètode que obté tots els usuaris de la BD.
+     * 
+     * @return llista d'usuaris.
+     */
     @Override
     public List<Usuari> getAllUsuaris() {
         return entityManager.createQuery("SELECT u FROM Usuari u", Usuari.class).getResultList();

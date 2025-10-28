@@ -10,19 +10,36 @@ import java.util.stream.StreamSupport;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.service.LlibreService;
 
+/**
+ * Classe que implementa el servei dels llibres de Google Books Service.
+ * 
+ * @author equip TotEsBook
+ */
 @Service
 public class GoogleBooksService {
 
     private final RestTemplate restTemplate;
     private final LlibreService llibreService; // Per guardar amb transacció
 
+    /**
+     * Constructor de GoogleBooksService.
+     * 
+     * @param restTemplate
+     * @param llibreService 
+     */
     public GoogleBooksService(RestTemplate restTemplate, LlibreService llibreService) {
         this.restTemplate = restTemplate;
         this.llibreService = llibreService;
     }
 
-    // Mètode que retorna un Llibre si el troba a Google Books
-    // Només consulta llibres a la Api
+    /**
+     * Mètode que retorna un Llibre si el troba a Google Books.
+     * 
+     * Només consulta llibres a la Api
+     * 
+     * @param isbn
+     * @return 
+     */
     public Optional<Llibre> getLlibreByIsbn(String isbn) {
         try {
             // Treure guions dels ISBN
@@ -66,7 +83,11 @@ public class GoogleBooksService {
         return Optional.empty();
     }
 
-    // Mètode que crida al primer mètode de la classe per consultar i GUARDA el llibre a BD
+    /**
+     * Mètode que crida al primer mètode de la classe per consultar i GUARDA el llibre a BD
+     * 
+     * @param isbn 
+     */
     public void importarILlibrePerIsbn(String isbn) {
         try {
             Optional<Llibre> optLlibre = getLlibreByIsbn(isbn); // cridem al mètode de consulta anterior
@@ -89,5 +110,4 @@ public class GoogleBooksService {
             System.err.println("Error important llibre per ISBN " + isbn + ": " + e.getMessage());
         }
     }
-
 }

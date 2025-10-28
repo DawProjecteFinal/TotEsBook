@@ -1,4 +1,3 @@
-
 package cat.totesbook.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,12 @@ public class LlibreController {
     @Autowired
     private LlibreService llibreService;
 
-    // mapping relatiu a l'arrel de l'aplicació: /TotEsBook/mostrarLlibres
+    // 
+    /**
+     * Mapping relatiu a l'arrel de l'aplicació: /TotEsBook/mostrarLlibres
+     * 
+     * @return 
+     */
     @RequestMapping("/mostrarLlibres")
     public ModelAndView mostrarLlibres() {
         ModelAndView modelview = new ModelAndView("mostrarLlibres");

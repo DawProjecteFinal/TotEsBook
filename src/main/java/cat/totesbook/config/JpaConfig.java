@@ -15,14 +15,25 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import java.util.Properties;
 
+/**
+ * 
+ * @author equip TotEsBook
+ */
 @Configuration
 @ComponentScan(
     basePackages = "cat.totesbook",
     excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)
 )
+/**
+ * 
+ */
 @EnableTransactionManagement
 public class JpaConfig {
 
+    /**
+     * 
+     * @return 
+     */
     @Bean
     public JndiObjectFactoryBean dataSource() {
         JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
@@ -32,6 +43,11 @@ public class JpaConfig {
         return jndiObjectFactoryBean;
     }
 
+    /**
+     * 
+     * @param dataSource
+     * @return 
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
@@ -49,12 +65,22 @@ public class JpaConfig {
 
         return emf;
     }
+    
+    /**
+     * 
+     * @param emf
+     * @return 
+     */
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         // Transaccions JPA gestionades per Spring
         return new JpaTransactionManager(emf);
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Bean
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();

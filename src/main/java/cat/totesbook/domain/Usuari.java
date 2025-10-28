@@ -1,10 +1,12 @@
-/**
- *
- * @author jmiro
- */
 package cat.totesbook.domain;
 
 import jakarta.persistence.*;
+
+/**
+ * Classe que representa l'entitat Usuari a la BD.
+ * 
+ * @author equip TotEsBook
+ */
 
 @Entity
 @Table(name = "Usuaris")

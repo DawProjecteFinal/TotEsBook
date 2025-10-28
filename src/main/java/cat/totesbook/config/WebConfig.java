@@ -17,8 +17,13 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
         useDefaultFilters = false,
         includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)
 )
+
 public class WebConfig implements WebMvcConfigurer {
 
+    /**
+     * 
+     * @return 
+     */
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();

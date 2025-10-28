@@ -8,24 +8,46 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.Optional;
 
+/**
+ * Mètode que obté tots els llibres de la BD mitjançant EntityManager.
+ * 
+ * @author equip TotEsBook
+ */
 @Repository
 public class LlibreDAO implements LlibreRepository {
-
-    // Creem EntityManager gestionat Spring
+    
+    /**
+     * Creem EntityManager gestionat Spring
+     */
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Mètode que obté tots els llibres de la BD.
+     * 
+     * @return llista de llibres.
+     */
     @Override
     public List<Llibre> getAllLlibres() {
         return entityManager.createQuery("SELECT l FROM Llibre l", Llibre.class).getResultList();
     }
 
-    // Afegeix un llibre a la base de dades
+    /**
+     * Mètode que afegeix un llibre a la base de dades
+     * 
+     * @param llibre 
+     */
     @Override
     public void addLlibre(Llibre llibre) {
         entityManager.merge(llibre);
     }
 
+    /**
+     * Mètode que retorna un llibre segons el seu ISBN.
+     * 
+     * @param isbn
+     * @return llibre amb ISBN passat per paràmetre.
+     */
     @Override
     public Optional<Llibre> getLlibreByIsbn(String isbn) {
         try {

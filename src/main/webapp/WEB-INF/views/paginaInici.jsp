@@ -1,7 +1,7 @@
 <%-- 
     Document   : paginaInici
     Created on : 28 sept 2025, 17:43:00
-    Author     : jmiro
+    Author     : equip totEsBook
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,7 +25,7 @@
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">TotEsBook</h1>
                     <p class="lead fw-normal text-white-50 mb-0">La biblioteca de tothom</p>
-                    <img src="${pageContext.request.contextPath}/images/logo-gran.jpeg" alt="Logo">
+                    <!--<img src="${pageContext.request.contextPath}/images/logo-gran.jpeg" alt="Logo"> -->
                 </div>
             </div>
         </header>

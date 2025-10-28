@@ -1,7 +1,7 @@
 <%-- 
     Document   : mostrarLlibres.jsp
     Created on : 28 sept 2025, 7:01:42
-    Author     : jmiro
+    Author     : equip TotEsBook
 --%>
 
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -26,7 +26,7 @@
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">TotEsBook</h1>
                     <p class="lead fw-normal text-white-50 mb-0">La biblioteca de tothom</p>
-                    <img src="${pageContext.request.contextPath}/images/logo-gran.jpeg" alt="Logo">
+                    <!-- <img src="${pageContext.request.contextPath}/images/logo-gran.jpeg" alt="Logo">-->
                 </div>
             </div>
         </header>

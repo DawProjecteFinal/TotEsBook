@@ -1,7 +1,7 @@
 <%-- 
     Document   : mostrarUsuaris
     Created on : 24 oct 2025, 11:48:48
-    Author     : jmiro
+    Author     : equip TotEsBook
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
