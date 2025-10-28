@@ -34,7 +34,7 @@ public class RegistreServlet extends HttpServlet {
         if (usuariExistent != null) {
             // Error: L'email ja existeix
             req.setAttribute("error", "Aquest correu electrònic ja està registrat.");
-            req.getRequestDispatcher("/registre.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/registre.jsp").forward(req, resp);
             return;
         }
         
@@ -50,7 +50,12 @@ public class RegistreServlet extends HttpServlet {
         
         usuariRepo.saveUsuari(nouUsuari);
 
-        resp.sendRedirect("login.jsp");
+        req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/registre.jsp").forward(req, resp);
     }
 }
 

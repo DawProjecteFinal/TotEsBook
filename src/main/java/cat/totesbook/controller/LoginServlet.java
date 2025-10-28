@@ -39,17 +39,15 @@ public class LoginServlet extends HttpServlet {
         
         if (agent != null) {
             // ÈXIT COM A AGENT
-            // **** CORRECCIÓ: Passem la variable 'agent', no la classe 'Agent' ****
-            SessioUsuari sessio = new SessioUsuari(agent); 
-            // ********************************************************************
+            SessioUsuari sessio = new SessioUsuari(agent);
+            
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("sessioUsuari", sessio);
 
             if (sessio.getRol() == cat.totesbook.domain.Rol.ADMIN) {
-                 // **** CORRECCIÓ: Nom del fitxer JSP correcte ****
-                resp.sendRedirect("dashboard_administrador.jsp"); 
+                req.getRequestDispatcher("/WEB-INF/views/dashboard_administrador.jsp").forward(req, resp); 
             } else {
-                resp.sendRedirect("dashboard_bibliotecari.jsp");
+                req.getRequestDispatcher("/WEB-INF/views/dashboard_bibliotecari.jsp").forward(req, resp);
             }
             return; 
         }
@@ -63,12 +61,18 @@ public class LoginServlet extends HttpServlet {
             HttpSession httpSession = req.getSession();
             httpSession.setAttribute("sessioUsuari", sessio);
             
-            resp.sendRedirect("dashboard_usuari.jsp");
+            req.getRequestDispatcher("/WEB-INF/views/dashboard_usuari.jsp").forward(req, resp);
             return;
         }
 
         // 3. Error
         req.setAttribute("error", "Email o contrasenya incorrectes.");
-        req.getRequestDispatcher("/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+        return;
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
     }
 }

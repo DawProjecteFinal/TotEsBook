@@ -66,7 +66,8 @@ public class MostrarUsuarisServlet extends HttpServlet {
             System.err.println("Error a MostrarUsuarisServlet: " + e.getMessage());
             // e.printStackTrace(); // Considera logging formal
             // En cas d'error, podríem redirigir a una pàgina d'error o a l'inici
-            response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp");
+            request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response);
+            return;        
         }
     }
 }

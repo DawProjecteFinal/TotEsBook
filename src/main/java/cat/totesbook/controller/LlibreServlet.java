@@ -32,7 +32,7 @@ public class LlibreServlet extends HttpServlet {
         
         String isbn = request.getParameter("isbn");
         if (isbn == null || isbn.trim().isEmpty()) {
-             response.sendRedirect(request.getContextPath() + "/paginaInici.jsp"); // Redirigim si no hi ha ISBN
+             request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response); // Redirigim si no hi ha ISBN
              return;
         }
         
@@ -55,7 +55,7 @@ public class LlibreServlet extends HttpServlet {
         } catch (Exception e) {
              System.err.println("Error a LlibreServlet: " + e.getMessage());
             // e.printStackTrace();
-             response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp"); // Redirigim a l'inici en cas d'error
+             request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response);// Redirigim a l'inici en cas d'error
         }
     }
 }

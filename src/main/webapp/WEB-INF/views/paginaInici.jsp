@@ -67,7 +67,7 @@
                     <%-- Lògica de Sessió per a Login/Logout --%>
                     <c:choose>
                         <c:when test="${empty sessionScope.sessioUsuari}">
-                            <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0">
+                            <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                 Inicia sessió <i class="bi bi-person-circle"></i>
                             </a>
                         </c:when>
@@ -79,13 +79,13 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
                                     <c:choose>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuario.jsp">El Meu Panell</a></li>
+                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari.jsp">El Meu Panell</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecario.jsp">Panell Bibliotecari</a></li>
+                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari.jsp">Panell Bibliotecari</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_admin.jsp">Panell Admin</a></li>
+                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador.jsp">Panell Admin</a></li>
                                          </c:when>
                                     </c:choose>
                                     <li><hr class="dropdown-divider"></li>

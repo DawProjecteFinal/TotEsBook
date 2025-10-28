@@ -37,8 +37,8 @@ public class CanviRolServlet extends HttpServlet {
         
         // Només l'ADMIN pot canviar rols
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
-             response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp");
-             return;
+            request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response);
+            return;
         }
         // --- Fi Comprovació Seguretat ---
 
@@ -99,6 +99,6 @@ public class CanviRolServlet extends HttpServlet {
         }
 
         // Redirigim sempre de tornada al panell d'admin
-        response.sendRedirect(request.getContextPath() + "/dashboard_administrador.jsp");
+        request.getRequestDispatcher("/WEB-INF/views/dashboard_administrador.jsp").forward(request, response);
     }
 }

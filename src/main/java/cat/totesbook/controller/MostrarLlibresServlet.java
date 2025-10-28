@@ -32,9 +32,9 @@ public class MostrarLlibresServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/mostrarLlibres.jsp").forward(request, response);
 
         } catch (Exception e) {
-             System.err.println("Error a MostrarLlibresServlet: " + e.getMessage());
-            // e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp");
+            System.err.println("Error a MostrarLlibresServlet: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response);
+            return;
         }
     }
 }
