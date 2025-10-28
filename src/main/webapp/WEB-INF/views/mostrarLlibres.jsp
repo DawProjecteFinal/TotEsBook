@@ -23,7 +23,7 @@
     <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/paginaInici.jsp">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}">
                 <img src="${pageContext.request.contextPath}/img/logo.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -33,7 +33,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/paginaInici.jsp">Inici</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
@@ -77,13 +77,13 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
                                     <c:choose>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuario.jsp">El Meu Panell</a></li>
+                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari.jsp">El Meu Panell</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecario.jsp">Panell Bibliotecari</a></li>
+                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari.jsp">Panell Bibliotecari</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_admin.jsp">Panell Admin</a></li>
+                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador.jsp">Panell Admin</a></li>
                                          </c:when>
                                     </c:choose>
                                     <li><hr class="dropdown-divider"></li>

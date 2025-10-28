@@ -19,7 +19,7 @@ public class LlibreDAO implements LlibreRepository {
     @Override
     public List<Llibre> getAllLlibres() {
         // Usem JPQL (Java Persistence Query Language)
-        TypedQuery<Llibre> query = entityManager.createQuery("SELECT l FROM Llibre l ORDER BY l.titol", Llibre.class);
+        TypedQuery<Llibre> query = entityManager.createQuery("SELECT * FROM Llibre l ORDER BY l.titol", Llibre.class);
         return query.getResultList();
     }
 

@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/cataleg") 
+@WebServlet("/MostrarLlibres") 
 public class MostrarLlibresServlet extends HttpServlet {
 
     private final LlibreRepository llibreRepo = new LlibreDAO();

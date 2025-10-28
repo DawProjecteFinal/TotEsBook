@@ -44,7 +44,7 @@ public class MostrarUsuarisServlet extends HttpServlet {
         
         // Si no està loguejat o no és ADMIN, redirigim a l'inici
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
-            response.sendRedirect(request.getContextPath() + "/WEB-INF/views/paginaInici.jsp");
+            request.getRequestDispatcher("/WEB-INF/views/paginaInici.jsp").forward(request, response);
             return;
         }
         // --- Fi Comprovació Seguretat ---
