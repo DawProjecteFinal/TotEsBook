@@ -15,7 +15,7 @@
     <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -23,7 +23,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/paginaInici.jsp">
-                <img src="${pageContext.request.contextPath}/img/logo.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
+                <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -38,7 +38,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">Catàleg</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cataleg">Veure Tot</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="#">Autoajuda</a></li>
                             <li><a class="dropdown-item" href="#">Ficció</a></li>
@@ -100,8 +100,8 @@
                         </form>
 
                         <div class="text-center mt-4">
-                            <a href="${pageContext.request.contextPath}/recuperarPass.jsp">Has oblidat la contrasenya?</a>
-                            <p class="mt-2">No tens un compte? <a href="${pageContext.request.contextPath}/registre.jsp">Registra't</a></p>
+                            <a href="${pageContext.request.contextPath}/recuperarPass">Has oblidat la contrasenya?</a>
+                            <p class="mt-2">No tens un compte? <a href="${pageContext.request.contextPath}/registre">Registra't</a></p>
                         </div>
                     </div>
 
