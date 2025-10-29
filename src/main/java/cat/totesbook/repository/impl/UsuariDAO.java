@@ -97,7 +97,7 @@ public class UsuariDAO implements UsuariRepository {
         return null;
     }
 
-    @Override // <-- Implementació del mètode que faltava (Error 5)
+    @Override 
     public List<Usuari> getAllUsuaris() {
         List<Usuari> usuaris = new ArrayList<>();
         String sql = "SELECT id, nom, cognoms, telefon, email, llibresFavorits FROM Usuaris";

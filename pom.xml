@@ -167,6 +167,12 @@
                 <version>3.3.2</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml> <!-- Important per a projectes sense web.xml -->
+                    <webappDirectory>${project.basedir}/src/main/webapp</webappDirectory>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
         </plugins>

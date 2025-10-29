@@ -32,7 +32,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/paginaInici.jsp">Inici</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/paginaInici">Inici</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
@@ -58,7 +58,7 @@
                         </button>
                     </form>
                     <%-- Lògica de Sessió (mostra "Iniciar Sessió" com a actiu) --%>
-                    <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0 active">
+                    <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0 active">
                         Inicia sessió <i class="bi bi-person-circle"></i>
                     </a>
                 </div>

@@ -1,7 +1,3 @@
-/**
- *
- * @author edinsonioc
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Llibre;
