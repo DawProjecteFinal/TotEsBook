@@ -128,8 +128,8 @@
                               <div class="col-lg-6 text-center">
                                 <h2 class="text-tot-bold">Descobreix un món de llibres</h2>
                                 <p class="text-tot-light">Cerca al nostre catàleg o inicia sessió per accedir als teus préstecs.</p>
-                                <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot me-2">Inicia Sessió</a>
-                                <a href="${pageContext.request.contextPath}/registre.jsp" class="btn btn-outline-secondary">Registra't</a>
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot me-2">Inicia Sessió</a>
+                                <a href="${pageContext.request.contextPath}/registre" class="btn btn-outline-secondary">Registra't</a>
                              </div>
                          </c:otherwise>
                      </c:choose>
