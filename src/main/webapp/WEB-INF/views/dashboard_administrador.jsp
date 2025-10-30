@@ -60,7 +60,7 @@
     <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/paginaInici">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}">
                 <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -70,7 +70,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/paginaInici">Inici</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
@@ -95,7 +95,7 @@
                      </c:if>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
-                    <form class="d-flex me-3 my-2 my-lg-0" role="search" action="${pageContext.request.contextPath}/cerca" method="GET">
+                    <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
                         <input class="form-control form-control-sm me-2" type="search" name="q"
                                placeholder="Cerca ràpida..." aria-label="Search">
                         <button class="btn btn-tot btn-sm" type="submit">
@@ -118,7 +118,7 @@
                                     <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li> <%-- Accés ràpid si també és biblio --%>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
+                                    <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}">
                                         <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                     </a></li>
                                 </ul>
@@ -279,7 +279,7 @@
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="${pageContext.request.contextPath}/contacte.jsp" class="text-decoration-none text-secondary">Contacte</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                     </ul>

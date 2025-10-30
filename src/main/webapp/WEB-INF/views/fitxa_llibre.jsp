@@ -23,8 +23,8 @@
     <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/paginaInici">
-                <img src="${pageContext.request.contextPath}/assets/img/logo.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}">
+                <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -33,7 +33,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/paginaInici">Inici</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
@@ -56,7 +56,7 @@
                      </c:if>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
-                    <form class="d-flex me-3 my-2 my-lg-0" role="search" action="${pageContext.request.contextPath}/cerca" method="GET">
+                    <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
                         <input class="form-control form-control-sm me-2" type="search" name="q"
                                placeholder="Cerca ràpida..." aria-label="Search">
                         <button class="btn btn-tot btn-sm" type="submit">
@@ -65,7 +65,7 @@
                     </form>
                     <c:choose>
                         <c:when test="${empty sessionScope.sessioUsuari}">
-                            <a href="${pageContext.request.contextPath}/login.jsp" class="btn btn-tot btn-sm my-2 my-lg-0">
+                            <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                 Inicia sessió <i class="bi bi-person-circle"></i>
                             </a>
                         </c:when>
@@ -190,7 +190,7 @@
                       <h4 class="alert-heading">Llibre no trobat</h4>
                       <p>No s'ha pogut trobar la informació del llibre sol·licitat. Si us plau, comprova l'ISBN o torna al catàleg.</p>
                       <hr>
-                       <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-secondary">Tornar al catàleg</a>
+                       <a href="${pageContext.request.contextPath}/mostrarLlibres" class="btn btn-secondary">Tornar al catàleg</a>
                     </div>
                 </c:otherwise>
              </c:choose>
@@ -208,7 +208,7 @@
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="${pageContext.request.contextPath}/contacte.jsp" class="text-decoration-none text-secondary">Contacte</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
                         <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                     </ul>

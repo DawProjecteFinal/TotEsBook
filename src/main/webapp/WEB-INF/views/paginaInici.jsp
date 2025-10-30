@@ -65,7 +65,7 @@
                     </ul>
                                 
                     <div class="d-flex align-items-center ms-lg-auto">
-                        <form class="d-flex me-3 my-2 my-lg-0" role="search" action="${pageContext.request.contextPath}/cerca" method="GET">
+                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
                                    placeholder="Cerca per titol, autor... " aria-label="Search">
                             <button class="btn btn-tot btn-sm" type="submit">
@@ -141,7 +141,7 @@
                     <c:forEach var="i" begin="1" end="8"> 
                         <div class="col mb-5">
                             <div class="card h-100 shadow-sm">
-                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                <img class="card-img-top" src="https://dummyimage.com/189x290/cccccc/fff.jpg&text=Portada" alt="..." />
                                 <div class="card-body p-4">
                                     <div class="text-center">
                                         <h5 class="fw-bolder text-tot-bold">Títol Llibre ${i}</h5>
