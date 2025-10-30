@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="${pageContext.request.contextPath}">
-                <img src="${pageContext.request.contextPath}/assets/images/logo.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
+                <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -37,7 +37,7 @@
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Catàleg</a>
+                           data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
                             <li><hr class="dropdown-divider" /></li>

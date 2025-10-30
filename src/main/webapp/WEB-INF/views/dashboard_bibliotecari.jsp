@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="${pageContext.request.contextPath}">
-                <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
+                <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -86,7 +86,7 @@
                                          </c:when>
                                     </c:choose>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}">
+                                    <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                         <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                     </a></li>
                                 </ul>

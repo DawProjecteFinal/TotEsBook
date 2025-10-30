@@ -36,7 +36,7 @@
                     <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Catàleg</a>
+                           data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
                             <li><hr class="dropdown-divider" /></li>

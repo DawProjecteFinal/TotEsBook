@@ -88,13 +88,13 @@
                                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
                                     <c:choose>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari.jsp">El Meu Panell</a></li>
+                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari.jsp">Panell Bibliotecari</a></li>
+                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
                                          </c:when>
                                          <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador.jsp">Panell Admin</a></li>
+                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
                                          </c:when>
                                     </c:choose>
                                     <li><hr class="dropdown-divider"></li>
