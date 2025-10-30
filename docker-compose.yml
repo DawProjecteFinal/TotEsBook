@@ -36,9 +36,12 @@ services:
       DB_NAME: totesbook
       DB_USER: totesuser
       DB_PASS: totespass
-    #volumes:
-    #  - ./target/TotEsBook-1.0-SNAPSHOT.war:/opt/glassfish7/glassfish/domains/domain1/autodeploy/TotEsBook.war
-
+    volumes:
+      # El .war es copia automàticament quan Maven el genera
+      - ./target/TotEsBook-1.0-SNAPSHOT.war:/opt/glassfish7/glassfish/domains/domain1/autodeploy/TotEsBook.war
+      # Mapegem directament el codi font JSP per veure canvis en calent
+      # Si canviem JSP, CSS o JS, es veurà en recarregar la pàgina
+      - ./src/main/webapp:/opt/glassfish7/glassfish/domains/domain1/applications/TotEsBook/
   adminer:
     image: adminer
     container_name: adminer

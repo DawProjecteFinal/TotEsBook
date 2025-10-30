@@ -24,7 +24,7 @@ public class LlibreController {
      * 
      * @return 
      */
-    @RequestMapping("/mostrarLlibres")
+    @RequestMapping({"/mostrarLlibres", "/cataleg"})
     public ModelAndView mostrarLlibres() {
         ModelAndView modelview = new ModelAndView("mostrarLlibres");
 

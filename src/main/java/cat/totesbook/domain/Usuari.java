@@ -2,19 +2,14 @@ package cat.totesbook.domain;
 
 import jakarta.persistence.*; // Imports JPA necessaris
 
-<<<<<<< HEAD
 /**
  * Classe que representa l'entitat Usuari a la BD.
  * 
  * @author equip TotEsBook
  */
 
-@Entity
-@Table(name = "Usuaris")
-=======
 @Entity // Indiquem que és una entitat JPA
 @Table(name = "Usuaris") // Nom de la taula a la BBDD
->>>>>>> feature-login
 public class Usuari {
 
     @Id // Clau primària

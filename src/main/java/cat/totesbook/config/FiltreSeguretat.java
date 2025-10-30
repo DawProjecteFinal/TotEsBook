@@ -28,7 +28,9 @@ public class FiltreSeguretat implements Filter {
     private static final Set<String> caminsPublics = Set.of(
         "/login.jsp", "/login", "/registre.jsp", "/registre", 
         "/paginaInici.jsp", "/fitxa_llibre.jsp", "/llibre", 
-        "/", "/logout", "/recuperarPass.jsp"
+        "/", "/logout", "/recuperarPass.jsp",
+        // Rutes públiques del catàleg
+        "/cataleg", "/mostrarLlibres"
     );
     
     // Conjunt de camins només per a convidats (no loguejats)

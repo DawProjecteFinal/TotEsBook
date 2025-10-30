@@ -4,21 +4,7 @@ import cat.totesbook.domain.Usuari;
 import java.util.List;
 
 /**
-<<<<<<< HEAD
- * Interfície de la capa repositori que gestiona les operacions de l'accés de 
- * dades dels usuaris.
- * 
- * @author equip TotEsBook
- */
-
-public interface UsuariRepository {
-    
-    /**
-     * Mètode que obté tots els usuaris.
-     * 
-     * @return 
-=======
- * Interfície per a les operacions de dades de la taula Usuaris.
+ * Interfície de la capa repositori per a les operacions de la taula Usuaris.
  */
 public interface UsuariRepository {
 
@@ -45,9 +31,7 @@ public interface UsuariRepository {
 
     /**
      * Retorna una llista de tots els Usuaris (lectors) del sistema.
-     * (Aquest era el mètode que faltava - Error 5)
      * @return Llista d'objectes Usuari.
->>>>>>> feature-login
      */
     List<Usuari> getAllUsuaris();
 }

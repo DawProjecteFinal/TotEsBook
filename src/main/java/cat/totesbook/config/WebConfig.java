@@ -21,8 +21,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class WebConfig implements WebMvcConfigurer {
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Bean
     public InternalResourceViewResolver viewResolver() {
@@ -40,11 +40,14 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-        registry.addResourceHandler("/images/**").addResourceLocations(
-                "classpath:/static/images/",
-                "/images/",
-                "file:src/main/webapp/images/");
+        // Configuració principal per /assets/** (css, images, etc.)
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations(
+                    "/assets/",                    // Per recursos públics
+                    "classpath:/static/assets/",   // Per recursos en el classpath
+                    "file:src/main/webapp/assets/" // Per desenvolupament local
+                )
+                .setCachePeriod(0);  // Deshabilitar cache durant desenvolupament
     }
+
 }

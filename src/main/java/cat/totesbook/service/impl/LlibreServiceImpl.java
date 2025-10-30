@@ -33,17 +33,7 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> getAllLlibres() {
         return llibreRepository.getAllLlibres();
     }
-<<<<<<< HEAD
     
-    /**
-     * Mètode que transaccional que guarda un llibre.
-     * 
-     * @param llibre 
-     */
-    @Override
-=======
-
->>>>>>> feature-login
     @Transactional
     public void addLlibre(Llibre llibre) {
         llibreRepository.addLlibre(llibre);

@@ -15,41 +15,27 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 /**
-<<<<<<< HEAD
- * Mètode que obté tots els usuaris de la BD mitjançant EntityManager.
- * 
- * @author equip TotEsBook
-=======
  * Implementació del DAO per a la taula Usuaris.
- * 
->>>>>>> feature-login
+ *
+ * Aquesta implementació utilitza accés JDBC directe via DBConnection.
  */
 
 @Repository
-<<<<<<< HEAD
-public class UsuariDAO implements UsuariRepository{
-    
-    /**
-     * Creem EntityManager gestionat Spring
-     */
-    @PersistenceContext
-    private EntityManager entityManager;
-=======
 public class UsuariDAO implements UsuariRepository {
 
-    @Override 
+    @Override
     public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
         String sql = "SELECT * FROM Usuaris WHERE email = ?";
-        
-        try (Connection conn = DBConnection.getConnection(); 
+
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setString(1, email);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String passwordHashejatDeLaDB = rs.getString("contrasenya");
-                    
+
                     if (BCrypt.checkpw(contrasenyaPlana, passwordHashejatDeLaDB)) {
                         Usuari usuari = new Usuari();
                         usuari.setId(rs.getInt("id"));
@@ -68,12 +54,11 @@ public class UsuariDAO implements UsuariRepository {
         }
         return null; // No trobat o contrasenya incorrecta
     }
->>>>>>> feature-login
 
     /**
-     * Mètode que obté tots els usuaris de la BD.
-     * 
-     * @return llista d'usuaris.
+     * Mètode que desa un usuari a la BD via JDBC.
+     *
+     * @param usuari l'usuari a desar
      */
     @Override
     public void saveUsuari(Usuari usuari) {

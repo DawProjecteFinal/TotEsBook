@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 package cat.totesbook.domain;
 
-=======
->>>>>>> feature-login
 /**
  *  Classe que representa l'entitat Agent a la BD.
  * 
  * @author equip TotEsBook
  */
-package cat.totesbook.domain;
 
 import jakarta.persistence.*; // Imports JPA
 
@@ -65,7 +61,7 @@ public class Agent {
     public String getContrasenya() { return contrasenya; }
     public void setContrasenya(String contrasenya) { this.contrasenya = contrasenya; }
 
-     // toString (opcional)
+     // toString
     @Override
     public String toString() {
         return "Agent{" + "idAgent=" + idAgent + ", nom=" + nom + ", cognoms=" + cognoms + ", email=" + email + ", tipus=" + tipus + '}';

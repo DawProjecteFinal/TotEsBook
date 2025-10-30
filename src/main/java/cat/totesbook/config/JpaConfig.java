@@ -1,85 +1,62 @@
 package cat.totesbook.config;
 
-import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.stereotype.Controller;
 import org.springframework.jndi.JndiObjectFactoryBean;
-import java.util.Properties;
 
-/**
- * 
- * @author equip TotEsBook
- */
 @Configuration
 @ComponentScan(
     basePackages = "cat.totesbook",
     excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)
 )
-/**
- * 
- */
 @EnableTransactionManagement
 public class JpaConfig {
 
     /**
-     * 
-     * @return 
+     * DataSource obtingut del pool JNDI gestionat per GlassFish
      */
     @Bean
     public JndiObjectFactoryBean dataSource() {
-        JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
-        jndiObjectFactoryBean.setJndiName("jdbc/TotEsBookDS");
-        jndiObjectFactoryBean.setResourceRef(true);
-        jndiObjectFactoryBean.setProxyInterface(DataSource.class);
-        return jndiObjectFactoryBean;
+        JndiObjectFactoryBean jndi = new JndiObjectFactoryBean();
+        jndi.setJndiName("jdbc/TotEsBookDS");  // nom exacte del teu pool
+        jndi.setResourceRef(true);
+        jndi.setProxyInterface(DataSource.class);
+        return jndi;
     }
 
     /**
-     * 
-     * @param dataSource
-     * @return 
+     * EntityManagerFactory vinculat a la unitat de persistència del persistence.xml
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource);
-        // Nom de la persistence-unit del persistence.xml
         emf.setPersistenceUnitName("totesbookPersistenceUnit");
-
-        // Propietats JPA per assegurar que Spring té el control
-        Properties jpaProperties = new Properties();
-        jpaProperties.put("jakarta.persistence.transactionType", "RESOURCE_LOCAL");
-        emf.setJpaProperties(jpaProperties);
-
-        // especifiquem el provider JPA (EclipseLink) per evitar ambigüitats.
-        emf.setPersistenceProviderClass(org.eclipse.persistence.jpa.PersistenceProvider.class);
-
+        emf.setJpaVendorAdapter(new EclipseLinkJpaVendorAdapter());
         return emf;
     }
-    
+
     /**
-     * 
-     * @param emf
-     * @return 
+     * Transaction manager basat en JTA (GlassFish)
      */
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        // Transaccions JPA gestionades per Spring
-        return new JpaTransactionManager(emf);
+    public PlatformTransactionManager transactionManager() {
+        return new JtaTransactionManager();
     }
 
     /**
-     * 
-     * @return 
+     * WebClient opcional per a crides HTTP externes
      */
     @Bean
     public WebClient.Builder webClientBuilder() {

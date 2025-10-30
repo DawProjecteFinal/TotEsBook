@@ -16,15 +16,6 @@ import java.util.Optional;
  */
 @Repository
 public class LlibreDAO implements LlibreRepository {
-<<<<<<< HEAD
-    
-    /**
-     * Creem EntityManager gestionat Spring
-     */
-=======
-
-    // Injectem EntityManager gestionat per Spring/GlassFish
->>>>>>> feature-login
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -35,20 +26,10 @@ public class LlibreDAO implements LlibreRepository {
      */
     @Override
     public List<Llibre> getAllLlibres() {
-        // Usem JPQL (Java Persistence Query Language)
-        TypedQuery<Llibre> query = entityManager.createQuery("SELECT * FROM Llibre l ORDER BY l.titol", Llibre.class);
+        TypedQuery<Llibre> query = entityManager.createQuery("SELECT l FROM Llibre l ORDER BY l.titol", Llibre.class);
         return query.getResultList();
     }
 
-<<<<<<< HEAD
-    /**
-     * Mètode que afegeix un llibre a la base de dades
-     * 
-     * @param llibre 
-     */
-=======
-    // Afegeix un llibre nou o actualitza un existent
->>>>>>> feature-login
     @Override
     public void addLlibre(Llibre llibre) {
          // merge fa un INSERT si l'entitat no existeix (per ISBN), o un UPDATE si ja existeix.

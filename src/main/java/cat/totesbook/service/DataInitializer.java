@@ -37,17 +37,9 @@ public class DataInitializer {
     @Autowired
     private LlibreService llibreService;
 
-<<<<<<< HEAD
-    /**
-     * Mètode que buscar les dades quan es desplega l'aplicació.
-     * 
-     */
-=======
     // Constants per a la lògica d'espera/reintent
     private static final int MAX_INTENTS = 6; // Intentarem 6 cops
     private static final long ESPERA_ENTRE_INTENTS_MS = 5000; // Esperem 5 segons
-
->>>>>>> feature-login
     @PostConstruct
     @Transactional // Mantenim la transacció per si s'insereixen dades
     public void initData() {

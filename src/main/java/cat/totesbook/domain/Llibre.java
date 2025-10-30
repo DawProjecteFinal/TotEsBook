@@ -54,23 +54,6 @@ public class Llibre {
      */
     public Llibre() {
     }
-
-<<<<<<< HEAD
-    /**
-     * Constructor que crea llibre venint de la API
-     * 
-     * @param isbn
-     * @param titol
-     * @param autor
-     * @param editorial
-     * @param categoria
-     * @param sinopsis
-     * @param imatgeUrl
-     * @param idioma 
-     */
-=======
-    // Constructor per a dades de l'API
->>>>>>> feature-login
     public Llibre(String isbn, String titol, String autor, String editorial, String categoria, String sinopsis, String imatgeUrl, String idioma) {
         this.isbn = isbn;
         this.titol = titol;

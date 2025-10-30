@@ -19,26 +19,10 @@ public interface LlibreRepository {
      */
     List<Llibre> getAllLlibres();
     
-<<<<<<< HEAD
-    /**
-     * Mètode que serveix per afegir un llibre.
-     * 
-     * @param llibre 
-     */
+    // Afegeix o actualitza un llibre
     void addLlibre(Llibre llibre);
-    
-    /**
-     * Mètode que comprova si el ISBN existeix
-     * 
-     * @param isbn
-     * @return el llibre amb l'ISBN.
-     */
-=======
-    // Mètode per afegir o actualitzar un llibre
-    void addLlibre(Llibre llibre); 
-    
-    // Comprovem si el ISBN existeix i obtenim el llibre
->>>>>>> feature-login
+
+    // Obté un llibre per ISBN si existeix
     Optional<Llibre> getLlibreByIsbn(String isbn);
 
 }
