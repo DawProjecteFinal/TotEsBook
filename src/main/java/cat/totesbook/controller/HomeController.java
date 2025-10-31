@@ -11,7 +11,7 @@ public class HomeController {
     @RequestMapping(value = {"","/"}, method = RequestMethod.GET)
     public ModelAndView paginaInici(){
         ModelAndView modelview = new ModelAndView("paginaInici");
-        modelview.getModelMap().addAttribute("benvinguda", "Benvinguts a TotEsBook!!.");
+        modelview.getModelMap().addAttribute("benvinguda", "Benvinguts a TotEsBook. Missatge antic!!.");
         return modelview;
     }
 
