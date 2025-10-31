@@ -7,6 +7,15 @@
 >>>>>>> feature-login
 */
 
+/* ====== Logo header ====== */
+header img {
+    max-width: 250px;      /* Amplada màxima del logo  */
+    width: 100%;           /* S'adapta al contenidor */
+    height: auto;          
+    display: block;        
+    margin: 0 auto;       
+}
+
 .dropdown-item.active, 
 .dropdown-item:active {
   background-color: #92dbe6; 
