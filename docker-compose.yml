@@ -42,6 +42,7 @@ services:
       # Mapegem directament el codi font JSP per veure canvis en calent
       # Si canviem JSP, CSS o JS, es veurà en recarregar la pàgina
       - ./src/main/webapp:/opt/glassfish7/glassfish/domains/domain1/applications/TotEsBook/
+  # eina gràfica per gestionar la base de dades MySQL.
   adminer:
     image: adminer
     container_name: adminer
