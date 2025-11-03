@@ -11,6 +11,9 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
+WEB-INF/classes/
+WEB-INF/lib/
+META-INF/maven/
 
 # ==========================
 # NetBeans

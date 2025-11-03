@@ -137,25 +137,38 @@
 
                 <h2 class="text-center text-tot-bold mb-4">Novetats Destacades</h2>
 
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <c:forEach var="i" begin="1" end="8"> 
+                 <c:if test="${not empty errorCarregantLlibres}">
+                 <div class="alert alert-warning text-center">
+                     <c:out value="${errorCarregantLlibres}"/>
+                 </div>
+            </c:if>
+
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                    <c:forEach var="llibre" items="${llibres}"> 
                         <div class="col mb-5">
                             <div class="card h-100 shadow-sm">
-                                <img class="card-img-top" src="https://dummyimage.com/189x290/cccccc/fff.jpg&text=Portada" alt="..." />
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <h5 class="fw-bolder text-tot-bold">Títol Llibre ${i}</h5>
-                                        <p class="text-tot-light mb-0">Autor ${i}</p>
+                                <img src="<c:url value='${llibre.imatgeUrl}'/>" class="card-img-top img-fixed mx-auto d-block" alt="Portada de <c:out value='${llibre.titol}'/>">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
+                                    <p class="text-muted mb-2 text-tot-light"><c:out value="${llibre.autor}"/></p>
+                                    <ul class="list-unstyled small mb-3 text-tot-isbn"> 
+                                        <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
+                                    </ul>
+                                    <div class="mt-auto text-center">
+                                        <%-- CORRECCIÓ: L'enllaç ha d'apuntar al controlador /llibre --%>
+                                        <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
                                     </div>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center">
-                                        <a class="btn btn-tot mt-auto" href="#">Més informació</a>
-                                    </div>
+                                   </div>
                                 </div>
                             </div>
-                        </div>
                     </c:forEach>
+                
+                    <c:if test="${empty llibres && empty errorCarregantLlibres}">
+                        <div class="col-12 text-center text-muted">
+                            <p>No s'han trobat llibres destacats en aquest moment.</p>
+                        </div>
+                    </c:if>
                 </div>
             </div>
         </section>

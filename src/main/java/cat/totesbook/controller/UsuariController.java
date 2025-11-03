@@ -86,6 +86,7 @@ public class UsuariController {
      * @param session La sessió HTTP per comprovar si l'usuari ja està loguejat.
      * @return El nom de la vista JSP o una redirecció.
      */
+    
     @GetMapping("/registre")
     public String mostrarFormulariRegistre(HttpSession session) {
         // Comprovem si l'usuari ja està loguejat

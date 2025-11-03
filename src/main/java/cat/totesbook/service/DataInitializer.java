@@ -30,7 +30,7 @@ public class DataInitializer {
     private static final long ESPERA_ENTRE_INTENTS_MS = 5000; // Esperem 5 segons
 
     @PostConstruct
-    @Transactional // Mantenim la transacció per si s'insereixen dades
+    //@Transactional // Mantenim la transacció per si s'insereixen dades
     public void initData() {
         System.out.println(">>> Iniciant DataInitializer...");
 
