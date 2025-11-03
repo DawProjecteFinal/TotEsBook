@@ -20,9 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Import
 import java.util.List;
 
 /**
- * Controlador Spring MVC per a les funcions de gestió d'usuaris.
- * Substitueix el 'MostrarUsuarisServlet'.
- * Només accessible per a l'ADMIN.
+ * Controlador Spring MVC per a les funcions de gestió d'usuaris
+ * i el procés de registre.
+ * Només accessible per a l'ADMIN (excepte el registre).
  */
 @Controller
 public class UsuariController {
@@ -40,18 +40,17 @@ public class UsuariController {
      *
      * @param model   L'objecte Model de Spring per passar atributs a la vista.
      * @param session La sessió HTTP per comprovar l'autorització.
-     * @return El nom de la vista JSP (sense el prefix /WEB-INF/views/) o una redirecció.
+     * @return El nom de la vista JSP ("mostrarUsuaris") o una redirecció.
      */
     @GetMapping("/mostrarUsuaris")
     public String mostrarLlistatUsuaris(Model model, HttpSession session) {
         
-        // --- Comprovació de Seguretat (idèntica a la del filtre) ---
+        // --- Comprovació de Seguretat ---
         SessioUsuari sessioUsuari = (session != null) ? (SessioUsuari) session.getAttribute("sessioUsuari") : null;
         
         // Si no està loguejat o no és ADMIN, redirigim a l'inici
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
-            // Fem un redirect a la pàgina d'inici
-            return "redirect:/paginaInici.jsp";
+            return "redirect:/"; // Redirigim a l'IniciController
         }
         // --- Fi Comprovació Seguretat ---
 
@@ -60,44 +59,43 @@ public class UsuariController {
             List<Usuari> llistaUsuaris = usuariRepo.getAllUsuaris();
             List<Agent> llistaAgents = agentRepo.getAllAgents();
 
-            // 2. Desem les llistes al Model (en lloc de la request)
+            // 2. Desem les llistes al Model
             model.addAttribute("llistaUsuaris", llistaUsuaris);
             model.addAttribute("llistaAgents", llistaAgents);
 
-            // 3. Retornem la RUTA COMPLETA al fitxer JSP dins de WEB-INF
-            //    (Ja que probablement no hi ha un ViewResolver configurat)
-            return "/WEB-INF/views/mostrarUsuaris.jsp";
+            // 3. Retornem el NOM de la vista.
+            // El ViewResolver buscarà: /WEB-INF/views/mostrarUsuaris.jsp
+            return "mostrarUsuaris"; 
 
         } catch (Exception e) {
             System.err.println("Error a UsuariController.mostrarLlistatUsuaris: " + e.getMessage());
             e.printStackTrace(); 
-            // Podem afegir un atribut d'error al model
             model.addAttribute("error", "No s'han pogut carregar les dades d'usuaris.");
-            // I redirigir a l'inici (o a una pàgina d'error)
-            return "redirect:/paginaInici.jsp";
+            // I redirigim a l'inici
+            return "redirect:/";
         }
     }
     
-    // --- INICI DEL NOU CODI CONVERTIT (DES DE RegistreServlet) ---
+    // --- Lògica de Registre ---
 
     /**
      * Gestiona les peticions GET a /registre.
      * Mostra la pàgina (formulari) de registre.
      * @param session La sessió HTTP per comprovar si l'usuari ja està loguejat.
-     * @return El nom de la vista JSP o una redirecció.
+     * @return El nom de la vista JSP ("registre") o una redirecció.
      */
-    
     @GetMapping("/registre")
     public String mostrarFormulariRegistre(HttpSession session) {
         // Comprovem si l'usuari ja està loguejat
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
         if (sessioUsuari != null) {
             // Si ja està loguejat, el redirigim a l'inici
-            return "redirect:/paginaInici.jsp";
+            return "redirect:/";
         }
         
-        // Retornem la ruta completa al JSP privat (com feia el teu servlet)
-        return "/WEB-INF/views/registre.jsp";
+        // Retornem el NOM de la vista.
+        // El ViewResolver buscarà: /WEB-INF/views/registre.jsp
+        return "registre";
     }
 
     /**
@@ -122,14 +120,14 @@ public class UsuariController {
             Model model,
             RedirectAttributes redirectAttrs) {
 
-        // 1. Comprovar si l'usuari ja existeix (fent servir el mètode corregit 'getUsuariByEmail')
+        // 1. Comprovar si l'usuari ja existeix
         Usuari usuariExistent = usuariRepo.getUsuariByEmail(email);
         
         if (usuariExistent != null) {
             // Error: L'email ja existeix
             model.addAttribute("error", "Aquest correu electrònic ja està registrat.");
-            // Retornem (forward) a la vista de registre
-            return "/WEB-INF/views/registre.jsp";
+            // Retornem (forward) al NOM de la vista de registre
+            return "registre"; // Mostra /WEB-INF/views/registre.jsp amb el missatge d'error
         }
 
         // 2. Hashejem la contrasenya
@@ -146,11 +144,7 @@ public class UsuariController {
         usuariRepo.saveUsuari(nouUsuari);
 
         // 4. Redirigim al login amb un missatge d'èxit
-        //    (Fem servir RedirectAttributes per passar missatges entre redireccions)
-        //    Això és millor que el 'forward' que tenies al servlet original.
         redirectAttrs.addFlashAttribute("success", "Registre completat! Ara pots iniciar sessió.");
-        return "redirect:/login"; // Redirigim a la URL del LoginServlet/Controller
+        return "redirect:/login"; // Redirigim a la URL del LoginController
     }
-    
-    // --- FI DEL NOU CODI CONVERTIT ---
 }
