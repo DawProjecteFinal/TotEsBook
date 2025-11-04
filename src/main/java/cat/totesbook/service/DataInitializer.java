@@ -1,23 +1,26 @@
 package cat.totesbook.service;
 
-import cat.totesbook.domain.Llibre; // Importa Llibre
+import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.domain.Llibre;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PersistenceException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-// Imports necessaris per a la gestió d'errors i espera
-import jakarta.persistence.PersistenceException; 
-import org.eclipse.persistence.exceptions.DatabaseException; 
-import java.sql.SQLSyntaxErrorException; 
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.sql.SQLSyntaxErrorException;
+import java.util.*;
 
 @Component
 public class DataInitializer {
+
+    // CONSTANTS GLOBALS
+    private static final String ISBN_FILE = "isbns.txt";         // Fitxer d'ISBNs
+    private static final int MAX_INTENTS = 6;                    // Nombre màxim d’intents
+    private static final long ESPERA_ENTRE_INTENTS_MS = 5000;    // Temps d’espera entre intents (ms)
 
     @Autowired
     private GoogleBooksService googleBooksService;
@@ -25,123 +28,143 @@ public class DataInitializer {
     @Autowired
     private LlibreService llibreService;
 
-    // Constants per a la lògica d'espera/reintent
-    private static final int MAX_INTENTS = 6; // Intentarem 6 cops
-    private static final long ESPERA_ENTRE_INTENTS_MS = 5000; // Esperem 5 segons
+    @Autowired
+    private BibliotecaService bibliotecaService;
+
+    @Autowired
+    private BibliotecaLlibreService bibliotecaLlibreService;
+
+
+    // MÈTODE PRINCIPAL D’INICIALITZACIÓ
 
     @PostConstruct
-    @Transactional // Mantenim la transacció per si s'insereixen dades
+    @Transactional
     public void initData() {
         System.out.println(">>> Iniciant DataInitializer...");
 
         boolean dadesInicialitzades = false;
-        
-        // Bucle per intentar accedir a la BBDD diverses vegades
+
         for (int intent = 1; intent <= MAX_INTENTS; intent++) {
             try {
-                // Intentem obtenir els llibres per veure si la taula existeix
                 List<Llibre> llibresExistents = llibreService.getAllLlibres();
-                
-                System.out.println(">>> DataInitializer: Connexió a BBDD reeixida (Intent " + intent + ").");
+                System.out.println(">>> Connexió a BBDD correcta (Intent " + intent + ").");
 
-                // Si la taula existeix i està buida, procedim a inicialitzar
                 if (llibresExistents.isEmpty()) {
-                    System.out.println(">>> DataInitializer: La taula Llibres és buida. Important dades des de Google Books API...");
-                    importarLlibresDesDeFitxer(); // Cridem a un mètode separat per claredat
+                    System.out.println(">>> La taula Llibres és buida. Important dades des de fitxer...");
+                    importarLlibresDesDeFitxer();
                 } else {
-                    System.out.println(">>> DataInitializer: Ja hi ha llibres a la BBDD. No cal inicialitzar.");
+                    System.out.println(">>> Ja hi ha llibres a la BBDD. No s'importen dades.");
                 }
-                
-                dadesInicialitzades = true; // Marquem que hem acabat
-                break; // Sortim del bucle for si tot ha anat bé
+
+                dadesInicialitzades = true;
+                break;
 
             } catch (PersistenceException e) {
-                // Comprovem si l'error és perquè la taula 'Llibres' no existeix
                 if (esErrorTaulaNoExisteix(e)) {
-                    System.out.println(">>> DataInitializer: Intent " + intent + "/" + MAX_INTENTS + 
-                                       " - La taula Llibres encara no existeix. Esperant " + 
-                                       (ESPERA_ENTRE_INTENTS_MS / 1000) + " segons...");
-                    if (intent < MAX_INTENTS) {
-                        esperar(ESPERA_ENTRE_INTENTS_MS); // Esperem abans del següent intent
-                    }
+                    System.out.println(">>> Intent " + intent + "/" + MAX_INTENTS +
+                            " - La taula Llibres encara no existeix. Esperant " +
+                            (ESPERA_ENTRE_INTENTS_MS / 1000) + " segons...");
+                    esperar(ESPERA_ENTRE_INTENTS_MS);
                 } else {
-                    // És un altre error de persistència, el registrem i sortim
-                    System.err.println(">>> DataInitializer: Error de persistència inesperat:");
+                    System.err.println(">>> Error de persistència inesperat:");
                     e.printStackTrace();
-                    break; // Sortim del bucle en cas d'error no recuperable
+                    break;
                 }
             } catch (Exception e) {
-                // Qualsevol altre error inesperat
-                System.err.println(">>> DataInitializer: Error general inesperat durant la inicialització:");
+                System.err.println(">>> Error inesperat durant la inicialització:");
                 e.printStackTrace();
-                break; // Sortim del bucle
+                break;
             }
-        } // Fi del bucle for
+        }
 
-        // Comprovem si hem aconseguit inicialitzar les dades
         if (!dadesInicialitzades) {
-            System.err.println(">>> DataInitializer: ERROR FATAL - No s'ha pogut accedir a la taula Llibres després de " + 
-                               MAX_INTENTS + " intents. Comprova l'script init.sql, la configuració de la BBDD i els logs de MySQL.");
+            System.err.println(">>> ERROR FATAL - No s'ha pogut inicialitzar després de "
+                    + MAX_INTENTS + " intents.");
         }
     }
 
-    /**
-     * Mètode auxiliar per importar els ISBNs des del fitxer.
-     */
+
+    // MÈTODE AUXILIAR: IMPORTAR LLIBRES DEL FITXER
+
     private void importarLlibresDesDeFitxer() {
-         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ClassPathResource("isbns.txt").getInputStream()))) {
-             reader.lines().forEach(isbn -> {
-                 // Usem try-catch per a cada llibre per si un falla
-                 try {
-                     googleBooksService.getLlibreByIsbn(isbn).ifPresent(llibre -> {
-                         System.out.println(">>> DataInitializer: Guardant llibre: " + llibre.getTitol());
-                         llibreService.guardarLlibre(llibre); // El servei gestiona la transacció
-                     });
-                 } catch (Exception ex) {
-                     System.err.println(">>> DataInitializer: Error processant ISBN '" + isbn + "': " + ex.getMessage());
-                 }
-             });
-             System.out.println(">>> DataInitializer: Dades importades des de fitxer.");
-         } catch (Exception e) {
-             System.err.println(">>> DataInitializer: Error crític llegint el fitxer d'ISBNs 'isbns.txt': " + e.getMessage());
-             e.printStackTrace();
-         }
+        Map<String, List<String>> isbnsPerBiblioteca = new LinkedHashMap<>();
+        String bibliotecaActual = null;
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new ClassPathResource(ISBN_FILE).getInputStream()))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                if (line.startsWith("#")) {
+                    bibliotecaActual = line.replace("#", "").trim();
+                    isbnsPerBiblioteca.put(bibliotecaActual, new ArrayList<>());
+                } else if (bibliotecaActual != null) {
+                    isbnsPerBiblioteca.get(bibliotecaActual).add(line);
+                }
+            }
+
+            // Processem cada biblioteca
+            for (Map.Entry<String, List<String>> entry : isbnsPerBiblioteca.entrySet()) {
+                String nomBiblioteca = entry.getKey();
+                List<String> isbns = entry.getValue();
+
+                Biblioteca biblioteca = bibliotecaService.findByNom(nomBiblioteca)
+                        .orElseThrow(() -> new RuntimeException("No s'ha trobat la biblioteca: " + nomBiblioteca));
+
+                System.out.println(">>> Important " + isbns.size() + " llibres per a " + nomBiblioteca);
+
+                for (String linia : isbns) {
+                    String[] parts = linia.split(";");
+                    String isbn = parts[0].trim();
+                    int exemplars = (parts.length > 1) ? Integer.parseInt(parts[1].trim()) : 3;
+
+                    try {
+                        googleBooksService.getLlibreByIsbn(isbn).ifPresent(llibre -> {
+                            llibreService.guardarLlibre(llibre);
+                            bibliotecaLlibreService.afegirLlibre(biblioteca, llibre, exemplars, exemplars);
+                            System.out.println(">>> [" + nomBiblioteca + "] Afegit llibre "
+                                    + llibre.getTitol() + " (" + exemplars + " exemplars)");
+                        });
+                    } catch (Exception ex) {
+                        System.err.println(">>> Error amb ISBN " + isbn + ": " + ex.getMessage());
+                    }
+                }
+            }
+
+            System.out.println(">>> Importació completada per totes les biblioteques.");
+
+        } catch (Exception e) {
+            System.err.println(">>> Error crític llegint el fitxer '" + ISBN_FILE + "': " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * Mètode auxiliar per comprovar si l'excepció indica que la taula no existeix.
-     * @param e L'excepció de persistència.
-     * @return true si l'error és per taula inexistent, false altrament.
-     */
+
+    // MÈTODES AUXILIARS
+
     private boolean esErrorTaulaNoExisteix(PersistenceException e) {
         Throwable causaArrel = e;
-        // Naveguem per les causes anidades fins a trobar l'excepció SQL original
         while (causaArrel.getCause() != null && causaArrel.getCause() != causaArrel) {
             causaArrel = causaArrel.getCause();
         }
-        
-        // Comprovem si l'excepció arrel és la que indica que la taula no existeix
-        if (causaArrel instanceof SQLSyntaxErrorException) {
-            SQLSyntaxErrorException sqlEx = (SQLSyntaxErrorException) causaArrel;
-            // Comprovem el missatge o el codi d'error (1146 per a MySQL)
-            return sqlEx.getErrorCode() == 1146 || 
-                   (sqlEx.getMessage() != null && 
-                    sqlEx.getMessage().toLowerCase().contains("table") && 
-                    sqlEx.getMessage().toLowerCase().contains("doesn't exist"));
+        if (causaArrel instanceof SQLSyntaxErrorException sqlEx) {
+            return sqlEx.getErrorCode() == 1146 ||
+                    (sqlEx.getMessage() != null &&
+                            sqlEx.getMessage().toLowerCase().contains("table") &&
+                            sqlEx.getMessage().toLowerCase().contains("doesn't exist"));
         }
         return false;
     }
 
-    /**
-     * Mètode auxiliar per fer una pausa.
-     * @param ms Milisegons a esperar.
-     */
     private void esperar(long ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
-            System.err.println(">>> DataInitializer: Fil d'espera interromput.");
+            System.err.println(">>> Fil d'espera interromput.");
         }
     }
 }

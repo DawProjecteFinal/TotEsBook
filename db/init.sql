@@ -143,3 +143,21 @@ INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu,
 VALUES
 (6, 'Crim i càstig', 'Fiódor Dostoievski', NULL, 'Edicions 62', 'Molt demanat pels usuaris', NOW(), 'pendent'),
 (7, 'El Senyor dels Anells', 'J.R.R. Tolkien', NULL, 'Minotauro', 'Per ampliar la secció de fantasia', NOW(), 'pendent');
+
+CREATE TABLE IF NOT EXISTS BibliotecaLlibres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idBiblioteca INT NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    exemplars INT NOT NULL DEFAULT 0,
+    disponibles INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_biblio_llibre_biblioteca
+        FOREIGN KEY (idBiblioteca) REFERENCES Biblioteques(idBiblioteca)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT fk_biblio_llibre_llibres
+        FOREIGN KEY (isbn) REFERENCES Llibres(isbn)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT uc_biblio_llibre UNIQUE (idBiblioteca, isbn)
+);

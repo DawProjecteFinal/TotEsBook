@@ -1,0 +1,44 @@
+
+package cat.totesbook.service.impl;
+
+import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.repository.BibliotecaRepository;
+import cat.totesbook.service.BibliotecaService;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author jmiro
+ */
+
+@Service
+@Transactional
+public class BibliotecaServiceImpl implements BibliotecaService {
+
+    @Autowired
+    private BibliotecaRepository bibliotecaRepository;
+
+    @Override
+    public List<Biblioteca> getAllBiblioteques() {
+        return bibliotecaRepository.getAllBiblioteques();
+    }
+
+    @Override
+    public Optional<Biblioteca> findById(int idBiblioteca) {
+        return bibliotecaRepository.findById(idBiblioteca);
+    }
+
+    @Override
+    public Optional<Biblioteca> findByNom(String nom) {
+        return bibliotecaRepository.findByNom(nom);
+    }
+
+    @Override
+    public void addBiblioteca(Biblioteca biblioteca) {
+        bibliotecaRepository.addBiblioteca(biblioteca);
+    }
+}
