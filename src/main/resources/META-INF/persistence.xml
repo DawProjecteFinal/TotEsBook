@@ -9,15 +9,16 @@
         <!-- JNDI DataSource configurat a GlassFish -->
         <jta-data-source>jdbc/TotEsBookDS</jta-data-source>
 
-        <!-- CORRECCIÓ 2: Llistar TOTES les entitats gestionades -->
-        <class>cat.totesbook.domain.Llibre</class>
-        <class>cat.totesbook.domain.Usuari</class>
+        <!-- TOTES les entitats gestionades -->
         <class>cat.totesbook.domain.Agent</class>
         <class>cat.totesbook.domain.Biblioteca</class> 
-        <class>cat.totesbook.domain.Prestec</class> 
-        <class>cat.totesbook.domain.Reserva</class>
+        <class>cat.totesbook.domain.Llibre</class>
+        <class>cat.totesbook.domain.Prestec</class>
         <class>cat.totesbook.domain.PropostaAdquisicio</class>
-        <!-- ... afegeix altres si n'hi ha ... -->
+        <class>cat.totesbook.domain.Reserva</class>
+        <class>cat.totesbook.domain.Rol</class>
+        <class>cat.totesbook.domain.SessioUsuari</class>
+        <class>cat.totesbook.domain.Usuari</class>
 
         <properties>
             <!-- CORRECCIÓ 1: Indicar a JPA que NO gestioni l'esquema -->

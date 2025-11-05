@@ -1,88 +1,90 @@
-package cat.totesbook.config;
+/*package cat.totesbook.config;
 
-import jakarta.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.reactive.function.client.WebClient; // Aquest bean estava aquí, el mantenim
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.jndi.JndiObjectFactoryBean;
-import java.util.Properties;
 
 /**
- * 
- * @author equip TotEsBook
+ * Configuració del context Arrel de Spring (Backend). S'encarrega d'escanejar
+ * Serveis, Repositoris i altres Components. S'ha eliminat la configuració de
+ * JPA/EntityManager per evitar conflictes amb la connexió JDBC manual
+ * (DBConnection.java).
  */
-@Configuration
+ /*@Configuration
 @ComponentScan(
-    basePackages = "cat.totesbook",
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)
+    basePackages = "cat.totesbook", // Escaneja tot el projecte
+    // Exclou els Controllers (perquè els gestiona WebConfig)
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class) 
 )
-/**
- * 
- */
-@EnableTransactionManagement
+//@EnableTransactionManagement // Encara que fem servir JDBC manual, podem gestionar transaccions
 public class JpaConfig {
 
-    /**
-     * 
-     * @return 
-     */
-    @Bean
-    public JndiObjectFactoryBean dataSource() {
-        JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
-        jndiObjectFactoryBean.setJndiName("jdbc/TotEsBookDS");
-        jndiObjectFactoryBean.setResourceRef(true);
-        jndiObjectFactoryBean.setProxyInterface(DataSource.class);
-        return jndiObjectFactoryBean;
-    }
 
-    /**
-     * 
-     * @param dataSource
-     * @return 
-     */
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setDataSource(dataSource);
-        // Nom de la persistence-unit del persistence.xml
-        emf.setPersistenceUnitName("totesbookPersistenceUnit");
-
-        // Propietats JPA per assegurar que Spring té el control
-        Properties jpaProperties = new Properties();
-        jpaProperties.put("jakarta.persistence.transactionType", "RESOURCE_LOCAL");
-        emf.setJpaProperties(jpaProperties);
-
-        // especifiquem el provider JPA (EclipseLink) per evitar ambigüitats.
-        emf.setPersistenceProviderClass(org.eclipse.persistence.jpa.PersistenceProvider.class);
-
-        return emf;
-    }
-    
-    /**
-     * 
-     * @param emf
-     * @return 
-     */
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        // Transaccions JPA gestionades per Spring
-        return new JpaTransactionManager(emf);
-    }
-
-    /**
-     * 
-     * @return 
-     */
+    // Encara que RestTemplateConfig.java crea un RestTemplate, no fan mal.
     @Bean
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
+    }
+    
+}*/
+package cat.totesbook.config;
+
+import jakarta.persistence.EntityManagerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+
+import org.springframework.jndi.JndiObjectFactoryBean;
+
+@Configuration
+@EnableTransactionManagement
+@ComponentScan(
+        basePackages = "cat.totesbook",
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = org.springframework.stereotype.Controller.class)
+)
+public class JpaConfig {
+
+    @Bean
+    public DataSource dataSource() throws NamingException {
+        JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+        lookup.setResourceRef(false);  // important
+        return lookup.getDataSource("jdbc/TotEsBookDS"); // nom del recurs JNDI"
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setPersistenceUnitName("totesbookPersistenceUnit");
+        em.setDataSource(dataSource);
+        em.setPackagesToScan("cat.totesbook.domain");
+        em.setJpaVendorAdapter(new EclipseLinkJpaVendorAdapter());
+        return em;
+    }
+
+    /**
+     * Gestiona les transaccions JPA
+     */
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+
+    @Bean
+    public org.springframework.web.reactive.function.client.WebClient.Builder webClientBuilder() {
+        return org.springframework.web.reactive.function.client.WebClient.builder();
     }
 }

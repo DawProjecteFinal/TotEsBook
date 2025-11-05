@@ -1,13 +1,16 @@
-package cat.totesbook.service;
+package cat.totesbook.init;
 
-import cat.totesbook.domain.Biblioteca;
-import cat.totesbook.domain.Llibre;
+import cat.totesbook.domain.*;
+import cat.totesbook.service.BibliotecaLlibreService;
+import cat.totesbook.service.BibliotecaService;
+import cat.totesbook.service.GoogleBooksService;
+import cat.totesbook.service.LlibreService;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.PersistenceException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,30 +21,30 @@ import java.util.*;
 public class DataInitializer {
 
     // CONSTANTS GLOBALS
-    private static final String ISBN_FILE = "isbns.txt";         // Fitxer d'ISBNs
-    private static final int MAX_INTENTS = 6;                    // Nombre màxim d’intents
-    private static final long ESPERA_ENTRE_INTENTS_MS = 5000;    // Temps d’espera entre intents (ms)
+    private static final String ISBN_FILE = "isbns.txt";
+    private static final int MAX_INTENTS = 6;
+    private static final long ESPERA_ENTRE_INTENTS_MS = 5000;
 
-    @Autowired
-    private GoogleBooksService googleBooksService;
+    @Autowired private GoogleBooksService googleBooksService;
+    @Autowired private LlibreService llibreService;
+    @Autowired private BibliotecaService bibliotecaService;
+    @Autowired private BibliotecaLlibreService bibliotecaLlibreService;
 
-    @Autowired
-    private LlibreService llibreService;
-
-    @Autowired
-    private BibliotecaService bibliotecaService;
-
-    @Autowired
-    private BibliotecaLlibreService bibliotecaLlibreService;
-
-
-    // MÈTODE PRINCIPAL D’INICIALITZACIÓ
-
+    // MÈTODE PRINCIPAL D’ARRENCADA 
     @PostConstruct
-    @Transactional
     public void initData() {
         System.out.println(">>> Iniciant DataInitializer...");
+        try {
+            inicialitzarDades(); // Fem la crida al mètode transaccional
+        } catch (Exception e) {
+            System.err.println(">>> Error durant la inicialització: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
+    // MÈTODE TRANSACCIONAL PRINCIPAL 
+    @Transactional
+    public void inicialitzarDades() {
         boolean dadesInicialitzades = false;
 
         for (int intent = 1; intent <= MAX_INTENTS; intent++) {
@@ -83,9 +86,7 @@ public class DataInitializer {
         }
     }
 
-
-    // MÈTODE AUXILIAR: IMPORTAR LLIBRES DEL FITXER
-
+    // LLEGIR FITXER D'ISBNs I IMPORTAR 
     private void importarLlibresDesDeFitxer() {
         Map<String, List<String>> isbnsPerBiblioteca = new LinkedHashMap<>();
         String bibliotecaActual = null;
@@ -106,7 +107,7 @@ public class DataInitializer {
                 }
             }
 
-            // Processem cada biblioteca
+            // Processar cada biblioteca
             for (Map.Entry<String, List<String>> entry : isbnsPerBiblioteca.entrySet()) {
                 String nomBiblioteca = entry.getKey();
                 List<String> isbns = entry.getValue();
@@ -123,8 +124,8 @@ public class DataInitializer {
 
                     try {
                         googleBooksService.getLlibreByIsbn(isbn).ifPresent(llibre -> {
-                            llibreService.guardarLlibre(llibre);
-                            bibliotecaLlibreService.afegirLlibre(biblioteca, llibre, exemplars, exemplars);
+                            llibreService.guardarLlibre(llibre); // JDBC
+                            bibliotecaLlibreService.afegirLlibre(biblioteca, llibre, exemplars, exemplars); // JPA
                             System.out.println(">>> [" + nomBiblioteca + "] Afegit llibre "
                                     + llibre.getTitol() + " (" + exemplars + " exemplars)");
                         });
@@ -142,9 +143,7 @@ public class DataInitializer {
         }
     }
 
-
-    // MÈTODES AUXILIARS
-
+    //  MÈTODES AUXILIARS 
     private boolean esErrorTaulaNoExisteix(PersistenceException e) {
         Throwable causaArrel = e;
         while (causaArrel.getCause() != null && causaArrel.getCause() != causaArrel) {

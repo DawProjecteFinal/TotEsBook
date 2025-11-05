@@ -40,7 +40,7 @@ public class LlibreServiceImpl implements LlibreService {
      * @param llibre 
      */
     @Override
-    @Transactional
+    //@Transactional
     public void guardarLlibre(Llibre llibre) {
         llibreRepository.addLlibre(llibre);
     }
