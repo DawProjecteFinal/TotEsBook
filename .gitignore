@@ -11,9 +11,11 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
-WEB-INF/classes/
-WEB-INF/lib/
-META-INF/maven/
+
+#️ Excloem fitxers generats dins del WAR
+src/main/webapp/WEB-INF/classes/
+src/main/webapp/WEB-INF/lib/
+src/main/webapp/META-INF/maven/
 
 # ==========================
 # NetBeans
