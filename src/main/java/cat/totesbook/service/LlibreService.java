@@ -1,5 +1,6 @@
 package cat.totesbook.service;
 
+import cat.totesbook.domain.Biblioteca;
 import java.util.List;
 import cat.totesbook.domain.Llibre;
 import java.util.Optional;
@@ -33,5 +34,8 @@ public interface LlibreService {
      * @return llibre amb l'ISBN passat per paràmetre.
      */
     Optional<Llibre> getLlibreByIsbn(String isbn);
+    
+    // Retorna els llibres de una biblioteca en concret
+    List<Llibre> findByBiblioteca(Biblioteca biblioteca);
     
 }

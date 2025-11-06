@@ -1,9 +1,8 @@
 <%-- 
-    Document   : mostrarLlibres.jsp
-    Created on : 28 sept 2025, 7:01:42
-    Author     : equip TotEsBook
+    Document   : mostrarBiblioteques
+    Created on : 6 nov 2025, 15:11:59
+    Author     : jmiro
 --%>
-
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -12,7 +11,7 @@
 <html lang="ca">
     <head>
         <meta charset="UTF-8">
-        <title>Llibres</title>
+        <title>Biblioteques</title>
 
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -83,28 +82,28 @@
             </div>
         </nav>
 
-        <div class="container py-4">
-            <h1 class="mb-4 text-center text-tot-principal">Explora, tria i gaudeix</h1>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-                <c:forEach var="llibre" items="${llibres}">
-                    <div class="col">
-                        <div class="card h-100 shadow-sm">
-                            <img src="${llibre.imatgeUrl}" class="card-img-top img-fixed mx-auto d-block" alt="Portada de ${llibre.titol}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
-                                <p class="text-muted mb-2 text-tot-light"><c:out value="${llibre.autor}"/></p>                            
-                                <ul class="list-unstyled small mb-3 text-tot-isbn"> 
-                                    <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
-                                </ul>
-                                <div class="mt-auto">
-                                    <a href="#" class="btn btn-tot w-100">Més informació</a>
-                                </div>
-                            </div>
+        <div class="container py-5">
+            <h1 class="mb-4 text-center text-tot-principal">Xarxa de Biblioteques TotEsBook</h1>
+
+            <div class="row justify-content-center text-center">
+                <c:forEach var="biblioteca" items="${biblioteques}">
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-0 shadow-lg p-4 h-100">
+                            <i class="bi bi-book-half display-3 text-tot-principal mb-3"></i>
+                            <h4 class="fw-bold mb-2"><c:out value="${biblioteca.nom}"/></h4>
+                            <p class="text-muted mb-1"><c:out value="${biblioteca.adreca}"/></p>
+                            <p class="small text-tot-light"><i class="bi bi-telephone"></i> <c:out value="${biblioteca.telefon}"/></p>
+                            <a href="${pageContext.request.contextPath}/biblioteques/${biblioteca.idBiblioteca}/llibres" 
+                               class="btn btn-tot w-100">
+                                Entra a la biblioteca
+                            </a>
                         </div>
                     </div>
                 </c:forEach>
             </div>
         </div>
+
+
 
         <footer class="bg-tot text-center text-lg-start border-top mt-5 py-3">
             <div class="container">

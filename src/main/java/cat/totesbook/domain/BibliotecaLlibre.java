@@ -29,7 +29,7 @@ public class BibliotecaLlibre {
     private Biblioteca biblioteca;
 
     @ManyToOne
-    @JoinColumn(name = "isbn", nullable = false)
+    @JoinColumn(name = "isbn", referencedColumnName="isbn", nullable = false)
     private Llibre llibre;
 
     private int exemplars;

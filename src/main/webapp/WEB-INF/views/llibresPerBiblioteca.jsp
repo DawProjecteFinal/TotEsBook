@@ -1,10 +1,10 @@
 <%-- 
-    Document   : mostrarLlibres.jsp
-    Created on : 28 sept 2025, 7:01:42
-    Author     : equip TotEsBook
+    Document   : llibresPerBiblioteca
+    Created on : 6 nov 2025, 16:05:16
+    Author     : jmiro
 --%>
 
-<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -12,7 +12,7 @@
 <html lang="ca">
     <head>
         <meta charset="UTF-8">
-        <title>Llibres</title>
+        <title>Biblioteques</title>
 
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -83,8 +83,11 @@
             </div>
         </nav>
 
+        <!-- Bucle per recórrer llistat de llibres -->
         <div class="container py-4">
-            <h1 class="mb-4 text-center text-tot-principal">Explora, tria i gaudeix</h1>
+            <h1 class="mb-4 text-center text-tot-principal">
+                Llibres disponibles a <c:out value="${biblioteca.nom}"/>
+            </h1>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 <c:forEach var="llibre" items="${llibres}">
                     <div class="col">
@@ -105,6 +108,7 @@
                 </c:forEach>
             </div>
         </div>
+
 
         <footer class="bg-tot text-center text-lg-start border-top mt-5 py-3">
             <div class="container">

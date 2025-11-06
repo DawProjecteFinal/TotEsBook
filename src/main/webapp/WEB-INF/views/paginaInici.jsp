@@ -17,7 +17,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     </head>
-    
+
     <body>
 
         <!-- ===== Encapçalat ===== -->
@@ -29,7 +29,7 @@
             </div>
         </header>
         <!-- ===== FI Encapçalat ===== -->
-                
+
         <!-- ===== Menu ===== -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight">
             <div class="container px-4 px-lg-5">
@@ -37,12 +37,14 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    
+
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -55,15 +57,15 @@
                                 <li><a class="dropdown-item" href="#">True crime</a></li>
                             </ul>
                         </li>
-                         <c:if test="${not empty sessionScope.sessioUsuari}">
-                             <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                             <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
-                             <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                        <c:if test="${not empty sessionScope.sessioUsuari}">
+                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
+                                <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
+                                <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
-                             </c:if>
-                         </c:if>
+                                </c:if>
+                            </c:if>
                     </ul>
-                                
+
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
@@ -72,7 +74,7 @@
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
-                            
+
                         <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
                             <c:when test="${empty sessionScope.sessioUsuari}">
@@ -85,23 +87,23 @@
                                     <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
                                     </button>
-                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
-                                    <c:choose>
-                                         <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                         </c:when>
-                                         <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
-                                         </c:when>
-                                         <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                         </c:when>
-                                    </c:choose>
-                                    <li><hr class="dropdown-divider"></li>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
+                                        <c:choose>
+                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                                </c:when>
+                                            </c:choose>
+                                        <li><hr class="dropdown-divider"></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
-                                            <i class="bi bi-box-arrow-right"></i> Tancar Sessió
-                                        </a></li>
+                                                <i class="bi bi-box-arrow-right"></i> Tancar Sessió
+                                            </a></li>
                                     </ul>
                                 </div>
                             </c:otherwise>
@@ -115,35 +117,35 @@
         <!-- ===== Secció Principal de Contingut ===== -->
         <section class="py-5 flex-grow-1">
             <div class="container px-4 px-lg-5 mt-5">
-                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
-                     <c:choose>
-                         <c:when test="${not empty sessionScope.sessioUsuari}">
-                             <div class="col-lg-6 text-center">
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.sessioUsuari}">
+                            <div class="col-lg-6 text-center">
                                 <h2 class="text-tot-bold">Benvingut/da de nou, <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>!</h2>
                                 <p class="text-tot-light">Explora el nostre catàleg o gestiona els teus préstecs.</p>
-                                 <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-tot">Veure Catàleg</a>
-                             </div>
-                         </c:when>
-                         <c:otherwise>
-                              <div class="col-lg-6 text-center">
+                                <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-tot">Veure Catàleg</a>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="col-lg-6 text-center">
                                 <h2 class="text-tot-bold">Descobreix un món de llibres</h2>
                                 <p class="text-tot-light">Cerca al nostre catàleg o inicia sessió per accedir als teus préstecs.</p>
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot me-2">Inicia Sessió</a>
                                 <a href="${pageContext.request.contextPath}/registre" class="btn btn-outline-secondary">Registra't</a>
-                             </div>
-                         </c:otherwise>
-                     </c:choose>
-                 </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
 
                 <h2 class="text-center text-tot-bold mb-4">Novetats Destacades</h2>
 
-                 <c:if test="${not empty errorCarregantLlibres}">
-                 <div class="alert alert-warning text-center">
-                     <c:out value="${errorCarregantLlibres}"/>
-                 </div>
-            </c:if>
+                <c:if test="${not empty errorCarregantLlibres}">
+                    <div class="alert alert-warning text-center">
+                        <c:out value="${errorCarregantLlibres}"/>
+                    </div>
+                </c:if>
 
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                     <c:forEach var="llibre" items="${llibres}"> 
                         <div class="col mb-5">
@@ -159,11 +161,11 @@
                                         <%-- CORRECCIÓ: L'enllaç ha d'apuntar al controlador /llibre --%>
                                         <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
                                     </div>
-                                   </div>
                                 </div>
                             </div>
+                        </div>
                     </c:forEach>
-                
+
                     <c:if test="${empty llibres && empty errorCarregantLlibres}">
                         <div class="col-12 text-center text-muted">
                             <p>No s'han trobat llibres destacats en aquest moment.</p>
@@ -205,6 +207,6 @@
         <!-- ===== FI Peu de pàgina ===== -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        
+
     </body>
 </html>

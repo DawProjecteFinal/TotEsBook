@@ -1,5 +1,6 @@
 package cat.totesbook.repository.impl;
 
+import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.repository.LlibreRepository;
 import jakarta.persistence.EntityManager;
@@ -50,6 +51,15 @@ public class LlibreDAO implements LlibreRepository {
     public Optional<Llibre> getLlibreByIsbn(String isbn) {
         Llibre llibre = entityManager.find(Llibre.class, isbn);
         return Optional.ofNullable(llibre);
+    }
+    
+    // Retorna els llibre de una biblioteca en concret
+    @Override
+    public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
+        return entityManager.createQuery(
+                "SELECT bl.llibre FROM BibliotecaLlibre bl WHERE bl.biblioteca = :biblioteca", Llibre.class)
+                .setParameter("biblioteca", biblioteca)
+                .getResultList();
     }
 
     /**

@@ -28,6 +28,7 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Enlloc de fer servir aquest metode per retornar tots els llibres de una biblioteca utilitzem el metode findByBiblioteca de LlibreDAO
     @Override
     public List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca) {
         TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(

@@ -9,6 +9,7 @@ package cat.totesbook.domain;
  * @author jmiro
  */
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Biblioteques")

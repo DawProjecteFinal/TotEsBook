@@ -1,4 +1,5 @@
 package cat.totesbook.repository;
+import cat.totesbook.domain.Biblioteca;
 import java.util.List;
 import cat.totesbook.domain.Llibre;
 import java.util.Optional;
@@ -33,4 +34,5 @@ public interface LlibreRepository {
      */
     Optional<Llibre> getLlibreByIsbn(String isbn);
 
+    List<Llibre> findByBiblioteca(Biblioteca biblioteca);
 }
