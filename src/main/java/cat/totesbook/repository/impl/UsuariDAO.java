@@ -1,124 +1,130 @@
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Usuari;
-import cat.totesbook.repository.UsuariRepository; // <-- Implementem la interfície
-import cat.totesbook.repository.*;
-import cat.totesbook.config.DBConnection; 
-import org.mindrot.jbcrypt.BCrypt; // <-- Import per a BCrypt
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import cat.totesbook.repository.UsuariRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
-/**
- * Implementació del DAO per a la taula Usuaris.
- * 
- */
-
 @Repository
+@Transactional
 public class UsuariDAO implements UsuariRepository {
 
-    @Override 
+    @PersistenceContext(unitName = "totesbookPersistenceUnit")
+    private EntityManager entityManager;
+
+    /**
+     * Retorna un usuari pel seu email i contrasenya (verificant hash BCrypt).
+     */
+    @Override
     public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
-        String sql = "SELECT * FROM Usuaris WHERE email = ?";
-        
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, email);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    String passwordHashejatDeLaDB = rs.getString("contrasenya");
-                    
-                    if (BCrypt.checkpw(contrasenyaPlana, passwordHashejatDeLaDB)) {
-                        Usuari usuari = new Usuari();
-                        usuari.setId(rs.getInt("id"));
-                        usuari.setNom(rs.getString("nom"));
-                        usuari.setCognoms(rs.getString("cognoms"));
-                        usuari.setEmail(rs.getString("email"));
-                        usuari.setTelefon(rs.getString("telefon"));
-                        usuari.setLlibresFavorits(rs.getString("llibresFavorits"));
-                        usuari.setContrasenya(rs.getString("contrasenya"));
-                        return usuari;
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null; // No trobat o contrasenya incorrecta
-    }
+        try {
+            TypedQuery<Usuari> query = entityManager.createQuery(
+                    "SELECT u FROM Usuari u WHERE u.email = :email", Usuari.class);
+            query.setParameter("email", email);
 
-    @Override
-    public void saveUsuari(Usuari usuari) {
-        String sql = "INSERT INTO Usuaris (nom, cognoms, email, contrasenya, telefon) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, usuari.getNom());
-            ps.setString(2, usuari.getCognoms());
-            ps.setString(3, usuari.getEmail());
-            ps.setString(4, usuari.getContrasenya()); // Guardem el hash
-            ps.setString(5, usuari.getTelefon());
-            
-            ps.executeUpdate();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+            Usuari usuari = query.getResultStream().findFirst().orElse(null);
 
-    @Override
-    public Usuari getUsuariByEmail(String email) {
-        String sql = "SELECT * FROM Usuaris WHERE email = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    // Retornem un usuari (sense contrasenya)
-                    Usuari usuari = new Usuari();
-                    usuari.setId(rs.getInt("id"));
-                    usuari.setNom(rs.getString("nom"));
-                    usuari.setCognoms(rs.getString("cognoms"));
-                    usuari.setEmail(rs.getString("email"));
-                    return usuari;
-                }
+            if (usuari != null && BCrypt.checkpw(contrasenyaPlana, usuari.getContrasenya())) {
+                return usuari;
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
+            System.err.println("Error a UsuariDAO.getUsuariByEmailAndContrasenya: " + e.getMessage());
             e.printStackTrace();
         }
+
         return null;
     }
 
-    @Override 
-    public List<Usuari> getAllUsuaris() {
-        List<Usuari> usuaris = new ArrayList<>();
-        String sql = "SELECT id, nom, cognoms, telefon, email, llibresFavorits FROM Usuaris";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
-            while (rs.next()) {
-                Usuari usuari = new Usuari();
-                usuari.setId(rs.getInt("id"));
-                usuari.setNom(rs.getString("nom"));
-                usuari.setCognoms(rs.getString("cognoms"));
-                usuari.setEmail(rs.getString("email"));
-                usuari.setTelefon(rs.getString("telefon"));
-                usuari.setLlibresFavorits(rs.getString("llibresFavorits"));
-                usuaris.add(usuari);
+    /**
+     * Desa un nou usuari (amb contrasenya ja hashejada).
+     */
+    @Override
+    public void saveUsuari(Usuari usuari) {
+        try {
+            // Comprovem si ja existeix per email (clau única)
+            List<Usuari> existents = entityManager.createQuery(
+                    "SELECT u FROM Usuari u WHERE u.email = :email", Usuari.class)
+                    .setParameter("email", usuari.getEmail())
+                    .getResultList();
+
+            if (existents.isEmpty()) {
+                entityManager.persist(usuari);
+                System.out.println(">>> [JPA] Usuari nou registrat: " + usuari.getEmail());
+            } else {
+                System.out.println(">>> [JPA] Usuari ja existent: " + usuari.getEmail());
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            System.err.println("Error a UsuariDAO.saveUsuari: " + e.getMessage());
             e.printStackTrace();
         }
-        return usuaris;
+    }
+
+    /**
+     * Busca un usuari pel seu email.
+     */
+    @Override
+    public Usuari getUsuariByEmail(String email) {
+        try {
+            List<Usuari> result = entityManager.createQuery(
+                    "SELECT u FROM Usuari u WHERE u.email = :email", Usuari.class)
+                    .setParameter("email", email)
+                    .getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        } catch (Exception e) {
+            System.err.println("Error a UsuariDAO.getUsuariByEmail: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Retorna tots els usuaris (sense carregar contrasenyes).
+     */
+    @Override
+    public List<Usuari> getAllUsuaris() {
+        try {
+            return entityManager.createQuery(
+                    "SELECT u FROM Usuari u", Usuari.class)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error a UsuariDAO.getAllUsuaris: " + e.getMessage());
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    /**
+     * Actualitza les dades d'un usuari existent (sense modificar contrasenya si
+     * no es passa nova).
+     */
+    public void updateUsuari(Usuari actualitzat) {
+        Usuari existent = entityManager.find(Usuari.class, actualitzat.getId());
+        if (existent != null) {
+            actualitzarUsuariDesDe(existent, actualitzat);
+            entityManager.merge(existent);
+            System.out.println(">>> [JPA] Usuari actualitzat: " + existent.getEmail());
+        }
+    }
+
+    /**
+     * Copia camps d'un usuari origen cap a un usuari existent.
+     */
+    private void actualitzarUsuariDesDe(Usuari desti, Usuari origen) {
+        desti.setNom(origen.getNom());
+        desti.setCognoms(origen.getCognoms());
+        desti.setEmail(origen.getEmail());
+        desti.setTelefon(origen.getTelefon());
+        desti.setLlibresFavorits(origen.getLlibresFavorits());
+
+        // Només si s'ha passat una nova contrasenya, la canviem
+        if (origen.getContrasenya() != null && !origen.getContrasenya().isBlank()) {
+            desti.setContrasenya(BCrypt.hashpw(origen.getContrasenya(), BCrypt.gensalt()));
+        }
     }
 }

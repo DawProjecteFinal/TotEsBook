@@ -1,139 +1,69 @@
 package cat.totesbook.repository.impl;
 
-import cat.totesbook.config.DBConnection;
-import java.util.List;
-import org.springframework.stereotype.Repository;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.repository.LlibreRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery; // Import necessari
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
-/**
- * Mètode que obté tots els llibres de la BD mitjançant EntityManager.
- * 
- * @author equip TotEsBook
- */
-@Repository // Li diem a Spring que gestioni aquest Bean
+@Repository
+@Transactional
 public class LlibreDAO implements LlibreRepository {
 
-    // Aquest DAO ara fa servir JDBC manual, igual que UsuariDAO i AgentDAO
-    
+    @PersistenceContext(unitName = "totesbookPersistenceUnit")
+    private EntityManager entityManager;
+
+    /**
+     * Obté tots els llibres de la base de dades.
+     */
     @Override
     public List<Llibre> getAllLlibres() {
-        List<Llibre> llibres = new ArrayList<>();
-        // Assegura't que els noms de columna (titol, autor, etc.) coincideixen amb init.sql
-        String sql = "SELECT isbn, titol, autor, editorial, categoria, sinopsis, imatgeUrl, exemplars, disponibles, idioma FROM Llibres"; 
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
-            while (rs.next()) {
-                llibres.add(mapRowToLlibre(rs));
-            }
-        } catch (SQLException e) {
-            System.err.println("Error a LlibreDAO.getAllLlibres: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return llibres;
-    }
-
-    @Override
-    public void addLlibre(Llibre llibre) {
-        // Aquest mètode s'encarrega d'INSERIR o ACTUALITZAR (UPSERT)
-        // Primer, comprovem si el llibre (per ISBN) ja existeix
-        if (getLlibreByIsbn(llibre.getIsbn()).isPresent()) {
-            // Si existeix, fem UPDATE
-            String sql = "UPDATE Llibres SET titol = ?, autor = ?, editorial = ?, categoria = ?, " +
-                         "sinopsis = ?, imatgeUrl = ?, idioma = ?, exemplars = ?, disponibles = ? WHERE isbn = ?";
-            try (Connection conn = DBConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-                
-                ps.setString(1, llibre.getTitol());
-                ps.setString(2, llibre.getAutor());
-                ps.setString(3, llibre.getEditorial());
-                ps.setString(4, llibre.getCategoria());
-                ps.setString(5, llibre.getSinopsis());
-                ps.setString(6, llibre.getImatgeUrl());
-                ps.setString(7, llibre.getIdioma());
-                ps.setInt(8, llibre.getExemplars());
-        		ps.setInt(9, llibre.getDisponibles());
-                ps.setString(10, llibre.getIsbn()); // ISBN pel WHERE
-                ps.executeUpdate();
-
-            } catch (SQLException e) {
-                System.err.println("Error a LlibreDAO.addLlibre (UPDATE): " + e.getMessage());
-                e.printStackTrace();
-            }
-        } else {
-            // Si no existeix, fem INSERT
-            String sql = "INSERT INTO Llibres (isbn, titol, autor, editorial, categoria, sinopsis, imatgeUrl, exemplars, disponibles, idioma) " +
-                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            try (Connection conn = DBConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-
-                ps.setString(1, llibre.getIsbn());
-                ps.setString(2, llibre.getTitol());
-                ps.setString(3, llibre.getAutor());
-                ps.setString(4, llibre.getEditorial());
-                ps.setString(5, llibre.getCategoria());
-                ps.setString(6, llibre.getSinopsis());
-                ps.setString(7, llibre.getImatgeUrl());
-                ps.setInt(8, llibre.getExemplars());
-                ps.setInt(9, llibre.getDisponibles());
-                ps.setString(10, llibre.getIdioma());
-                ps.executeUpdate();
-                
-            } catch (SQLException e) {
-                System.err.println("Error a LlibreDAO.addLlibre (INSERT): " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public Optional<Llibre> getLlibreByIsbn(String isbn) {
-        String sql = "SELECT * FROM Llibres WHERE isbn = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, isbn);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapRowToLlibre(rs));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error a LlibreDAO.getLlibreByIsbn: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return Optional.empty(); // No trobat
+        return entityManager
+                .createQuery("SELECT l FROM Llibre l", Llibre.class)
+                .getResultList();
     }
 
     /**
-     * Mètode privat d'ajuda per convertir una fila de ResultSet a un objecte Llibre.
-     * Això evita repetir codi.
+     * Afegeix o actualitza (UPSERT) un llibre segons si ja existeix l'ISBN.
      */
-    private Llibre mapRowToLlibre(ResultSet rs) throws SQLException {
-        Llibre llibre = new Llibre();
-        llibre.setIsbn(rs.getString("isbn"));
-        llibre.setTitol(rs.getString("titol"));
-        llibre.setAutor(rs.getString("autor"));
-        llibre.setEditorial(rs.getString("editorial"));
-        llibre.setCategoria(rs.getString("categoria"));
-        llibre.setSinopsis(rs.getString("sinopsis"));
-        llibre.setImatgeUrl(rs.getString("imatgeUrl"));
-        llibre.setExemplars(rs.getInt("exemplars"));
-        llibre.setDisponibles(rs.getInt("disponibles"));
-        llibre.setIdioma(rs.getString("idioma"));
-        return llibre;
+    @Override
+    public void addLlibre(Llibre llibre) {
+        Llibre existent = entityManager.find(Llibre.class, llibre.getIsbn());
+
+        if (existent == null) {
+            entityManager.persist(llibre);
+            System.out.println(">>> [JPA] Llibre nou afegit: " + llibre.getTitol());
+        } else {
+            actualitzarLlibreDesDe(existent, llibre);
+            entityManager.merge(existent);
+            System.out.println(">>> [JPA] Llibre actualitzat: " + llibre.getTitol());
+        }
+    }
+
+    /**
+     * Busca un llibre pel seu ISBN.
+     */
+    @Override
+    public Optional<Llibre> getLlibreByIsbn(String isbn) {
+        Llibre llibre = entityManager.find(Llibre.class, isbn);
+        return Optional.ofNullable(llibre);
+    }
+
+    /**
+     * Copia totes les propietats d'un llibre origen a un llibre existent.
+     */
+    private void actualitzarLlibreDesDe(Llibre desti, Llibre origen) {
+        desti.setTitol(origen.getTitol());
+        desti.setAutor(origen.getAutor());
+        desti.setEditorial(origen.getEditorial());
+        desti.setCategoria(origen.getCategoria());
+        desti.setSinopsis(origen.getSinopsis());
+        desti.setImatgeUrl(origen.getImatgeUrl());
+        desti.setIdioma(origen.getIdioma());
+        desti.setExemplars(origen.getExemplars());
+        desti.setDisponibles(origen.getDisponibles());
     }
 }

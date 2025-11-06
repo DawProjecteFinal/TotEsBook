@@ -24,7 +24,7 @@
         <header class="bg-tot py-1">
             <div class="container px-4 px-lg-5 my-1">
                 <div class="text-center text-white">
-                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo"> 
+                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo" class="logo-header"> 
                 </div>
             </div>
         </header>

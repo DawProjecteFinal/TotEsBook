@@ -1,8 +1,8 @@
 
-
-package cat.totesbook.repository;
+package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.repository.BibliotecaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BibliotecaDAO implements BibliotecaRepository {
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "totesbookPersistenceUnit")
     private EntityManager entityManager;
 
     @Override

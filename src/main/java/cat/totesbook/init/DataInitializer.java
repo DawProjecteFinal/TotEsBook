@@ -25,10 +25,14 @@ public class DataInitializer {
     private static final int MAX_INTENTS = 6;
     private static final long ESPERA_ENTRE_INTENTS_MS = 5000;
 
-    @Autowired private GoogleBooksService googleBooksService;
-    @Autowired private LlibreService llibreService;
-    @Autowired private BibliotecaService bibliotecaService;
-    @Autowired private BibliotecaLlibreService bibliotecaLlibreService;
+    @Autowired
+    private GoogleBooksService googleBooksService;
+    @Autowired
+    private LlibreService llibreService;
+    @Autowired
+    private BibliotecaService bibliotecaService;
+    @Autowired
+    private BibliotecaLlibreService bibliotecaLlibreService;
 
     // MÈTODE PRINCIPAL D’ARRENCADA 
     @PostConstruct
@@ -64,9 +68,9 @@ public class DataInitializer {
 
             } catch (PersistenceException e) {
                 if (esErrorTaulaNoExisteix(e)) {
-                    System.out.println(">>> Intent " + intent + "/" + MAX_INTENTS +
-                            " - La taula Llibres encara no existeix. Esperant " +
-                            (ESPERA_ENTRE_INTENTS_MS / 1000) + " segons...");
+                    System.out.println(">>> Intent " + intent + "/" + MAX_INTENTS
+                            + " - La taula Llibres encara no existeix. Esperant "
+                            + (ESPERA_ENTRE_INTENTS_MS / 1000) + " segons...");
                     esperar(ESPERA_ENTRE_INTENTS_MS);
                 } else {
                     System.err.println(">>> Error de persistència inesperat:");
@@ -97,7 +101,9 @@ public class DataInitializer {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) continue;
+                if (line.isEmpty()) {
+                    continue;
+                }
 
                 if (line.startsWith("#")) {
                     bibliotecaActual = line.replace("#", "").trim();
@@ -105,6 +111,7 @@ public class DataInitializer {
                 } else if (bibliotecaActual != null) {
                     isbnsPerBiblioteca.get(bibliotecaActual).add(line);
                 }
+                System.out.println("DEBUG -> línia llegida: [" + line + "]");
             }
 
             // Processar cada biblioteca
@@ -123,12 +130,19 @@ public class DataInitializer {
                     int exemplars = (parts.length > 1) ? Integer.parseInt(parts[1].trim()) : 3;
 
                     try {
-                        googleBooksService.getLlibreByIsbn(isbn).ifPresent(llibre -> {
+                        Optional<Llibre> optLlibre = googleBooksService.getLlibreByIsbn(isbn);
+
+                        if (optLlibre.isPresent()) {
+                            Llibre llibre = optLlibre.get();
                             llibreService.guardarLlibre(llibre); // JDBC
                             bibliotecaLlibreService.afegirLlibre(biblioteca, llibre, exemplars, exemplars); // JPA
                             System.out.println(">>> [" + nomBiblioteca + "] Afegit llibre "
-                                    + llibre.getTitol() + " (" + exemplars + " exemplars)");
-                        });
+                                    + llibre.getIsbn() + " - " + llibre.getTitol() + " (" + exemplars + " exemplars)");
+                        } else {
+                            System.out.println(">>> [" + nomBiblioteca + "] ISBN " + isbn
+                                    + " no trobat a l'API de Google Books.");
+                        }
+
                     } catch (Exception ex) {
                         System.err.println(">>> Error amb ISBN " + isbn + ": " + ex.getMessage());
                     }
@@ -150,10 +164,10 @@ public class DataInitializer {
             causaArrel = causaArrel.getCause();
         }
         if (causaArrel instanceof SQLSyntaxErrorException sqlEx) {
-            return sqlEx.getErrorCode() == 1146 ||
-                    (sqlEx.getMessage() != null &&
-                            sqlEx.getMessage().toLowerCase().contains("table") &&
-                            sqlEx.getMessage().toLowerCase().contains("doesn't exist"));
+            return sqlEx.getErrorCode() == 1146
+                    || (sqlEx.getMessage() != null
+                    && sqlEx.getMessage().toLowerCase().contains("table")
+                    && sqlEx.getMessage().toLowerCase().contains("doesn't exist"));
         }
         return false;
     }
