@@ -196,8 +196,12 @@
                          <div class="card-body">
                             <p><strong>Nom:</strong> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/></p>
                             <p><strong>Email:</strong> <c:out value="${sessionScope.sessioUsuari.email}"/></p>
-                             <%-- TODO: Enllaç a una pàgina per editar perfil? --%>
-                            <button class="btn btn-sm btn-outline-secondary mt-2">Editar Perfil</button>
+                             <!-- === BOTÓ CORREGIT === -->
+                            <!-- Ara és un enllaç 'a' que apunta al controlador /perfil -->
+                            <a href="${pageContext.request.contextPath}/perfil" class="btn btn-sm btn-outline-secondary mt-2">
+                                Editar Perfil
+                            </a>
+                            <!-- === FI BOTÓ CORREGIT === -->
                          </div>
                     </div>
                      <div class="card shadow-sm mb-4">

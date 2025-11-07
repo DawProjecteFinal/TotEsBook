@@ -147,4 +147,122 @@ public class UsuariController {
         redirectAttrs.addFlashAttribute("success", "Registre completat! Ara pots iniciar sessió.");
         return "redirect:/login"; // Redirigim a la URL del LoginController
     }
+    
+     // --- INICI NOU CODI PER "EDITAR PERFIL" ---
+
+    /**
+     * Gestiona les peticions GET a /perfil.
+     * Mostra la pàgina (formulari) d'edició de perfil de l'usuari loguejat.
+     *
+     * @param session La sessió HTTP per obtenir l'ID de l'usuari.
+     * @param model El model de Spring per passar les dades de l'usuari a la vista.
+     * @return El nom de la vista JSP ("editarPerfil") o una redirecció.
+     */
+    @GetMapping("/perfil")
+    public String mostrarFormulariPerfil(HttpSession session, Model model) {
+        
+        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
+        
+        // Comprovació de seguretat: si no està loguejat, fora.
+        if (sessioUsuari == null) {
+            return "redirect:/login";
+        }
+        
+        // Només els Usuaris (lectors) poden editar el seu perfil aquí.
+        if (sessioUsuari.getRol() != Rol.USUARI) {
+            model.addAttribute("error", "Els administradors o bibliotecaris no poden editar el seu perfil aquí.");
+            // Redirigim al dashboard corresponent
+            if (sessioUsuari.getRol() == Rol.ADMIN) return "redirect:/dashboard_admin";
+            if (sessioUsuari.getRol() == Rol.BIBLIOTECARI) return "redirect:/dashboard_bibliotecari";
+            return "redirect:/";
+        }
+
+        try {
+            // Busquem les dades completes de l'usuari a la BBDD
+            Usuari usuariComplet = usuariRepo.findUsuariById(sessioUsuari.getId());
+            if (usuariComplet == null) {
+                // Error estrany (usuari a la sessió però no a la BBDD)
+                session.invalidate();
+                return "redirect:/login?error=SessioInvalida";
+            }
+            
+            // Passem l'objecte Usuari a la vista
+            model.addAttribute("usuari", usuariComplet);
+            return "editarPerfil"; // Busca /WEB-INF/views/editarPerfil.jsp
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error en carregar les dades del perfil.");
+            return "dashboard_usuari";
+        }
+    }
+
+    /**
+     * Processa l'enviament del formulari d'edició de perfil (POST a /perfil).
+     *
+     * @param nom El nou nom del formulari.
+     * @param cognoms Els nous cognoms del formulari.
+     * @param email El nou email del formulari.
+     * @param telefon El nou telèfon del formulari.
+     * @param session La sessió HTTP per actualitzar les dades de sessió.
+     * @param redirectAttrs Atributs per enviar missatges de feedback.
+     * @return Redirecció al dashboard de l'usuari.
+     */
+    @PostMapping("/perfil")
+    public String processarPerfil(
+            @RequestParam("nom") String nom,
+            @RequestParam("cognoms") String cognoms,
+            @RequestParam("email") String email,
+            @RequestParam(value = "telefon", required = false) String telefon,
+            HttpSession session,
+            RedirectAttributes redirectAttrs) {
+
+        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
+        
+        if (sessioUsuari == null || sessioUsuari.getRol() != Rol.USUARI) {
+            return "redirect:/login"; // Comprovació de seguretat
+        }
+
+        try {
+            // Validació d'Email: Comprovem si el NOU email ja està en ús PER UNA ALTRA PERSONA
+            Usuari usuariEmailExistent = usuariRepo.getUsuariByEmail(email);
+            if (usuariEmailExistent != null && usuariEmailExistent.getId() != sessioUsuari.getId()) {
+                // Error: L'email ja pertany a un altre usuari
+                redirectAttrs.addFlashAttribute("error", "Error: Aquest correu electrònic ja està registrat per un altre usuari.");
+                return "redirect:/perfil"; // Tornem al formulari d'edició
+            }
+
+            // --- INICI DE LA CORRECCIÓ DE LÒGICA ---
+            
+            // 1. Obtenim l'usuari complet de la BBDD (per conservar dades que no són al formulari, com la contrasenya o els favorits)
+            Usuari usuariPerActualitzar = usuariRepo.findUsuariById(sessioUsuari.getId());
+
+            // 2. Actualitzem només els camps que venen del formulari
+            usuariPerActualitzar.setNom(nom);
+            usuariPerActualitzar.setCognoms(cognoms);
+            usuariPerActualitzar.setEmail(email);
+            usuariPerActualitzar.setTelefon(telefon);
+            
+            // 3. Cridem al mètode updatePerfil (que ara sí que desa els favorits)
+            usuariRepo.updatePerfil(usuariPerActualitzar);
+            
+            // 4. Creem un NOU objecte SessioUsuari amb les dades refrescades
+            SessioUsuari novaSessioUsuari = new SessioUsuari(usuariPerActualitzar);
+            
+            // 5. Substituïm l'objecte antic a la sessió
+            session.setAttribute("sessioUsuari", novaSessioUsuari);
+
+            // --- FI DE LA CORRECCIÓ DE LÒGICA ---
+
+            redirectAttrs.addFlashAttribute("success", "Perfil actualitzat correctament!");
+            return "redirect:/dashboard_usuari";
+
+        } catch (Exception e) {
+            System.err.println("Error processant l'actualització del perfil: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttrs.addFlashAttribute("error", "Error inesperat en desar el perfil.");
+            return "redirect:/perfil";
+        }
+    }
+    // --- FI NOU CODI PER "EDITAR PERFIL" ---
 }
