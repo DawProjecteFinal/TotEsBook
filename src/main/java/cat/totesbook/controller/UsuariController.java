@@ -76,6 +76,62 @@ public class UsuariController {
         }
     }
     
+    
+    /**
+     * Gestiona les peticions GET a /dashboard_usuari.
+     * Comprova la sessió i mostra el panell de l'usuari.
+     */
+    @GetMapping("/dashboard_usuari")
+    public String mostrarDashboardUsuari(HttpSession session) {
+        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
+        
+        // Comprovació de seguretat (encara que el filtre ja ho fa)
+        if (sessioUsuari == null || sessioUsuari.getRol() != Rol.USUARI) {
+            return "redirect:/login";
+        }
+        
+        // El ViewResolver buscarà: /WEB-INF/views/dashboard_usuari.jsp
+        // TODO: Més endavant, aquí hauries de carregar els préstecs i reserves
+        // i passar-los al 'model.addAttribute'.
+        return "dashboard_usuari";
+    }
+
+    /**
+     * Gestiona les peticions GET a /dashboard_bibliotecari.
+     * Comprova la sessió i mostra el panell del bibliotecari.
+     */
+    @GetMapping("/dashboard_bibliotecari")
+    public String mostrarDashboardBibliotecari(HttpSession session) {
+        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
+        
+        if (sessioUsuari == null || (sessioUsuari.getRol() != Rol.BIBLIOTECARI && sessioUsuari.getRol() != Rol.ADMIN)) {
+            return "redirect:/login";
+        }
+        
+        // El ViewResolver buscarà: /WEB-INF/views/dashboard_bibliotecario.jsp
+        // TODO: Carregar dades necessàries per a aquest panell (ex: reserves pendents)
+        return "dashboard_bibliotecario";
+    }
+
+    /**
+     * Gestiona les peticions GET a /dashboard_admin.
+     * Comprova la sessió i mostra el panell de l'administrador.
+     */
+    @GetMapping("/dashboard_admin")
+    public String mostrarDashboardAdmin(HttpSession session) {
+        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
+        
+        if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
+            return "redirect:/login";
+        }
+        
+        // El ViewResolver buscarà: /WEB-INF/views/dashboard_admin.jsp
+        // NOTA: El teu 'dashboard_admin.jsp' actualment carrega les dades
+        // amb scriptlets (<% ... %>) al propi JSP. Això funcionarà.
+        // (En una futura refactorització, aquesta lògica hauria de moure's aquí).
+        return "dashboard_admin";
+    }
+    
     // --- Lògica de Registre ---
 
     /**
