@@ -131,143 +131,229 @@
     </nav>
     <!-- ===== FI CAPÇALERA INCRUSTADA ===== -->
 
-    <!-- Secció Principal -->
-    <section class="py-5 flex-grow-1">
-        <div class="container px-4 px-lg-5 mt-5">
-            <h1 class="text-center text-tot-bold mb-5">Panell d'Administració</h1>
+<!-- ===== Panell d'Administració ===== -->
+<section class="py-5 flex-grow-1">
+  <div class="container px-4 px-lg-5 mt-5">
+    <h1 class="text-center text-tot-bold mb-5">Panell d'Administració</h1>
 
-            <%-- Mostrem missatge de feedback (èxit/error) del CanviRolServlet --%>
-            <c:if test="${not empty feedbackMessage}">
-                <div class="alert alert-${messageType == 'success' ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
-                    <c:out value="${feedbackMessage}"/>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </c:if>
+    <%-- Missatges de feedback o errors --%>
+    <c:if test="${not empty feedbackMessage}">
+      <div class="alert alert-${messageType == 'success' ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
+        <c:out value="${feedbackMessage}"/>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </c:if>
 
-             <%-- Mostrem error si no s'han pogut carregar les dades --%>
-             <c:if test="${not empty errorCarrega}">
-                 <div class="alert alert-danger" role="alert">
-                     Error carregant dades: <c:out value="${errorCarrega}"/>
-                 </div>
-             </c:if>
+    <c:if test="${not empty errorCarrega}">
+      <div class="alert alert-danger" role="alert">
+        Error carregant dades: <c:out value="${errorCarrega}"/>
+      </div>
+    </c:if>
 
-            <div class="card shadow-sm mb-5">
-                 <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0 text-tot-bold"><i class="bi bi-people-fill me-2"></i> Gestió de Comptes</h4>
-                    <button class="btn btn-sm btn-tot" onclick="alert('Funcionalitat per crear nou usuari/agent no implementada')">
-                        <i class="bi bi-plus-circle-fill me-1"></i> Crear Compte
-                    </button>
-                 </div>
-                 <div class="card-body">
-                     <p>Aquí pots veure i modificar els rols dels usuaris i agents del sistema.</p>
+    <!-- ===== Pestanyes ===== -->
+    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="biblioteques-tab" data-bs-toggle="tab" data-bs-target="#biblioteques" type="button" role="tab">
+          🏛️ Biblioteques
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="comptes-tab" data-bs-toggle="tab" data-bs-target="#comptes" type="button" role="tab">
+          👥 Comptes d'Usuari
+        </button>
+      </li>
+    </ul>
 
-                     <h5 class="mt-4">Agents (Personal de Biblioteca)</h5>
-                     <div class="table-responsive">
-                         <table class="table table-striped table-hover caption-top small">
-                             <caption>Llista d'agents del sistema (bibliotecaris i administradors)</caption>
-                             <thead class="table-light">
-                                 <tr>
-                                     <th>ID</th>
-                                     <th>Nom Complet</th>
-                                     <th>Email</th>
-                                     <th>Rol Actual</th>
-                                     <th>Canviar Rol</th>
-                                     <th>Accions</th>
-                                 </tr>
-                             </thead>
-                             <tbody>
-                                 <c:forEach var="agent" items="${llistaAgents}">
-                                     <tr>
-                                         <td>${agent.idAgent}</td>
-                                         <td><c:out value="${agent.nom} ${agent.cognoms}"/></td>
-                                         <td><c:out value="${agent.email}"/></td>
-                                         <td>
-                                             <c:choose>
-                                                 <c:when test="${agent.tipus == 'administrador'}"><span class="badge bg-danger">Admin</span></c:when>
-                                                 <c:otherwise><span class="badge bg-info text-dark">Bibliotecari</span></c:otherwise>
-                                             </c:choose>
-                                         </td>
-                                         <td>
-                                             <%-- El formulari envia al CanviRolServlet --%>
-                                             <form action="${pageContext.request.contextPath}/canviRol" method="POST" class="d-flex align-items-center">
-                                                 <input type="hidden" name="idCompte" value="${agent.idAgent}">
-                                                 <input type="hidden" name="tipusCompte" value="AGENT">
-                                                 <select name="nouRol" class="form-select form-select-sm me-2" style="width: auto;">
-                                                     <option value="BIBLIOTECARI" ${agent.tipus == 'bibliotecari' ? 'selected' : ''}>Bibliotecari</option>
-                                                     <option value="ADMIN" ${agent.tipus == 'administrador' ? 'selected' : ''}>Admin</option>
-                                                 </select>
-                                                 <button type="submit" class="btn btn-sm btn-tot">Canviar</button>
-                                             </form>
-                                         </td>
-                                          <td>
-                                             <button class="btn btn-sm btn-outline-danger" onclick="alert('Eliminació no implementada')">
-                                                 <i class="bi bi-trash"></i>
-                                             </button>
-                                          </td>
-                                     </tr>
-                                 </c:forEach>
-                                 <c:if test="${empty llistaAgents}">
-                                      <tr><td colspan="6" class="text-center text-muted">No hi ha agents registrats.</td></tr>
-                                 </c:if>
-                             </tbody>
-                         </table>
-                     </div>
+    <div class="tab-content" id="adminTabsContent">
 
-                     <h5 class="mt-5">Usuaris (Lectors)</h5>
-                     <div class="table-responsive">
-                          <table class="table table-striped table-hover caption-top small">
-                             <caption>Llista d'usuaris lectors del sistema</caption>
-                             <thead class="table-light">
-                                 <tr>
-                                     <th>ID</th>
-                                     <th>Nom Complet</th>
-                                     <th>Email</th>
-                                     <th>Rol Actual</th>
-                                     <th>Canviar Rol (Ascendir)</th>
-                                     <th>Accions</th>
-                                 </tr>
-                             </thead>
-                             <tbody>
-                                 <c:forEach var="usuari" items="${llistaUsuaris}">
-                                     <tr>
-                                         <td>${usuari.id}</td>
-                                         <td><c:out value="${usuari.nom} ${usuari.cognoms}"/></td>
-                                         <td><c:out value="${usuari.email}"/></td>
-                                         <td><span class="badge bg-secondary">Usuari</span></td>
-                                         <td>
-                                              <%-- Aquest formulari també envia al CanviRolServlet --%>
-                                              <form action="${pageContext.request.contextPath}/canviRol" method="POST" class="d-flex align-items-center">
-                                                 <input type="hidden" name="idCompte" value="${usuari.id}">
-                                                 <input type="hidden" name="tipusCompte" value="USUARI">
-                                                 <select name="nouRol" class="form-select form-select-sm me-2" style="width: auto;">
-                                                     <option value="USUARI" selected disabled>-- Ascendir a --</option>
-                                                     <option value="BIBLIOTECARI">Bibliotecari</option>
-                                                     <option value="ADMIN">Admin</option>
-                                                 </select>
-                                                 <%-- TODO: Implementar la lògica d'ascens al CanviRolServlet per habilitar aquest botó --%>
-                                                 <button type="submit" class="btn btn-sm btn-tot" disabled title="Funcionalitat pendent d'implementar">Canviar</button>
-                                             </form>
-                                         </td>
-                                          <td>
-                                             <button class="btn btn-sm btn-outline-danger" onclick="alert('Eliminació no implementada')">
-                                                 <i class="bi bi-trash"></i>
-                                             </button>
-                                          </td>
-                                     </tr>
-                                 </c:forEach>
-                                  <c:if test="${empty llistaUsuaris}">
-                                      <tr><td colspan="6" class="text-center text-muted">No hi ha usuaris registrats.</td></tr>
-                                 </c:if>
-                             </tbody>
-                         </table>
-                     </div>
-                 </div>
+      <!-- ===== PESTANYA 1: GESTIÓ DE BIBLIOTEQUES ===== -->
+      <div class="tab-pane fade show active" id="biblioteques" role="tabpanel">
+        <div class="card shadow-sm mb-5">
+          <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-tot-bold">
+              <i class="bi bi-building me-2"></i> Gestió de Biblioteques
+            </h4>
+            <a href="${pageContext.request.contextPath}/admin/biblioteques/nova" class="btn btn-sm btn-tot">
+              <i class="bi bi-plus-circle-fill me-1"></i> Afegir Biblioteca
+            </a>
+          </div>
+
+          <div class="card-body">
+            <p>Aquí pots veure totes les biblioteques del sistema, així com afegir, modificar o eliminar-ne.</p>
+
+            <div class="table-responsive">
+              <table class="table table-striped table-hover caption-top small align-middle">
+                <caption>Llista general de biblioteques del sistema</caption>
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Adreça</th>
+                    <th>Bibliotecari</th>
+                    <th>Llibres</th>
+                    <th>Préstecs Actius</th>
+                    <th>Accions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:forEach var="b" items="${llistaBiblioteques}">
+                    <tr>
+                      <td>${b.idBiblioteca}</td>
+                      <td><c:out value="${b.nom}"/></td>
+                      <td><c:out value="${b.adreca}"/></td>
+                      <td>
+                        <c:choose>
+                          <c:when test="${not empty b.bibliotecari}">
+                            <c:out value="${b.bibliotecari.nom} ${b.bibliotecari.cognoms}"/>
+                          </c:when>
+                          <c:otherwise><span class="text-muted fst-italic">No assignat</span></c:otherwise>
+                        </c:choose>
+                      </td>
+                      <td>${b.numLlibres}</td>
+                      <td>${b.numPrestecs}</td>
+                      <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                          <a href="${pageContext.request.contextPath}/admin/biblioteques/${b.idBiblioteca}" 
+                             class="btn btn-outline-primary"><i class="bi bi-gear"></i> Gestionar</a>
+                          <a href="${pageContext.request.contextPath}/admin/biblioteques/${b.idBiblioteca}/editar" 
+                             class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
+                          <form action="${pageContext.request.contextPath}/admin/biblioteques/${b.idBiblioteca}/eliminar" 
+                                method="POST" style="display:inline;"
+                                onsubmit="return confirm('Segur que vols eliminar aquesta biblioteca?')">
+                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  </c:forEach>
+
+                  <c:if test="${empty llistaBiblioteques}">
+                    <tr><td colspan="7" class="text-center text-muted">No hi ha biblioteques registrades.</td></tr>
+                  </c:if>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PESTANYA 2: GESTIÓ DE COMPTES ===== -->
+      <div class="tab-pane fade" id="comptes" role="tabpanel">
+        <div class="card shadow-sm mb-5">
+          <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-tot-bold">
+              <i class="bi bi-people-fill me-2"></i> Gestió de Comptes
+            </h4>
+            <button class="btn btn-sm btn-tot" onclick="alert('Funcionalitat per crear nou usuari/agent no implementada')">
+              <i class="bi bi-plus-circle-fill me-1"></i> Crear Compte
+            </button>
+          </div>
+
+          <div class="card-body">
+            <p>Aquí pots veure i modificar els rols dels usuaris i agents del sistema.</p>
+
+            <!-- Taula Agents -->
+            <h5 class="mt-4">Agents (Bibliotecaris i Administradors)</h5>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover caption-top small">
+                <caption>Llista d'agents del sistema</caption>
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Canviar Rol</th>
+                    <th>Accions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:forEach var="agent" items="${llistaAgents}">
+                    <tr>
+                      <td>${agent.idAgent}</td>
+                      <td><c:out value="${agent.nom} ${agent.cognoms}"/></td>
+                      <td><c:out value="${agent.email}"/></td>
+                      <td>
+                        <c:choose>
+                          <c:when test="${agent.tipus == 'administrador'}">
+                            <span class="badge bg-danger">Admin</span>
+                          </c:when>
+                          <c:otherwise><span class="badge bg-info text-dark">Bibliotecari</span></c:otherwise>
+                        </c:choose>
+                      </td>
+                      <td>
+                        <form action="${pageContext.request.contextPath}/canviRol" method="POST" class="d-flex align-items-center">
+                          <input type="hidden" name="idCompte" value="${agent.idAgent}">
+                          <input type="hidden" name="tipusCompte" value="AGENT">
+                          <select name="nouRol" class="form-select form-select-sm me-2" style="width:auto;">
+                            <option value="BIBLIOTECARI" ${agent.tipus == 'bibliotecari' ? 'selected' : ''}>Bibliotecari</option>
+                            <option value="ADMIN" ${agent.tipus == 'administrador' ? 'selected' : ''}>Admin</option>
+                          </select>
+                          <button type="submit" class="btn btn-sm btn-tot">Canviar</button>
+                        </form>
+                      </td>
+                      <td><button class="btn btn-sm btn-outline-danger" onclick="alert('Eliminació no implementada')"><i class="bi bi-trash"></i></button></td>
+                    </tr>
+                  </c:forEach>
+
+                  <c:if test="${empty llistaAgents}">
+                    <tr><td colspan="6" class="text-center text-muted">No hi ha agents registrats.</td></tr>
+                  </c:if>
+                </tbody>
+              </table>
             </div>
 
-            <%-- Aquí podrien anar altres seccions del panell d'administrador --%>
+            <!-- Taula Usuaris -->
+            <h5 class="mt-5">Usuaris (Lectors)</h5>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover caption-top small">
+                <caption>Llista d'usuaris lectors</caption>
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Ascendir</th>
+                    <th>Accions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:forEach var="usuari" items="${llistaUsuaris}">
+                    <tr>
+                      <td>${usuari.id}</td>
+                      <td><c:out value="${usuari.nom} ${usuari.cognoms}"/></td>
+                      <td><c:out value="${usuari.email}"/></td>
+                      <td><span class="badge bg-secondary">Usuari</span></td>
+                      <td>
+                        <form action="${pageContext.request.contextPath}/canviRol" method="POST" class="d-flex align-items-center">
+                          <input type="hidden" name="idCompte" value="${usuari.id}">
+                          <input type="hidden" name="tipusCompte" value="USUARI">
+                          <select name="nouRol" class="form-select form-select-sm me-2" style="width:auto;">
+                            <option value="USUARI" selected disabled>-- Ascendir a --</option>
+                            <option value="BIBLIOTECARI">Bibliotecari</option>
+                            <option value="ADMIN">Admin</option>
+                          </select>
+                          <button type="submit" class="btn btn-sm btn-tot" disabled title="Funcionalitat pendent">Canviar</button>
+                        </form>
+                      </td>
+                      <td><button class="btn btn-sm btn-outline-danger" onclick="alert('Eliminació no implementada')"><i class="bi bi-trash"></i></button></td>
+                    </tr>
+                  </c:forEach>
 
+                  <c:if test="${empty llistaUsuaris}">
+                    <tr><td colspan="6" class="text-center text-muted">No hi ha usuaris registrats.</td></tr>
+                  </c:if>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div> <!-- fi tab-content -->
+  </div>
+</section>
+
 
     <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
     <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">

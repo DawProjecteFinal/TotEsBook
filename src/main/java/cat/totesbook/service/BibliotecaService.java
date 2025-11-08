@@ -12,7 +12,6 @@ import java.util.Optional;
  *
  * @author jmiro
  */
-
 public interface BibliotecaService {
 
     List<Biblioteca> getAllBiblioteques();
@@ -22,4 +21,8 @@ public interface BibliotecaService {
     Optional<Biblioteca> findByNom(String nom);
 
     void addBiblioteca(Biblioteca biblioteca);
+
+    int countLlibresByBiblioteca(int idBiblioteca);
+
+    int countPrestecsByBiblioteca(int idBiblioteca);
 }

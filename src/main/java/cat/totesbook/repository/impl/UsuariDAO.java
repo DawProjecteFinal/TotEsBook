@@ -108,18 +108,6 @@ public class UsuariDAO implements UsuariRepository {
         }
     }
 
-    /**
-     * Actualitza les dades d'un usuari existent (sense modificar contrasenya si
-     * no es passa nova).
-     */
-    public void updateUsuari(Usuari actualitzat) {
-        Usuari existent = entityManager.find(Usuari.class, actualitzat.getId());
-        if (existent != null) {
-            actualitzarUsuariDesDe(existent, actualitzat);
-            entityManager.merge(existent);
-            System.out.println(">>> [JPA] Usuari actualitzat: " + existent.getEmail());
-        }
-    }
 
     /**
      * Copia camps d'un usuari origen cap a un usuari existent.

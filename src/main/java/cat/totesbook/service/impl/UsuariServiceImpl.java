@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Usuari;
@@ -26,4 +23,30 @@ public class UsuariServiceImpl implements UsuariService {
         return usuariRepository.getAllUsuaris();
     }
 
+    @Override
+    public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
+
+        return usuariRepository.getUsuariByEmailAndContrasenya(email, contrasenyaPlana);
+    }
+
+    @Override
+    public void saveUsuari(Usuari usuari) {
+        usuariRepository.saveUsuari(usuari);
+    }
+
+    @Override
+    public Usuari getUsuariByEmail(String email) {
+        return usuariRepository.getUsuariByEmail(email);
+    }
+    /*
+    @Override
+    public void updatePerfil(Usuari usuari) {
+        usuariRepository.updatePerfil(usuari);
+    }
+    */
+
+    @Override
+    public void updateUsuari(Usuari usuari) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

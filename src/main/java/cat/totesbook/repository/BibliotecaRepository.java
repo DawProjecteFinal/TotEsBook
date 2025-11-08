@@ -19,4 +19,8 @@ public interface BibliotecaRepository {
     Optional<Biblioteca> findByNom(String nom);
 
     void addBiblioteca(Biblioteca biblioteca);
+    
+    int countLlibresByBiblioteca(int idBiblioteca);
+    
+    int countPrestecsByBiblioteca(int idBiblioteca);
 }

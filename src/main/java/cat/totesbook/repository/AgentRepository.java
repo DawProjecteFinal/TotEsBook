@@ -31,4 +31,6 @@ public interface AgentRepository {
      * @return Llista d'objectes Agent.
      */
     List<Agent> getAllAgents();
+    
+    void saveAgent(Agent agent);
 }

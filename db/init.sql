@@ -8,14 +8,6 @@ CREATE TABLE IF NOT EXISTS Usuaris (
     contrasenya VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Biblioteques (
-    idBiblioteca INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(150) NOT NULL,
-    adreca VARCHAR(255),
-    telefon VARCHAR(20),
-    email VARCHAR(150)
-);
-
 CREATE TABLE IF NOT EXISTS Agents (
     idAgent INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
@@ -24,6 +16,19 @@ CREATE TABLE IF NOT EXISTS Agents (
     email VARCHAR(150),
     tipus ENUM('bibliotecari', 'administrador') NOT NULL,
     contrasenya VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Biblioteques (
+    idBiblioteca INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(150) NOT NULL,
+    adreca VARCHAR(255),
+    telefon VARCHAR(20),
+    email VARCHAR(150),
+    idBibliotecari INT,
+    CONSTRAINT fk_biblioteca_bibliotecari
+        FOREIGN KEY (idBibliotecari) REFERENCES Agents(idAgent)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Llibres (
