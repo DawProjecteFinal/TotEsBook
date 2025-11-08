@@ -52,4 +52,24 @@ public class BibliotecaDAO implements BibliotecaRepository {
     public void addBiblioteca(Biblioteca biblioteca) {
         entityManager.persist(biblioteca);
     }
+    
+    @Override
+    public int countLlibresByBiblioteca(int idBiblioteca) {
+        Long resultat = entityManager.createQuery(
+                "SELECT COUNT(bl) FROM BibliotecaLlibre bl WHERE bl.biblioteca.idBiblioteca = :id",
+                Long.class)
+                .setParameter("id", idBiblioteca)
+                .getSingleResult();
+        return resultat != null ? resultat.intValue() : 0;
+    }
+
+    @Override
+    public int countPrestecsByBiblioteca(int idBiblioteca) {
+        Long resultat = entityManager.createQuery(
+                "SELECT COUNT(p) FROM Prestec p WHERE p.biblioteca.idBiblioteca = :id",
+                Long.class)
+                .setParameter("id", idBiblioteca)
+                .getSingleResult();
+        return resultat != null ? resultat.intValue() : 0;
+    }
 }

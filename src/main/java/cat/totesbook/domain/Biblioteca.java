@@ -26,7 +26,27 @@ public class Biblioteca {
     private String telefon;
     private String email;
 
+    @Transient  // indica que no és una columna a la BD
+    private int numLlibres;
+
+    @Transient
+    private int numPrestecs;
+
+    // Relació amb el bibliotecari responsable
+    @ManyToOne
+    @JoinColumn(name = "idBibliotecari")
+    private Agent bibliotecari;
+
     public Biblioteca() {
+    }
+
+    // Constructor
+    public Biblioteca(String nom, String adreca, String telefon, String email, Agent bibliotecari) {
+        this.nom = nom;
+        this.adreca = adreca;
+        this.telefon = telefon;
+        this.email = email;
+        this.bibliotecari = bibliotecari;
     }
 
     // Getters i Setters
@@ -68,5 +88,38 @@ public class Biblioteca {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Agent getBibliotecari() {
+        return bibliotecari;
+    }
+
+    public void setBibliotecari(Agent bibliotecari) {
+        this.bibliotecari = bibliotecari;
+    }
+
+    public int getNumLlibres() {
+        return numLlibres;
+    }
+
+    public void setNumLlibres(int numLlibres) {
+        this.numLlibres = numLlibres;
+    }
+
+    public int getNumPrestecs() {
+        return numPrestecs;
+    }
+
+    public void setNumPrestecs(int numPrestecs) {
+        this.numPrestecs = numPrestecs;
+    }
+
+    @Override
+    public String toString() {
+        return "Biblioteca{"
+                + "idBiblioteca=" + idBiblioteca
+                + ", nom='" + nom + '\''
+                + ", bibliotecari=" + (bibliotecari != null ? bibliotecari.getNom() : "cap")
+                + '}';
     }
 }

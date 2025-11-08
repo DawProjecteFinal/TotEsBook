@@ -103,6 +103,7 @@ public class UsuariDAO implements UsuariRepository {
      * Actualitza les dades d'un usuari existent (sense modificar contrasenya si
      * no es passa nova).
      */
+    @Override
     public void updateUsuari(Usuari actualitzat) {
         Usuari existent = entityManager.find(Usuari.class, actualitzat.getId());
         if (existent != null) {

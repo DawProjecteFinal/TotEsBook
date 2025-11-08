@@ -41,4 +41,17 @@ public class BibliotecaServiceImpl implements BibliotecaService {
     public void addBiblioteca(Biblioteca biblioteca) {
         bibliotecaRepository.addBiblioteca(biblioteca);
     }
+    
+        @Override
+    public int countLlibresByBiblioteca(int idBiblioteca) {
+            return bibliotecaRepository.countLlibresByBiblioteca(idBiblioteca);
+
+    }
+
+    @Override
+    public int countPrestecsByBiblioteca(int idBiblioteca) {
+
+            return bibliotecaRepository.countPrestecsByBiblioteca(idBiblioteca);
+
+    }
 }

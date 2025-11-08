@@ -41,7 +41,8 @@ public class AgentDAO implements AgentRepository {
     }
 
     /**
-     * Actualitza el tipus d'un agent (per exemple, de BIBLIOTECARI a ADMINISTRADOR).
+     * Actualitza el tipus d'un agent (per exemple, de BIBLIOTECARI a
+     * ADMINISTRADOR).
      */
     @Override
     public void updateAgentTipus(int idAgent, Agent.TipusAgent nouTipus) {
@@ -78,6 +79,7 @@ public class AgentDAO implements AgentRepository {
     /**
      * Desa o actualitza un agent (opcional, per compatibilitat futura).
      */
+    @Override
     public void saveAgent(Agent agent) {
         Agent existent = entityManager.find(Agent.class, agent.getIdAgent());
         if (existent == null) {

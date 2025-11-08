@@ -26,4 +26,24 @@ public class UsuariServiceImpl implements UsuariService {
         return usuariRepository.getAllUsuaris();
     }
 
+    @Override
+    public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
+
+        return usuariRepository.getUsuariByEmailAndContrasenya(email, contrasenyaPlana);
+    }
+
+    @Override
+    public void saveUsuari(Usuari usuari) {
+        usuariRepository.saveUsuari(usuari);
+    }
+
+    @Override
+    public Usuari getUsuariByEmail(String email) {
+        return usuariRepository.getUsuariByEmail(email);
+    }
+
+    @Override
+    public void updateUsuari(Usuari usuari) {
+        usuariRepository.updateUsuari(usuari);
+    }
 }

@@ -35,4 +35,6 @@ public interface UsuariRepository {
      * @return Llista d'objectes Usuari.
      */
     List<Usuari> getAllUsuaris();
+    
+    void updateUsuari(Usuari actualitzat);
 }
