@@ -248,8 +248,71 @@
         </div>
     </footer>
     <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+    
+    <!-- ============================================= -->
+    <!-- ===== INICI CODI NOU: Toast (Pop-up) ===== -->
+    <!-- ============================================= -->
+    
+    <!-- 1. Contenidor del Toast (Pop-up) -->
+    <!-- El situem a la cantonada inferior dreta -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      
+      <!-- Toast per a missatges d'èxit (p.ex. perfil guardat) -->
+      <c:if test="${not empty success}">
+          <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              <strong class="me-auto">Èxit!</strong>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              ${success}
+            </div>
+          </div>
+      </c:if>
+
+      <!-- Toast per a missatges d'error -->
+      <c:if test="${not empty error}">
+          <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <strong class="me-auto">Error</strong>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              ${error}
+            </div>
+          </div>
+      </c:if>
+    </div>
+    <!-- ===== FI CODI NOU: Toast (Pop-up) ===== -->
+
 
     <!-- Script de Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- ==================================================== -->
+    <!-- ===== INICI CODI NOU: Script per activar el Toast ===== -->
+    <!-- ==================================================== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // Buscar el toast d'èxit
+            const successToastEl = document.getElementById('successToast');
+            if (successToastEl) {
+                const successToast = new bootstrap.Toast(successToastEl);
+                successToast.show();
+            }
+
+            // Buscar el toast d'error
+            const errorToastEl = document.getElementById('errorToast');
+            if (errorToastEl) {
+                const errorToast = new bootstrap.Toast(errorToastEl);
+                errorToast.show();
+            }
+        });
+    </script>
+    <!-- ===== FI CODI NOU: Script per activar el Toast ===== -->
+    
 </body>
 </html>
