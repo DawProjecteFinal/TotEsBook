@@ -124,7 +124,7 @@ INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
 ('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
-('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
+('Albert', 'Ferruz', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
 
 -- LLIBRES
 -- INSERT INTO Llibres () VALUES

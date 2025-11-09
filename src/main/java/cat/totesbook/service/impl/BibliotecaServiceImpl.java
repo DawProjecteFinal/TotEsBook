@@ -1,6 +1,6 @@
-
 package cat.totesbook.service.impl;
 
+import cat.totesbook.domain.Agent;
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.repository.BibliotecaRepository;
 import cat.totesbook.service.BibliotecaService;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author jmiro
  */
-
 @Service
 @Transactional
 public class BibliotecaServiceImpl implements BibliotecaService {
@@ -41,17 +40,36 @@ public class BibliotecaServiceImpl implements BibliotecaService {
     public void addBiblioteca(Biblioteca biblioteca) {
         bibliotecaRepository.addBiblioteca(biblioteca);
     }
-    
-        @Override
+
+    @Override
+    public void saveOrUpdateBiblioteca(Biblioteca biblioteca) {
+        bibliotecaRepository.saveOrUpdateBiblioteca(biblioteca);
+    }
+
+    @Override
+    public void deleteBiblioteca(int idBiblioteca) {
+        try {
+            bibliotecaRepository.deleteBiblioteca(idBiblioteca);
+            System.out.println("[Service] Biblioteca eliminada correctament: id=" + idBiblioteca);
+        } catch (Exception e) {
+            System.err.println("[Service] Error eliminant biblioteca id=" + idBiblioteca + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public int countLlibresByBiblioteca(int idBiblioteca) {
-            return bibliotecaRepository.countLlibresByBiblioteca(idBiblioteca);
+        return bibliotecaRepository.countLlibresByBiblioteca(idBiblioteca);
 
     }
 
     @Override
     public int countPrestecsByBiblioteca(int idBiblioteca) {
+        return bibliotecaRepository.countPrestecsByBiblioteca(idBiblioteca);
+    }
 
-            return bibliotecaRepository.countPrestecsByBiblioteca(idBiblioteca);
-
+    @Override
+    public Agent getBibliotecariByBiblioteca(Biblioteca biblioteca) {
+        return bibliotecaRepository.getBibliotecariByBiblioteca(biblioteca.getIdBiblioteca());
     }
 }

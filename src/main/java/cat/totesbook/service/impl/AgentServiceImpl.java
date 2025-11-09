@@ -36,4 +36,9 @@ public class AgentServiceImpl implements AgentService {
     public void saveAgent(Agent agent) {
         agentRepository.saveAgent(agent);
     }
+    
+    @Override
+    public List<Agent> getAllBibliotecaris() {
+        return agentRepository.getAllBibliotecaris();
+    }
 }

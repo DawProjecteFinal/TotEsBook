@@ -113,4 +113,23 @@ public class AgentDAO implements AgentRepository {
             desti.setContrasenya(BCrypt.hashpw(origen.getContrasenya(), BCrypt.gensalt()));
         }
     }
+    
+    /**
+     * Nomes mostra els agents que són bibliotecaris
+     * @return 
+     */
+    @Override
+    public List<Agent> getAllBibliotecaris() {
+        try {
+            return entityManager.createQuery(
+                    "SELECT a FROM Agent a WHERE a.tipus = :tipus", Agent.class)
+                    .setParameter("tipus", Agent.TipusAgent.bibliotecari)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error a AgentDAO.getAllBibliotecaris: " + e.getMessage());
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
 }
