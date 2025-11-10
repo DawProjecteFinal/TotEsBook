@@ -41,4 +41,8 @@ public class AgentServiceImpl implements AgentService {
     public List<Agent> getAllBibliotecaris() {
         return agentRepository.getAllBibliotecaris();
     }
+    
+    public Agent getAgentById(int idAgent){
+        return agentRepository.getAgentById(idAgent);
+    }
 }

@@ -22,8 +22,10 @@ public class AgentDAO implements AgentRepository {
     @Override
     public Agent getAgentByEmailAndContrasenya(String email, String contrasenyaPlana) {
         try {
+            // Fem un join per a carregar la biblioteca assignada al bibliotecari
             List<Agent> result = entityManager.createQuery(
-                    "SELECT a FROM Agent a WHERE a.email = :email", Agent.class)
+                    "SELECT a FROM Agent a LEFT JOIN FETCH a.biblioteca WHERE a.email = :email",
+                    Agent.class)
                     .setParameter("email", email)
                     .getResultList();
 
@@ -113,10 +115,11 @@ public class AgentDAO implements AgentRepository {
             desti.setContrasenya(BCrypt.hashpw(origen.getContrasenya(), BCrypt.gensalt()));
         }
     }
-    
+
     /**
      * Nomes mostra els agents que són bibliotecaris
-     * @return 
+     *
+     * @return
      */
     @Override
     public List<Agent> getAllBibliotecaris() {
@@ -132,4 +135,19 @@ public class AgentDAO implements AgentRepository {
         }
     }
 
+    /**
+     * 
+     * @param idAgent
+     * @return 
+     */
+    @Override
+    public Agent getAgentById(int idAgent) {
+        try {
+            return entityManager.find(Agent.class, idAgent);
+        } catch (Exception e) {
+            System.err.println("Error a AgentDAO.getById: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

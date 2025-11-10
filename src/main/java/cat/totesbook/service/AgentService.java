@@ -18,4 +18,6 @@ public interface AgentService {
     void saveAgent(Agent agent);
     
     List<Agent> getAllBibliotecaris();
+    
+    Agent getAgentById(int idAgent);
 }

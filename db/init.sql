@@ -166,3 +166,12 @@ CREATE TABLE IF NOT EXISTS BibliotecaLlibres (
 
     CONSTRAINT uc_biblio_llibre UNIQUE (idBiblioteca, isbn)
 );
+
+-- Afegim al final del init.sql aquesta clau forana per a que primer es crein les taules referenciades
+ALTER TABLE Agents
+ADD COLUMN idBiblioteca INT,
+ADD CONSTRAINT fk_agent_biblioteca
+    FOREIGN KEY (idBiblioteca)
+    REFERENCES Biblioteques(idBiblioteca)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;
