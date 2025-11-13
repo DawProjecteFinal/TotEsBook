@@ -45,18 +45,46 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
+                        <!-- Dropdown + categories -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
                                 <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#">Autoajuda</a></li>
-                                <li><a class="dropdown-item" href="#">Ficció</a></li>
-                                <li><a class="dropdown-item" href="#">Juvenil</a></li>
-                                <li><a class="dropdown-item" href="#">Novel·la</a></li>
-                                <li><a class="dropdown-item" href="#">True crime</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>                                   
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Cooking">Cuina i gastronomia</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Juvenile Fiction">Ficció juvenil</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Fiction">Novel·la i ficció</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Young Adult Fiction">Novel·la juvenil</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
+                        <!-- Dropdown + formulari cerca avançada -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Cerca avançada
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#" data-field="author">Autor</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#" data-field="idioma">Idioma</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
+                            </ul>
+                        </li>
+
+                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/buscar'/>">
+                            <input type="hidden" name="field" id="field" value="">
+                            <div id="searchGroup" class="input-group d-none">
+                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off" required>
+                                <button class="btn btn-tot btn-sm" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+
                         <c:if test="${not empty sessionScope.sessioUsuari}">
                             <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
                                 <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
@@ -66,10 +94,13 @@
                             </c:if>
                     </ul>
 
+
+
+
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
-                                   placeholder="Cerca per titol, autor... " aria-label="Search">
+                                   placeholder="Cerca per titol" aria-label="Search">
                             <button class="btn btn-tot btn-sm" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -207,6 +238,6 @@
         <!-- ===== FI Peu de pàgina ===== -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
 </html>

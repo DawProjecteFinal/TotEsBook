@@ -35,4 +35,6 @@ public interface LlibreRepository {
     Optional<Llibre> getLlibreByIsbn(String isbn);
 
     List<Llibre> findByBiblioteca(Biblioteca biblioteca);
+    
+    List<Llibre> findByCategoria(String categoria);
 }

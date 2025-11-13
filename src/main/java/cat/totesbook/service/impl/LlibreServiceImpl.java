@@ -61,4 +61,10 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
         return llibreRepository.findByBiblioteca(biblioteca);
     }
+
+    //Retorna els llibres per categoria
+    @Override
+    public List<Llibre> getLlibresByCategoria(String categoria) {
+        return llibreRepository.findByCategoria(categoria);
+    }
 }

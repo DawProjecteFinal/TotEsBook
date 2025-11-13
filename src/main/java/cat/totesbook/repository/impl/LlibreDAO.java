@@ -52,7 +52,7 @@ public class LlibreDAO implements LlibreRepository {
         Llibre llibre = entityManager.find(Llibre.class, isbn);
         return Optional.ofNullable(llibre);
     }
-    
+
     // Retorna els llibre de una biblioteca en concret
     @Override
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
@@ -75,5 +75,14 @@ public class LlibreDAO implements LlibreRepository {
         desti.setIdioma(origen.getIdioma());
         desti.setExemplars(origen.getExemplars());
         desti.setDisponibles(origen.getDisponibles());
+    }
+
+    //Retorna els llibres per una categoria concreta
+    @Override
+    public List<Llibre> findByCategoria(String categoria) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l WHERE l.categoria = :categoria", Llibre.class)
+                .setParameter("categoria", categoria)
+                .getResultList();
     }
 }

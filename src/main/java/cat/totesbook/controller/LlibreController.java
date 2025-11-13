@@ -28,11 +28,20 @@ public class LlibreController {
      * @return 
      */
     @RequestMapping("/mostrarLlibres")
-    public ModelAndView mostrarLlibres() {
+    public ModelAndView mostrarLlibres(@RequestParam(name = "categoria", required = false)String categoria) {
         ModelAndView modelview = new ModelAndView("mostrarLlibres");
-
-
+        
+        if (categoria == null || categoria.isBlank()){
         modelview.addObject("llibres", llibreService.getAllLlibres());
+        modelview.addObject("categoriaSeleccionada", null);
+        
+    } else {
+            modelview.addObject("llibres", llibreService.getLlibresByCategoria(categoria));
+            modelview.addObject("categoriaSeleccionada", categoria);
+        }
+
+
+        
         return modelview;
     }
  

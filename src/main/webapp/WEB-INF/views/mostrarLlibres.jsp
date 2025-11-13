@@ -50,19 +50,20 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
+                        <!-- Dropdown + categories -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li><a class="dropdown-item" href="#!">Autoajuda</a></li>
-                                <li><a class="dropdown-item" href="#!">Ficció</a></li>
-                                <li><a class="dropdown-item" href="#!">Juvenil</a></li>
-                                <li><a class="dropdown-item" href="#!">Novel·la</a></li>
-                                <li><a class="dropdown-item" href="#!">True crime</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>                                   
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Cooking">Cuina i gastronomia</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Juvenile Fiction">Ficció juvenil</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Fiction">Novel·la i ficció</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Young Adult Fiction">Novel·la juvenil</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -70,7 +71,7 @@
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search">
                             <input class="form-control form-control-sm me-2" type="search"
-                                   placeholder="Cerca per títol, autor..." aria-label="Search">
+                                   placeholder="Cerca per títol" aria-label="Search">
                             <button class="btn btn-tot btn-sm" type="submit">
                                 <i class="bi bi-search-heart"></i>
                             </button>
@@ -84,17 +85,76 @@
         </nav>
 
         <div class="container py-4">
-            <h1 class="mb-4 text-center text-tot-principal">Explora, tria i gaudeix</h1>
+            <!-- Títol dinàmic segons categoria -->
+
+            <c:choose>
+                <c:when test="${not empty categoriaSeleccionada}">
+                    <h1 class="mb-3 text-center text-tot-principal">
+                        Llibres 
+                        <span class="text-tot-principal">
+                            <c:choose>
+                                <c:when test="${categoriaSeleccionada == 'Self-Help'}">
+                                    d'autoajuda
+                                </c:when>
+                                <c:when test="${categoriaSeleccionada == 'Cooking'}">
+                                    de cuina i gastronomia
+                                </c:when>
+                                <c:when test="${categoriaSeleccionada == 'Fiction'}">
+                                    de novel·la i ficció
+                                </c:when>
+                                <c:when test="${categoriaSeleccionada == 'Juvenile Fiction'}">
+                                    de ficció juvenil
+                                </c:when>
+                                <c:when test="${categoriaSeleccionada == 'Young Adult Fiction'}">
+                                    de novel·la Juvenil
+                                </c:when>
+                                <c:when test="${categoriaSeleccionada == 'True Crime'}">
+                                    de crims reals
+                                </c:when>
+                                <c:when test="${fn:contains(categoriaSeleccionada, 'Biography')}">
+                                    de biografies i Memòries
+                                </c:when>
+                                <c:when test="${categoriaSeleccionada == 'Psychology'}">
+                                    de psicologia
+                                </c:when>
+                            </c:choose>
+                        </span>
+                    </h1>
+                </c:when>
+                <c:otherwise>
+                    <h1 class="mb-3 text-center text-tot-principal">
+                        Explora, tria i gaudeix
+                    </h1>
+                </c:otherwise>
+            </c:choose>
+
+            <!-- Missatge si no hi ha llibres -->
+            <c:if test="${empty llibres}">
+                <div class="alert alert-warning text-center my-3" role="alert">
+                    No s'han trobat llibres per a aquesta categoria.
+                </div>
+            </c:if>
+
+            <!-- Llistat de llibres -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 <c:forEach var="llibre" items="${llibres}">
                     <div class="col">
                         <div class="card h-100 shadow-sm">
-                            <img src="${llibre.imatgeUrl}" class="card-img-top img-fixed mx-auto d-block" alt="Portada de ${llibre.titol}">
+                            <img src="${llibre.imatgeUrl}"
+                                 class="card-img-top img-fixed mx-auto d-block"
+                                 alt="Portada de ${llibre.titol}">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
-                                <p class="text-muted mb-2 text-tot-light"><c:out value="${llibre.autor}"/></p>                            
-                                <ul class="list-unstyled small mb-3 text-tot-isbn"> 
-                                    <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
+                                <h5 class="card-title mb-1 text-tot-bold">
+                                    <c:out value="${llibre.titol}"/>
+                                </h5>
+                                <p class="text-muted mb-2 text-tot-light">
+                                    <c:out value="${llibre.autor}"/>
+                                </p>
+                                <ul class="list-unstyled small mb-3 text-tot-isbn">
+                                    <li>
+                                        <strong>ISBN:</strong>
+                                        <c:out value="${llibre.isbn}"/>
+                                    </li>
                                 </ul>
                                 <div class="mt-auto">
                                     <a href="#" class="btn btn-tot w-100">Més informació</a>
