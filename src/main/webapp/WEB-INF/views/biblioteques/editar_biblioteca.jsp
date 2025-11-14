@@ -45,14 +45,17 @@
 
                 <div class="mb-3">
                     <label class="form-label">Bibliotecari Responsable</label>
-                    <select name="bibliotecari.idAgent" class="form-select">
+                    <select name="idBibliotecari" class="form-select">
                         <option value="">-- Selecciona un bibliotecari --</option>
+
                         <c:forEach var="b" items="${llistaBibliotecaris}">
-                            <option value="${b.idAgent}" ${biblioteca.bibliotecari != null && biblioteca.bibliotecari.idAgent == b.idAgent ? 'selected' : ''}>
+                            <option value="${b.idAgent}"
+                                    ${biblioteca.bibliotecari != null && biblioteca.bibliotecari.idAgent == b.idAgent ? 'selected' : ''}>
                                 ${b.nom} ${b.cognoms}
                             </option>
                         </c:forEach>
                     </select>
+
                 </div>
 
                 <button type="submit" class="btn btn-tot">Guardar Canvis</button>

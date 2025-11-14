@@ -109,36 +109,40 @@
                     </small>
                 </p>
 
-                <!-- ===== Targetes resum ===== -->
+                <!-- Targeta resum de prestecs -->
                 <div class="row text-center mb-5 g-3">
                     <div class="col-6 col-md-3">
                         <div class="card shadow-sm border-start border-4 border-primary">
                             <div class="card-body">
-                                <h2 class="fw-bold mb-0">${prestecsActius}</h2>
+                                <h2 class="fw-bold mb-0">${numPrestecsActius}</h2>
                                 <p class="text-muted small mb-0">Préstecs actius</p>
+
                             </div>
                         </div>
                     </div>
+                    <!-- Targeta resum de devolucions -->
                     <div class="col-6 col-md-3">
                         <div class="card shadow-sm border-start border-4 border-success">
                             <div class="card-body">
-                                <h2 class="fw-bold mb-0">${devolucionsPendents}</h2>
+                                <h2 class="fw-bold mb-0">${numDevolucionsPendents}</h2>
                                 <p class="text-muted small mb-0">Devolucions</p>
                             </div>
                         </div>
                     </div>
+                    <!-- Targeta resum de reserves -->
                     <div class="col-6 col-md-3">
                         <div class="card shadow-sm border-start border-4 border-warning">
                             <div class="card-body">
-                                <h2 class="fw-bold mb-0">${reservesPendents}</h2>
+                                <h2 class="fw-bold mb-0">${numReservesPendents}</h2>
                                 <p class="text-muted small mb-0">Reserves pendents de recollir</p>
                             </div>
                         </div>
                     </div>
+                    <!-- Targeta resum de llibres que no s'han retornat a temps -->
                     <div class="col-6 col-md-3">
                         <div class="card shadow-sm border-start border-4 border-danger">
                             <div class="card-body">
-                                <h2 class="fw-bold mb-0">${llibresRetard}</h2>
+                                <h2 class="fw-bold mb-0">${numLlibresRetard}</h2>
                                 <p class="text-muted small mb-0">Llibres amb retard</p>
                             </div>
                         </div>
@@ -159,22 +163,33 @@
                     <div class="tab-pane fade show active" id="prestecs">
                         <h4 class="mb-3">Préstecs actius a la teva biblioteca</h4>
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="table-light">
+                            <table class="table table-striped mt-4">
+                                <thead>
                                     <tr>
-                                        <th>Llibre</th>
+                                        <th>ISBN</th>
                                         <th>Usuari</th>
                                         <th>Data Préstec</th>
-                                        <th>Accions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%-- TODO: Iterar sobre la llista de préstecs actius --%>
-                                    <tr>
-                                        <td colspan="4" class="text-center">No hi ha préstecs actius actualment.</td>
-                                    </tr>
+                                    <c:forEach var="p" items="${prestecsActius}">
+                                        <tr>
+                                            <td>${p.llibre.isbn}</td>
+                                            <td>${p.usuari.nom} ${p.usuari.cognoms}</td>
+                                            <td>${p.dataPrestec}</td>
+                                        </tr>
+                                    </c:forEach>
+
+                                    <c:if test="${empty prestecsActius}">
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted fst-italic">
+                                                No hi ha préstecs actius.
+                                            </td>
+                                        </tr>
+                                    </c:if>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                     <div class="tab-pane fade" id="reserves">
@@ -190,7 +205,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%-- TODO: Iterar sobre la llista de reserves pendents --%>
+                                    <%-- Iterar sobre la llista de reserves pendents --%>
                                     <tr>
                                         <td colspan="4" class="text-center">No hi ha reserves pendents.</td>
                                     </tr>
@@ -222,7 +237,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.</div>
+                    <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
+                    
+                    
+                    
+                    
+                    
+                    </div>
                 </div>
             </div>
         </section>

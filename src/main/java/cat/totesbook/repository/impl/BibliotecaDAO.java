@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jmiro
  */
 @Repository
-@Transactional
 public class BibliotecaDAO implements BibliotecaRepository {
 
     @PersistenceContext(unitName = "totesbookPersistenceUnit")
