@@ -40,4 +40,7 @@ public interface LlibreService {
     
     //Retorna els llibres per una categoria concreta
     List<Llibre> getLlibresByCategoria(String categoria);
+    
+    //Retorna els llibres per un títol determinat
+    List<Llibre> getLlibreByTitol(String titol);
 }

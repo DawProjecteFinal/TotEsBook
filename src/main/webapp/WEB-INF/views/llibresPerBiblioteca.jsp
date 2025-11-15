@@ -50,14 +50,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
+                        <!-- Dropdown + categories -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
+                                <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>                                   
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
@@ -69,13 +67,16 @@
                             </ul>
                         </li>
                     </ul>
+                    </li>
+                    </ul>
 
+                    <!-- Cerca per títol -->        
                     <div class="d-flex align-items-center ms-lg-auto">
-                        <form class="d-flex me-3 my-2 my-lg-0" role="search">
-                            <input class="form-control form-control-sm me-2" type="search"
-                                   placeholder="Cerca per títol, autor..." aria-label="Search">
+                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
+                            <input class="form-control form-control-sm me-2" type="search" name="q" 
+                                   placeholder="Cerca per titol" aria-label="Search" autocomplete="off">
                             <button class="btn btn-tot btn-sm" type="submit">
-                                <i class="bi bi-search-heart"></i>
+                                <i class="bi bi-search"></i>
                             </button>
                         </form>
 

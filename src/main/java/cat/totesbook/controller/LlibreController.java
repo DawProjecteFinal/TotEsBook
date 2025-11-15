@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import cat.totesbook.service.LlibreService;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author equip totEsBook
  */
-
 @Controller
 public class LlibreController {
 
@@ -24,25 +24,37 @@ public class LlibreController {
     // 
     /**
      * Mapping relatiu a l'arrel de l'aplicació: /TotEsBook/mostrarLlibres
-     * 
-     * @return 
+     *
+     * @return
      */
     @RequestMapping("/mostrarLlibres")
-    public ModelAndView mostrarLlibres(@RequestParam(name = "categoria", required = false)String categoria) {
+    public ModelAndView mostrarLlibres(
+            @RequestParam(name = "categoria", required = false) String categoria,
+            @RequestParam(name = "q", required = false) String titol) {
         ModelAndView modelview = new ModelAndView("mostrarLlibres");
-        
-        if (categoria == null || categoria.isBlank()){
-        modelview.addObject("llibres", llibreService.getAllLlibres());
-        modelview.addObject("categoriaSeleccionada", null);
-        
-    } else {
-            modelview.addObject("llibres", llibreService.getLlibresByCategoria(categoria));
-            modelview.addObject("categoriaSeleccionada", categoria);
+
+        //Cerca per títol
+        if (titol != null && !titol.isBlank()) {
+            List<Llibre> llibres = llibreService.getLlibreByTitol(titol);
+            modelview.addObject("llibres", llibres);
+            modelview.addObject("categoriaSeleccionada", null);
+            modelview.addObject("textCerca", titol);
+            return modelview;
         }
 
+        //Si no hi ha títol però sí categoria, filtrarà per categoria
+        if (categoria != null && !categoria.isBlank()) {
+            List<Llibre> llibres = llibreService.getLlibresByCategoria(categoria);
+            modelview.addObject("llibres", llibres);
+            modelview.addObject("categoriaSeleccionada", categoria);
 
-        
+        } else {
+            //Mostrará tots els llibres
+            List<Llibre> llibres = llibreService.getAllLlibres();
+            modelview.addObject("llibres", llibres);
+            modelview.addObject("categoriaSeleccionada", null);
+        }
         return modelview;
     }
- 
+
 }

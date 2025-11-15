@@ -74,11 +74,12 @@
                                 <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
                             </ul>
                         </li>
-
                         <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/buscar'/>">
                             <input type="hidden" name="field" id="field" value="">
                             <div id="searchGroup" class="input-group d-none">
-                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off" required>
+                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off" required
+                                       oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                       oninput="this.setCustomValidity('')" />
                                 <button class="btn btn-tot btn-sm" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -96,11 +97,13 @@
 
 
 
-
+                    <!-- Cerca per títol -->        
                     <div class="d-flex align-items-center ms-lg-auto">
-                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
+                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
-                                   placeholder="Cerca per titol" aria-label="Search">
+                                   placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
+                                       oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                       oninput="this.setCustomValidity('')" />
                             <button class="btn btn-tot btn-sm" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>

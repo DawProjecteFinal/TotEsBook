@@ -85,4 +85,15 @@ public class LlibreDAO implements LlibreRepository {
                 .setParameter("categoria", categoria)
                 .getResultList();
     }
+
+    @Override
+    public List<Llibre> findByTitolContainingIgnoreCase(String titol) {
+        return entityManager.createQuery(
+            "SELECT l FROM Llibre l " +
+            "WHERE LOWER(l.titol) LIKE LOWER(CONCAT('%', :titol, '%'))",
+            Llibre.class)
+        .setParameter("titol", titol)
+        .getResultList();
+       
+    }
 }

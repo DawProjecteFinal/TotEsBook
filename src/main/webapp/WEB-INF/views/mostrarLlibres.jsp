@@ -66,14 +66,40 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
+                        <!-- Dropdown + formulari cerca avançada -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Cerca avançada
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#" data-field="author">Autor</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#" data-field="idioma">Idioma</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
+                            </ul>
+                        </li>
+                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/buscar'/>">
+                            <input type="hidden" name="field" id="field" value="">
+                            <div id="searchGroup" class="input-group d-none">
+                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off" required
+                                       oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                       oninput="this.setCustomValidity('')" />
+                                <button class="btn btn-tot btn-sm" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
                     </ul>
-
+                    <!-- Cerca per títol -->            
                     <div class="d-flex align-items-center ms-lg-auto">
-                        <form class="d-flex me-3 my-2 my-lg-0" role="search">
-                            <input class="form-control form-control-sm me-2" type="search"
-                                   placeholder="Cerca per títol" aria-label="Search">
+                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
+                            <input class="form-control form-control-sm me-2" type="search" name="q" 
+                                   placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
+                                       oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                       oninput="this.setCustomValidity('')" />
                             <button class="btn btn-tot btn-sm" type="submit">
-                                <i class="bi bi-search-heart"></i>
+                                <i class="bi bi-search"></i>
                             </button>
                         </form>
 
@@ -85,9 +111,19 @@
         </nav>
 
         <div class="container py-4">
-            <!-- Títol dinàmic segons categoria -->
-
+            <!-- Títol dinàmic -->
             <c:choose>
+                <%-- Cerca per títol --%>
+                <c:when test="${not empty textCerca}">
+                    <h1 class="mb-3 text-center text-tot-principal">
+                        Resultats de la cerca per :
+                        <span class="text-tot-principal">
+                            "<c:out value="${textCerca}"/>"
+                        </span>
+                    </h1>
+                </c:when>
+
+                <%-- Cerca per categoria seleccionada --%>
                 <c:when test="${not empty categoriaSeleccionada}">
                     <h1 class="mb-3 text-center text-tot-principal">
                         Llibres 
@@ -106,21 +142,26 @@
                                     de ficció juvenil
                                 </c:when>
                                 <c:when test="${categoriaSeleccionada == 'Young Adult Fiction'}">
-                                    de novel·la Juvenil
+                                    de novel·la juvenil
                                 </c:when>
                                 <c:when test="${categoriaSeleccionada == 'True Crime'}">
                                     de crims reals
                                 </c:when>
                                 <c:when test="${fn:contains(categoriaSeleccionada, 'Biography')}">
-                                    de biografies i Memòries
+                                    de biografies i memòries
                                 </c:when>
                                 <c:when test="${categoriaSeleccionada == 'Psychology'}">
                                     de psicologia
                                 </c:when>
+                                <c:otherwise>
+                                    de <c:out value="${categoriaSeleccionada}"/>
+                                </c:otherwise>
                             </c:choose>
                         </span>
                     </h1>
                 </c:when>
+
+                <%-- Vista sense cerca --%>
                 <c:otherwise>
                     <h1 class="mb-3 text-center text-tot-principal">
                         Explora, tria i gaudeix
@@ -131,7 +172,18 @@
             <!-- Missatge si no hi ha llibres -->
             <c:if test="${empty llibres}">
                 <div class="alert alert-warning text-center my-3" role="alert">
-                    No s'han trobat llibres per a aquesta categoria.
+                    <c:choose>
+                        <c:when test="${not empty textCerca}">
+                            No s'han trobat llibres amb el títol
+                            "<strong><c:out value="${textCerca}"/></strong>".
+                        </c:when>
+                        <c:when test="${not empty categoriaSeleccionada}">
+                            No s'han trobat llibres per a aquesta categoria.
+                        </c:when>
+                        <c:otherwise>
+                            No s'han trobat llibres.
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </c:if>
 
@@ -199,5 +251,6 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
 </html>

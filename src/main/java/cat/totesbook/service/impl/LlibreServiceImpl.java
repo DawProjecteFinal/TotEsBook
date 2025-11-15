@@ -67,4 +67,9 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> getLlibresByCategoria(String categoria) {
         return llibreRepository.findByCategoria(categoria);
     }
+
+    @Override
+    public List<Llibre> getLlibreByTitol(String titol) {
+       return llibreRepository.findByTitolContainingIgnoreCase(titol);
+    }
 }

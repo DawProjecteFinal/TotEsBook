@@ -4,7 +4,7 @@
     Created on : 9 nov 2025, 11:06:03
     Author     : jmiro
     Created on : 10 nov 2025
-    Author     : Gemini Code Assist
+    Author     : Equip TotEsBook
     Description: Llista totes les biblioteques per a la gestió (accessible per ADMIN i BIBLIOTECARI).
 --%>
 
