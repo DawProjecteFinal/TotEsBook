@@ -141,6 +141,11 @@
                             👥 Comptes d'Usuari
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="llibres-tab" data-bs-toggle="tab" data-bs-target="#llibres" type="button" role="tab">
+                            📚 Llibres
+                        </button>
+                    </li>
                 </ul>
 
                 <div class="tab-content" id="adminTabsContent">
@@ -324,6 +329,74 @@
                                                 <tr><td colspan="6" class="text-center text-muted">No hi ha usuaris registrats.</td></tr>
                                             </c:if>
                                         </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ===== PESTANYA 3: GESTIÓ DE LLIBRES ===== -->
+                     <div class="tab-pane fade show active" id="llibres" role="tabpanel">
+                        <div class="card shadow-sm mb-5">
+                            <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0 text-tot-bold">
+                                    <i class="bi bi-building me-2"></i> Gestió de Llibres
+                                </h4>
+                                <a href="#" class="btn btn-sm btn-tot">
+                                    <i class="bi bi-plus-circle-fill me-1"></i> Afegir Llibre
+                                </a>
+                            </div>
+
+                            <div class="card-body">
+                                <p>Aquí pots veure tots els llibres registrats, així com afegir, modificar o eliminar-ne.</p>
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover caption-top small align-middle">
+                                        <caption>Llista general de libres registrats</caption>
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Títol</th>
+                                                <th>Autor</th>
+                                                <th>ISBN</th>
+                                                <th>Idioma</th>
+                                                <th>Biblioteca</th>
+                                                <th>Accions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Llistat de llibres -->
+                                            <c:forEach var="llibre" items="${llibres}">
+                                                
+                                                <tr>
+                                                    <td>${llibre.titol}</td>
+                                                    <td><c:out value="${llibre.autor}"/></td>
+                                                    <td><c:out value="${llibre.isbn}"/></td>
+                                                    <td><c:out value="${llibre.idioma}"/></td>
+                                                    <td>
+                                                    
+                                                            
+                                                                <c:out value="Pendent d'assignar"/>
+                                                            
+                                                            
+                                                        
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <div class="btn-group btn-group-sm" role="group">
+                                                            <a href="#" 
+                                                               class="btn btn-outline-primary"><i class="bi bi-gear"></i></a>
+                                                            <a href="#" 
+                                                               class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
+                                                            <form action="#" 
+                                                                  method="POST" style="display:inline;"
+                                                                  onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
+                                                                <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                
+                                                
+                                            </c:forEach>
                                     </table>
                                 </div>
                             </div>

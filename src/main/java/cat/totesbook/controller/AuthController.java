@@ -2,10 +2,12 @@ package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
 import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.SessioUsuari;
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.service.AgentService;
 import cat.totesbook.service.BibliotecaService;
+import cat.totesbook.service.LlibreService;
 import cat.totesbook.service.UsuariService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class AuthController {
 
     @Autowired
     private BibliotecaService bibliotecaService;    //Cridem a la capa de servei
+    
+    @Autowired
+    private LlibreService llibreService;
 
     @GetMapping("/login")
     public ModelAndView loginForm() {
@@ -54,6 +59,7 @@ public class AuthController {
                 List<Biblioteca> biblioteques = bibliotecaService.getAllBiblioteques();
                 List<Agent> agents = agentService.getAllAgents();
                 List<Usuari> usuaris = usuariService.getAllUsuaris();
+                List<Llibre> llibres = llibreService.getAllLlibres();
 
                 // Calcular el nombre de llibres i préstecs per a cada biblioteca
                 for (Biblioteca b : biblioteques) {
@@ -66,6 +72,7 @@ public class AuthController {
                 mv.addObject("llistaBiblioteques", biblioteques);
                 mv.addObject("llistaAgents", agents);
                 mv.addObject("llistaUsuaris", usuaris);
+                mv.addObject("llibres", llibres);
                 return mv;
 
                 // Si és bibliotecari
