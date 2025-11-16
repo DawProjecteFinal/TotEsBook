@@ -4,11 +4,8 @@ import cat.totesbook.config.DBConnection;
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.UsuariRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
-import java.sql.Connection;
-import java.util.List;
+import jakarta.persistence.PersistenceContext; // Manté aquest import
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +13,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@Transactional
 public class UsuariDAO implements UsuariRepository {
 
     @PersistenceContext(unitName = "totesbookPersistenceUnit")

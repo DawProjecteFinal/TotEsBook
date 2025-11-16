@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.domain;
 
 /**
@@ -9,6 +5,7 @@ package cat.totesbook.domain;
  * @author jmiro
  */
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,6 +33,10 @@ public class Biblioteca {
     @ManyToOne
     @JoinColumn(name = "idBibliotecari")
     private Agent bibliotecari;
+
+    // Una biblioteca pot tenir MOLTS agents
+    @OneToMany(mappedBy = "biblioteca", fetch = FetchType.LAZY)
+    private List<Agent> agents = new ArrayList<>();
 
     public Biblioteca() {
     }
@@ -112,6 +113,14 @@ public class Biblioteca {
 
     public void setNumPrestecs(int numPrestecs) {
         this.numPrestecs = numPrestecs;
+    }
+
+    public List<Agent> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agent> agents) {
+        this.agents = agents;
     }
 
     @Override

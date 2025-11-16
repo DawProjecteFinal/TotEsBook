@@ -7,6 +7,7 @@ import cat.totesbook.domain.Usuari;
 import cat.totesbook.service.AgentService;
 import cat.totesbook.service.BibliotecaService;
 import cat.totesbook.service.UsuariService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,8 @@ public class AuthController {
         // Intentem autenticar com a agent
         Agent agent = agentService.getAgentByEmailAndContrasenya(email, contrasenya);
         if (agent != null) {
-            session.setAttribute("sessioUsuari", new SessioUsuari(agent));
+            SessioUsuari sessioUsuari = new SessioUsuari(agent);
+            session.setAttribute("sessioUsuari", sessioUsuari);
 
             // Si és Administrador
             if (agent.getTipus() == Agent.TipusAgent.administrador) {
@@ -67,8 +69,13 @@ public class AuthController {
                 return mv;
 
                 // Si és bibliotecari
-            } else {
-                return new ModelAndView("dashboard_bibliotecari");
+            } else {            
+                Biblioteca biblioteca = agent.getBiblioteca();
+                if (biblioteca != null) {
+                    sessioUsuari.assignarBiblioteca(biblioteca);
+                    session.setAttribute("sessioUsuari", sessioUsuari);
+                }
+                return new ModelAndView("redirect:/dashboard_bibliotecari");
             }
         }
 

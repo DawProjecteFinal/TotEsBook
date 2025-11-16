@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.domain;
 
 /**
@@ -53,6 +49,15 @@ public class Prestec {
     private EstatPrestec estat = EstatPrestec.actiu;
 
     public Prestec() {
+    }
+
+    public Prestec(Usuari usuari, Llibre llibre, Biblioteca biblioteca, Agent agentPrestec) {
+        this.usuari = usuari;
+        this.llibre = llibre;
+        this.biblioteca = biblioteca;
+        this.agentPrestec = agentPrestec;
+        this.dataPrestec = LocalDateTime.now();
+        this.estat = EstatPrestec.actiu;
     }
 
     // Getters i Setters

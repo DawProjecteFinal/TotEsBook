@@ -16,9 +16,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.util.Properties;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "cat.totesbook.repository.impl")
 @ComponentScan(
         basePackages = "cat.totesbook",
         excludeFilters = @ComponentScan.Filter(

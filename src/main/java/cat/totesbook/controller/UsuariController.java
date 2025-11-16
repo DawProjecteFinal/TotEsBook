@@ -100,6 +100,7 @@ public class UsuariController {
      * Gestiona les peticions GET a /dashboard_bibliotecari.
      * Comprova la sessió i mostra el panell del bibliotecari.
      */
+    /*
     @GetMapping("/dashboard_bibliotecari")
     public String mostrarDashboardBibliotecari(HttpSession session) {
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -112,11 +113,12 @@ public class UsuariController {
         // TODO: Carregar dades necessàries per a aquest panell (ex: reserves pendents)
         return "dashboard_bibliotecario";
     }
-
+    */
     /**
      * Gestiona les peticions GET a /dashboard_admin.
      * Comprova la sessió i mostra el panell de l'administrador.
      */
+    /*
     @GetMapping("/dashboard_admin")
     public String mostrarDashboardAdmin(HttpSession session) {
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -131,7 +133,7 @@ public class UsuariController {
         // (En una futura refactorització, aquesta lògica hauria de moure's aquí).
         return "dashboard_admin";
     }
-    
+    */
     // --- Lògica de Registre ---
 
     /**
