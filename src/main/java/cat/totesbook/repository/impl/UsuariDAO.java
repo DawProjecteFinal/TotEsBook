@@ -1,13 +1,19 @@
 package cat.totesbook.repository.impl;
 
+import cat.totesbook.config.DBConnection;
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.UsuariRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.PersistenceContext; // Manté aquest import
-import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class UsuariDAO implements UsuariRepository {
@@ -97,19 +103,6 @@ public class UsuariDAO implements UsuariRepository {
         }
     }
 
-    /**
-     * Actualitza les dades d'un usuari existent (sense modificar contrasenya si
-     * no es passa nova).
-     */
-    @Override
-    public void updateUsuari(Usuari actualitzat) {
-        Usuari existent = entityManager.find(Usuari.class, actualitzat.getId());
-        if (existent != null) {
-            actualitzarUsuariDesDe(existent, actualitzat);
-            entityManager.merge(existent);
-            System.out.println(">>> [JPA] Usuari actualitzat: " + existent.getEmail());
-        }
-    }
 
     /**
      * Copia camps d'un usuari origen cap a un usuari existent.
@@ -126,4 +119,70 @@ public class UsuariDAO implements UsuariRepository {
             desti.setContrasenya(BCrypt.hashpw(origen.getContrasenya(), BCrypt.gensalt()));
         }
     }
+    
+    // ===================================
+    // --- INICI NOU CODI AFEGIT ---
+    // ===================================
+    
+    @Override
+    public Usuari findUsuariById(int id) {
+        String sql = "SELECT * FROM Usuaris WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Fem servir el mètode d'ajuda per mapejar les dades
+                    return mapRowToUsuari(rs);
+                }
+            }
+        } catch (Exception ex) {
+            System.getLogger(UsuariDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return null; // No trobat
+    }
+
+    @Override
+    public void updatePerfil(Usuari usuari) {
+        // Aquest UPDATE NO actualitza la contrasenya, només les dades del perfil
+        // CORRECCIÓ: Afegim llibresFavorits a l'UPDATE
+        String sql = "UPDATE Usuaris SET nom = ?, cognoms = ?, email = ?, telefon = ?, llibresFavorits = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, usuari.getNom());
+            ps.setString(2, usuari.getCognoms());
+            ps.setString(3, usuari.getEmail());
+            ps.setString(4, usuari.getTelefon());
+            ps.setString(5, usuari.getLlibresFavorits()); // <-- CORRECCIÓ: S'ha afegit aquest paràmetre
+            ps.setInt(6, usuari.getId());                 // <-- CORRECCIÓ: Ara és el paràmetre 6
+            
+            ps.executeUpdate();
+            
+        } catch (Exception ex) {
+            System.getLogger(UsuariDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+    /**
+     * Mètode d'ajuda privat per convertir un ResultSet a un objecte Usuari
+     * (Evita repetir codi)
+     */
+    private Usuari mapRowToUsuari(ResultSet rs) throws SQLException {
+        Usuari usuari = new Usuari();
+        usuari.setId(rs.getInt("id"));
+        usuari.setNom(rs.getString("nom"));
+        usuari.setCognoms(rs.getString("cognoms"));
+        usuari.setEmail(rs.getString("email"));
+        usuari.setTelefon(rs.getString("telefon"));
+        usuari.setLlibresFavorits(rs.getString("llibresFavorits"));
+        usuari.setContrasenya(rs.getString("contrasenya")); // Obtenim el hash (encara que no el fem servir a la vista)
+        return usuari;
+    }
+    
+    // ===================================
+    // --- FI NOU CODI AFEGIT ---
+    // ===================================
 }
