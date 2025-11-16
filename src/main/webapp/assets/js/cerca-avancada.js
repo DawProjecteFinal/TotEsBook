@@ -9,35 +9,32 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // Cuando se hace clic en Autor / Idioma / ISBN
     dropdownLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
 
-            const field = this.dataset.field;  // autor / idioma / isbn
+            const field = this.dataset.field; 
             fieldInput.value = field;
 
-            // Siempre mostramos el grupo
             searchGroup.classList.remove('d-none');
 
-            // Reset de valores
             searchInput.value = '';
             if (idiomaSelect) {
                 idiomaSelect.value = '';
             }
 
-            // Si es IDIOMA → mostramos el select y ocultamos el input de texto
+
             if (field === 'idioma' && idiomaSelect) {
-                searchInput.classList.add('d-none');   // input oculto
-                idiomaSelect.classList.remove('d-none'); // select visible
+                searchInput.classList.add('d-none');   
+                idiomaSelect.classList.remove('d-none'); 
             } else {
-                // Para autor / isbn → input visible, select oculto
+
                 searchInput.classList.remove('d-none');
                 if (idiomaSelect) {
                     idiomaSelect.classList.add('d-none');
                 }
 
-                // Placeholder segons tipus de cerca
+
                 switch (field) {
                     case 'autor':
                         searchInput.placeholder = 'Cerca per autor';
@@ -50,20 +47,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
                 }
 
-                // Focus al input
+
                 searchInput.focus();
             }
         });
     });
 
-    // Quan es triï un idioma al select, copiem el valor al input hidden q (searchInput)
+
     if (idiomaSelect) {
         idiomaSelect.addEventListener('change', function () {
             searchInput.value = this.value; // ca / es
         });
     }
 
-    // Opcional: validar abans d'enviar el formulari per idioma
+
     const advancedForm = document.getElementById('advancedSearch');
     if (advancedForm) {
         advancedForm.addEventListener('submit', function (e) {

@@ -168,86 +168,139 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <div class="col-lg-6 text-center">
-                                <h2 class="text-tot-bold">Descobreix un món de llibres</h2>
-                                <p class="text-tot-light">Cerca al nostre catàleg o inicia sessió per accedir als teus préstecs.</p>
-                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot me-2">Inicia Sessió</a>
-                                <a href="${pageContext.request.contextPath}/registre" class="btn btn-outline-secondary">Registra't</a>
+                            <div class="col-12 text-center">
+                                <h2 class="text-tot-bold mb-4">Si busques una escapada... obre un llibre</h2>
+
+                                <!-- ===== CARRUSEL INICI (4 imatges) ===== -->
+                                <div id="carouselInici" class="carousel slide mb-4"
+                                     data-bs-ride="carousel"
+                                     data-bs-interval="10000"
+                                     data-bs-pause="false">
+
+                                    <!-- Indicadors -->
+                                    <div class="carousel-indicators">
+                                        <button type="button" data-bs-target="#carouselInici" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+                                        <button type="button" data-bs-target="#carouselInici" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+                                        <button type="button" data-bs-target="#carouselInici" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+                                        <button type="button" data-bs-target="#carouselInici" data-bs-slide-to="3" aria-label="Diapositiva 4"></button>
+                                    </div>
+
+                                    <!-- Slides -->
+                                    <div class="carousel-inner rounded shadow">
+
+                                        <div class="carousel-item active">
+                                            <img src="${pageContext.request.contextPath}/assets/images/carrusel1.png"
+                                                 class="d-block w-100"
+                                                 alt="Imatge carrusel 1">
+                                        </div>
+
+                                        <div class="carousel-item">
+                                            <img src="${pageContext.request.contextPath}/assets/images/carrusel3.png"
+                                                 class="d-block w-100"
+                                                 alt="Imatge carrusel 2">
+                                        </div>
+
+                                        <div class="carousel-item">
+                                            <img src="${pageContext.request.contextPath}/assets/images/carrusel2.png"
+                                                 class="d-block w-100"
+                                                 alt="Imatge carrusel 3">
+                                        </div>
+
+                                        <div class="carousel-item">
+                                            <img src="${pageContext.request.contextPath}/assets/images/carrusel4.png"
+                                                 class="d-block w-100"
+                                                 alt="Imatge carrusel 4">
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Controls -->
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselInici" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Anterior</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselInici" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Següent</span>
+                                    </button>
+                                </div>
+                                <!-- ===== FI CARRUSEL INICI ===== -->
+
                             </div>
                         </c:otherwise>
-                    </c:choose>
-                </div>
-
-                <h2 class="text-center text-tot-bold mb-4">Novetats Destacades</h2>
-
-                <c:if test="${not empty errorCarregantLlibres}">
-                    <div class="alert alert-warning text-center">
-                        <c:out value="${errorCarregantLlibres}"/>
+                        </c:choose>
                     </div>
-                </c:if>
 
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <h2 class="text-center text-tot-bold mb-4">Novetats Destacades</h2>
 
-                    <c:forEach var="llibre" items="${llibres}"> 
-                        <div class="col mb-5">
-                            <div class="card h-100 shadow-sm">
-                                <img src="<c:url value='${llibre.imatgeUrl}'/>" class="card-img-top img-fixed mx-auto d-block" alt="Portada de <c:out value='${llibre.titol}'/>">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
-                                    <p class="text-muted mb-2 text-tot-light"><c:out value="${llibre.autor}"/></p>
-                                    <ul class="list-unstyled small mb-3 text-tot-isbn"> 
-                                        <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
-                                    </ul>
-                                    <div class="mt-auto text-center">
-                                        <%-- CORRECCIÓ: L'enllaç ha d'apuntar al controlador /llibre --%>
-                                        <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
+                    <c:if test="${not empty errorCarregantLlibres}">
+                        <div class="alert alert-warning text-center">
+                            <c:out value="${errorCarregantLlibres}"/>
+                        </div>
+                    </c:if>
+
+                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                        <c:forEach var="llibre" items="${llibres}"> 
+                            <div class="col mb-5">
+                                <div class="card h-100 shadow-sm">
+                                    <img src="<c:url value='${llibre.imatgeUrl}'/>" class="card-img-top img-fixed mx-auto d-block" alt="Portada de <c:out value='${llibre.titol}'/>">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
+                                        <p class="text-muted mb-2 text-tot-light"><c:out value="${llibre.autor}"/></p>
+                                        <ul class="list-unstyled small mb-3 text-tot-isbn"> 
+                                            <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
+                                        </ul>
+                                        <div class="mt-auto text-center">
+                                            <%-- CORRECCIÓ: L'enllaç ha d'apuntar al controlador /llibre --%>
+                                            <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
 
-                    <c:if test="${empty llibres && empty errorCarregantLlibres}">
-                        <div class="col-12 text-center text-muted">
-                            <p>No s'han trobat llibres destacats en aquest moment.</p>
-                        </div>
-                    </c:if>
-                </div>
-            </div>
-        </section>
-        <!-- ===== FI Secció Principal de Contingut ===== -->
-
-        <!-- ===== Peu de pàgina ===== -->
-        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <h6 class="fw-bold">TotEsBook</h6>
-                        <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
-                    </div>
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="${pageContext.request.contextPath}/contacte.jsp" class="text-decoration-none text-secondary">Contacte</a></li> 
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-center justify-content-md-end"> 
-                            <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
-                        </div>
-                        <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                        <c:if test="${empty llibres && empty errorCarregantLlibres}">
+                            <div class="col-12 text-center text-muted">
+                                <p>No s'han trobat llibres destacats en aquest moment.</p>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
-                <hr class="my-3">
-                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
-            </div>
-        </footer>
-        <!-- ===== FI Peu de pàgina ===== -->
+            </section>
+            <!-- ===== FI Secció Principal de Contingut ===== -->
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
-    </body>
-</html>
+            <!-- ===== Peu de pàgina ===== -->
+            <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <h6 class="fw-bold">TotEsBook</h6>
+                            <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="${pageContext.request.contextPath}/contacte.jsp" class="text-decoration-none text-secondary">Contacte</a></li> 
+                                <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
+                                <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-center justify-content-md-end"> 
+                                <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
+                            </div>
+                            <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
+                </div>
+            </footer>
+            <!-- ===== FI Peu de pàgina ===== -->
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
+        </body>
+    </html>
