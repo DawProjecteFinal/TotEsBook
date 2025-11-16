@@ -17,6 +17,7 @@ import cat.totesbook.domain.Llibre;
  * @author equip TotEsBook
  */
 @Service
+@Transactional
 public class LlibreServiceImpl implements LlibreService {
 
     /**

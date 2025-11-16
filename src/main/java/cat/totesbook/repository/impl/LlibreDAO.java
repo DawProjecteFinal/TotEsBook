@@ -11,7 +11,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Transactional
 public class LlibreDAO implements LlibreRepository {
 
     @PersistenceContext(unitName = "totesbookPersistenceUnit")

@@ -90,7 +90,7 @@ public class DataInitializer {
         }
     }
 
-    // LLEGIR FITXER D'ISBNs I IMPORTAR 
+// LLEGIR FITXER D'ISBNS I IMPORTAR 
     private void importarLlibresDesDeFitxer() {
         Map<String, List<String>> isbnsPerBiblioteca = new LinkedHashMap<>();
         String bibliotecaActual = null;
@@ -111,10 +111,11 @@ public class DataInitializer {
                 } else if (bibliotecaActual != null) {
                     isbnsPerBiblioteca.get(bibliotecaActual).add(line);
                 }
+
                 System.out.println("DEBUG -> línia llegida: [" + line + "]");
             }
 
-            // Processar cada biblioteca
+            // PROCESSAR CADA BIBLIOTECA
             for (Map.Entry<String, List<String>> entry : isbnsPerBiblioteca.entrySet()) {
                 String nomBiblioteca = entry.getKey();
                 List<String> isbns = entry.getValue();
@@ -125,6 +126,7 @@ public class DataInitializer {
                 System.out.println(">>> Important " + isbns.size() + " llibres per a " + nomBiblioteca);
 
                 for (String linia : isbns) {
+
                     String[] parts = linia.split(";");
                     String isbn = parts[0].trim();
                     int exemplars = (parts.length > 1) ? Integer.parseInt(parts[1].trim()) : 3;
@@ -133,14 +135,26 @@ public class DataInitializer {
                         Optional<Llibre> optLlibre = googleBooksService.getLlibreByIsbn(isbn);
 
                         if (optLlibre.isPresent()) {
+
                             Llibre llibre = optLlibre.get();
-                            llibreService.guardarLlibre(llibre); // JDBC
-                            bibliotecaLlibreService.afegirLlibre(biblioteca, llibre, exemplars, exemplars); // JPA
+
+                            // Assignar exemplars abans de guardar
+                            llibre.setExemplars(exemplars);
+                            llibre.setDisponibles(exemplars);
+
+                            // Guardar llibre globalment
+                            llibreService.guardarLlibre(llibre);
+
+                            // Assignar-lo a la biblioteca concreta
+                            bibliotecaLlibreService.afegirLlibre(biblioteca, llibre, exemplars, exemplars);
+
                             System.out.println(">>> [" + nomBiblioteca + "] Afegit llibre "
-                                    + llibre.getIsbn() + " - " + llibre.getTitol() + " (" + exemplars + " exemplars)");
+                                    + llibre.getIsbn() + " - " + llibre.getTitol()
+                                    + " (" + exemplars + " exemplars)");
+
                         } else {
                             System.out.println(">>> [" + nomBiblioteca + "] ISBN " + isbn
-                                    + " no trobat a l'API de Google Books.");
+                                    + " NO TROBAT a l'API Google Books.");
                         }
 
                     } catch (Exception ex) {

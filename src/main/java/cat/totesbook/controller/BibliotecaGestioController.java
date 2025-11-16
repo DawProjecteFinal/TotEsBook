@@ -120,8 +120,8 @@ public class BibliotecaGestioController {
      */
     @PostMapping("/afegir")
     public ModelAndView afegirBiblioteca(@ModelAttribute Biblioteca biblioteca,
-                                       @RequestParam(value = "idBibliotecari", required = false) Integer idBibliotecari,
-                                       HttpSession session) {
+            @RequestParam(value = "idBibliotecari", required = false) Integer idBibliotecari,
+            HttpSession session) {
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
         if (sessio == null) {
             return new ModelAndView("redirect:/login");
@@ -192,26 +192,65 @@ public class BibliotecaGestioController {
 
     /**
      * Mètode per guaradr els canvis de la edició
-     *
-     * @param idBiblioteca
-     * @param biblioteca
-     * @param session
-     * @return
      */
     @PostMapping("/{id}/editar")
-    public ModelAndView editarBiblioteca(@PathVariable("id") int idBiblioteca,
-            @ModelAttribute Biblioteca biblioteca, HttpSession session) {
-        SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
-        if (sessio == null) {
-            return new ModelAndView("redirect:/login");
-        }
+public ModelAndView editarBiblioteca(
+        @PathVariable("id") int idBiblioteca,
+        @ModelAttribute Biblioteca form,
+        @RequestParam(name = "idBibliotecari", required = false) Integer idBibliotecari,
+        HttpSession session) {
 
-        biblioteca.setIdBiblioteca(idBiblioteca);
-        // Guardem o actualitzem segons toqui
-        bibliotecaService.saveOrUpdateBiblioteca(biblioteca);
-
-        return new ModelAndView("redirect:/gestio/biblioteques")
-                .addObject("success", "Biblioteca actualitzada correctament.");
+    SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+    if (sessio == null) {
+        return new ModelAndView("redirect:/login");
     }
 
+    // Recuperar la biblioteca original
+    Biblioteca biblioteca = bibliotecaService.findById(idBiblioteca).orElse(null);
+
+    if (biblioteca == null) {
+        return new ModelAndView("redirect:/gestio/biblioteques")
+                .addObject("error", "La biblioteca no existeix.");
+    }
+
+    // Actualitzar dades bàsiques
+    biblioteca.setNom(form.getNom());
+    biblioteca.setAdreca(form.getAdreca());
+    biblioteca.setTelefon(form.getTelefon());
+    biblioteca.setEmail(form.getEmail());
+
+    // ================================
+    //   ACTUALITZAR BIBLIOTECARI
+    // ================================
+    if (idBibliotecari != null && idBibliotecari != 0) {
+
+        Agent agent = agentService.getAgentById(idBibliotecari);
+
+        if (agent != null) {
+
+            // Assignar agent a biblioteca
+            biblioteca.setBibliotecari(agent);
+
+            // Assignar biblioteca a agent
+            agent.setBiblioteca(biblioteca);
+
+            // IMPORTANT: no toca la contrasenya
+            agentService.saveAgent(agent);
+        }
+
+    } else {
+        biblioteca.setBibliotecari(null);
+    }
+
+    // Guardar biblioteca actualitzada
+    bibliotecaService.saveOrUpdateBiblioteca(biblioteca);
+
+    return new ModelAndView("redirect:/gestio/biblioteques")
+            .addObject("success", "Biblioteca actualitzada correctament.");
 }
+
+
+}
+
+//Contarsenya Marta:
+// 	$2a$10$Y8ZSZgTzun8CJlKdQtX2auax2OvHrkq.8HRLQwn8WDo2Z1sKeWXhq

@@ -40,4 +40,8 @@ public interface AgentRepository {
     List<Agent> getAllBibliotecaris();
     
     Agent getAgentById(int idAgent);
+    
+    void actualitzarAgentDesDe(Agent desti, Agent origen);
+    
+    void updatePassword(int idAgent, String novaPwd);
 }

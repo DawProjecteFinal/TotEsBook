@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jmiro
  */
 @Service
-@Transactional
+@Transactional 
 public class BibliotecaServiceImpl implements BibliotecaService {
 
     @Autowired

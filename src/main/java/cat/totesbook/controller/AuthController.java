@@ -69,18 +69,13 @@ public class AuthController {
                 return mv;
 
                 // Si és bibliotecari
-            } else {
-                ModelAndView mv = new ModelAndView("dashboard_bibliotecari");
-                // Obtenim la biblioteca directament de l'objecte Agent.       
+            } else {            
                 Biblioteca biblioteca = agent.getBiblioteca();
                 if (biblioteca != null) {
-                    // Assignem la biblioteca a l'objecte de sessió i actualitzem la sessió
                     sessioUsuari.assignarBiblioteca(biblioteca);
                     session.setAttribute("sessioUsuari", sessioUsuari);
-                    mv.addObject("prestecsActius", 0); // Falta carregar dades reals
-                    mv.addObject("reservesPendents", 0); //falta carregar dades reals
                 }
-                return mv;
+                return new ModelAndView("redirect:/dashboard_bibliotecari");
             }
         }
 

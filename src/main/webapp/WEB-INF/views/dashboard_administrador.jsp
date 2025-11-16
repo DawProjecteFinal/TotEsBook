@@ -14,36 +14,8 @@
 <%@ page import="cat.totesbook.domain.Usuari" %>
 <%@ page import="cat.totesbook.domain.Agent" %>
 <%@ page import="cat.totesbook.domain.Rol" %>
-<%
-    // *** ATENCIÓ: Lògica temporal al JSP (Moure a Servlet /adminDashboard) ***
-    List<Usuari> llistaUsuaris = null;
-    List<Agent> llistaAgents = null;
-    String errorCarrega = null;
-    try {
-        // Obtenim instàncies dels DAOs
-        UsuariRepository usuariRepo = new UsuariDAO();
-        AgentRepository agentRepo = new AgentDAO();
-        // Cridem als mètodes correctes per obtenir les llistes
-        llistaUsuaris = usuariRepo.getAllUsuaris();
-        llistaAgents = agentRepo.getAllAgents();
-        // Guardem les llistes a l'scope de la petició
-        request.setAttribute("llistaUsuaris", llistaUsuaris);
-        request.setAttribute("llistaAgents", llistaAgents);
-    } catch (Exception e) {
-        errorCarrega = "Error carregant les dades d'usuaris/agents: " + e.getMessage();
-        System.err.println(errorCarrega);
-        e.printStackTrace(); // Mostra la traça completa a la consola del servidor
-    }
 
-    // Gestió de missatges de feedback (per exemple, després de canviar un rol)
-    String feedbackMessage = (String) session.getAttribute("feedbackMessage");
-    String messageType = (String) session.getAttribute("messageType"); // Pot ser 'success' o 'danger'
-    if (feedbackMessage != null) {
-        // Esborrem els atributs perquè no es mostrin en recarregar la pàgina
-        session.removeAttribute("feedbackMessage");
-        session.removeAttribute("messageType");
-    }
-%>
+
 <!DOCTYPE html>
 <html lang="ca">
     <head>

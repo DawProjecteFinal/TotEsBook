@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Usuari;
@@ -10,6 +7,7 @@ import cat.totesbook.service.UsuariService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -22,28 +20,39 @@ public class UsuariServiceImpl implements UsuariService {
     private UsuariRepository usuariRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuari> getAllUsuaris() {
         return usuariRepository.getAllUsuaris();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
 
         return usuariRepository.getUsuariByEmailAndContrasenya(email, contrasenyaPlana);
     }
 
     @Override
+    @Transactional
     public void saveUsuari(Usuari usuari) {
         usuariRepository.saveUsuari(usuari);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Usuari getUsuariByEmail(String email) {
         return usuariRepository.getUsuariByEmail(email);
     }
+    /*
+    @Override
+    public void updatePerfil(Usuari usuari) {
+        usuariRepository.updatePerfil(usuari);
+    }
+    */
 
     @Override
+    @Transactional
     public void updateUsuari(Usuari usuari) {
-        usuariRepository.updateUsuari(usuari);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

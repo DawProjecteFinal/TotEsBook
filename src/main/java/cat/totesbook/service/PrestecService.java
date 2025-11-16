@@ -1,15 +1,20 @@
-
 package cat.totesbook.service;
 
-import cat.totesbook.domain.Agent;
 import cat.totesbook.domain.Biblioteca;
-import cat.totesbook.domain.Llibre;
-import cat.totesbook.domain.Usuari;
+import cat.totesbook.domain.Prestec;
+import java.util.List;
 
 /**
  *
  * @author jmiro
  */
 public interface PrestecService {
-    void registrarPrestec(Usuari usuari, Llibre llibre, Biblioteca biblioteca, Agent agent);
+
+    void registrarPrestec(String isbn, String emailUsuari, int idAgentBibliotecari);
+
+    List<Prestec> findActiusByBiblioteca(Biblioteca biblioteca);
+
+    void registrarDevolucio(String isbn, String emailUsuari, Integer idAgentBibliotecari);
+
+    List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
 }
