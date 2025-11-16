@@ -43,4 +43,11 @@ public interface LlibreService {
     
     //Retorna els llibres per un títol determinat
     List<Llibre> getLlibreByTitol(String titol);
+    
+    //Retorna els llisbres per  un autor determinat
+    List<Llibre> getLlibresByAutor(String autor);
+    
+    //Retorna els llibres per un idioma determinat
+    List<Llibre> getLlibresByIdioma(String idioma);
+    
 }

@@ -1,66 +1,83 @@
-// En fer clic en Autor/ISBN/Idioma, configurar el camp i mostrar-lo
-document.querySelectorAll('.dropdown-item[data-field]').forEach(item => {
-    item.addEventListener('click', e => {
-        e.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownLinks = document.querySelectorAll('a.dropdown-item[data-field]');
+    const fieldInput    = document.getElementById('field');
+    const searchGroup   = document.getElementById('searchGroup');
+    const searchInput   = document.getElementById('searchInput');
+    const idiomaSelect  = document.getElementById('idiomaSelect');
 
-        const field = item.dataset.field; // 'author' / 'isbn' / 'idioma'
-        const hidden = document.getElementById('field');
-        const input = document.getElementById('searchInput');
-        const group = document.getElementById('searchGroup');
-        const toggle = document.getElementById('dropdownAdvanced');
+    if (!dropdownLinks.length || !fieldInput || !searchGroup || !searchInput) {
+        return;
+    }
 
-        hidden.value = field;
-        toggle.textContent = `Cerca avançada: ${item.textContent}`;
+    // Cuando se hace clic en Autor / Idioma / ISBN
+    dropdownLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
 
-        // Eliminar un possible selector d'idioma anterior
-        const oldSelect = document.getElementById('idiomaSelect');
-        if (oldSelect) {
-            oldSelect.remove();
-        }
+            const field = this.dataset.field;  // autor / idioma / isbn
+            fieldInput.value = field;
 
-        // Reset de l’input text
-        input.classList.remove('d-none');
-        input.value = '';
-        input.placeholder = '';
-        input.removeAttribute('pattern');
-        input.removeAttribute('title');
-        input.name = 'q'; // el backend rep sempre 'field' + 'q'
+            // Siempre mostramos el grupo
+            searchGroup.classList.remove('d-none');
 
-        // Mostrar el grup d’entrada
-        group.classList.remove('d-none');
+            // Reset de valores
+            searchInput.value = '';
+            if (idiomaSelect) {
+                idiomaSelect.value = '';
+            }
 
-        if (field === 'isbn') {
-            // Cerca per ISBN
-            input.placeholder = 'Introdueix l\'ISBN';
-            input.setAttribute('pattern', '^(97[89])\\d{10}$');
-            input.setAttribute('title', 'Introdueix un ISBN-13 vàlid (13 dígits, sense guions)');
-            input.focus();
+            // Si es IDIOMA → mostramos el select y ocultamos el input de texto
+            if (field === 'idioma' && idiomaSelect) {
+                searchInput.classList.add('d-none');   // input oculto
+                idiomaSelect.classList.remove('d-none'); // select visible
+            } else {
+                // Para autor / isbn → input visible, select oculto
+                searchInput.classList.remove('d-none');
+                if (idiomaSelect) {
+                    idiomaSelect.classList.add('d-none');
+                }
 
-        } else if (field === 'author') {
-            input.placeholder = 'Introdueix l\'autor';
-            input.focus();
+                // Placeholder segons tipus de cerca
+                switch (field) {
+                    case 'autor':
+                        searchInput.placeholder = 'Cerca per autor';
+                        break;
+                    case 'isbn':
+                        searchInput.placeholder = 'Cerca per ISBN';
+                        break;
+                    default:
+                        searchInput.placeholder = 'Cerca avançada';
+                        break;
+                }
 
-        } else if (field === 'idioma') {
-            input.classList.add('d-none');
-
-            const select = document.createElement('select');
-            select.id = 'idiomaSelect';
-            select.name = 'q';
-            select.className = 'form-select form-select-sm me-2';
-            select.innerHTML = `
-                <option value="">Selecciona un idioma</option>
-                <option value="Català">Català</option>
-                <option value="Castellà">Castellà</option>
-            `;
-
-
-            const btn = group.querySelector('button');
-            group.insertBefore(select, btn);
-
-            select.focus();
-        }
+                // Focus al input
+                searchInput.focus();
+            }
+        });
     });
-});
 
+    // Quan es triï un idioma al select, copiem el valor al input hidden q (searchInput)
+    if (idiomaSelect) {
+        idiomaSelect.addEventListener('change', function () {
+            searchInput.value = this.value; // ca / es
+        });
+    }
+
+    // Opcional: validar abans d'enviar el formulari per idioma
+    const advancedForm = document.getElementById('advancedSearch');
+    if (advancedForm) {
+        advancedForm.addEventListener('submit', function (e) {
+            if (fieldInput.value === 'idioma') {
+                // Si no s'ha triat idioma, no enviar
+                if (!searchInput.value) {
+                    e.preventDefault();
+                    if (idiomaSelect) {
+                        idiomaSelect.focus();
+                    }
+                }
+            }
+        });
+    }
+});
 
 

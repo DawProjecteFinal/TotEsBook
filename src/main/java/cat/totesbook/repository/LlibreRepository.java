@@ -39,4 +39,8 @@ public interface LlibreRepository {
     List<Llibre> findByCategoria(String categoria);
     
     List<Llibre>findByTitolContainingIgnoreCase(String titol);
+    
+    List<Llibre>findByAutorContainingIgnoreCase(String autor);
+    
+    List<Llibre>findByIdioma(String idioma);
 }

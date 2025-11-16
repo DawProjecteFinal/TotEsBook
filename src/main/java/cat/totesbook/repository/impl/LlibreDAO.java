@@ -81,19 +81,25 @@ public class LlibreDAO implements LlibreRepository {
     @Override
     public List<Llibre> findByCategoria(String categoria) {
         return entityManager.createQuery(
-                "SELECT l FROM Llibre l WHERE l.categoria = :categoria", Llibre.class)
-                .setParameter("categoria", categoria)
-                .getResultList();
+                "SELECT l FROM Llibre l WHERE l.categoria = :categoria", Llibre.class).setParameter("categoria", categoria).getResultList();
     }
 
     @Override
     public List<Llibre> findByTitolContainingIgnoreCase(String titol) {
         return entityManager.createQuery(
-            "SELECT l FROM Llibre l " +
-            "WHERE LOWER(l.titol) LIKE LOWER(CONCAT('%', :titol, '%'))",
-            Llibre.class)
-        .setParameter("titol", titol)
-        .getResultList();
-       
+                "SELECT l FROM Llibre l " + "WHERE LOWER(l.titol) LIKE LOWER(CONCAT('%', :titol, '%'))", Llibre.class).setParameter("titol", titol).getResultList();
     }
+
+    @Override
+    public List<Llibre> findByAutorContainingIgnoreCase(String autor) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l " + "WHERE LOWER(l.autor) LIKE LOWER(CONCAT('%', :autor, '%'))", Llibre.class).setParameter("autor", autor).getResultList();
+    }
+
+    @Override
+    public List<Llibre> findByIdioma(String idioma) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l " + "WHERE LOWER(l.idioma) = LOWER(:idioma)", Llibre.class).setParameter("idioma", idioma).getResultList();
+    }
+
 }

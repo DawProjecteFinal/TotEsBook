@@ -71,20 +71,27 @@
                             <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Cerca avançada
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#" data-field="author">Autor</a></li>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownAdvanced">
+                                <li><a class="dropdown-item" href="#" data-field="autor">Autor</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="#" data-field="idioma">Idioma</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
                             </ul>
                         </li>
-                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/buscar'/>">
+                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/cercar'/>">
                             <input type="hidden" name="field" id="field" value="">
+
                             <div id="searchGroup" class="input-group d-none">
-                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off" required
-                                       oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
-                                       oninput="this.setCustomValidity('')" />
+                                <!-- Input de text per autor / isbn -->
+                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off"
+                                       required oninvalid="this.setCustomValidity('Aquest camp és obligatori')" oninput="this.setCustomValidity('')" />
+                                <select id="idiomaSelect" class="form-select form-select-sm me-2 d-none">
+                                    <option value="">Tria l'idioma</option>
+                                    <option value="ca">Català</option>
+                                    <option value="es">Castellà</option>
+                                </select>
+
                                 <button class="btn btn-tot btn-sm" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -96,8 +103,8 @@
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
                                    placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
-                                       oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
-                                       oninput="this.setCustomValidity('')" />
+                                   oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                   oninput="this.setCustomValidity('')" />
                             <button class="btn btn-tot btn-sm" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -116,9 +123,19 @@
                 <%-- Cerca per títol --%>
                 <c:when test="${not empty textCerca}">
                     <h1 class="mb-3 text-center text-tot-principal">
-                        Resultats de la cerca per :
+                        Resultats de la cerca 
+                        <c:choose>
+                            <c:when test="${tipusCerca == 'autor'}"> per autor </c:when>
+                            <c:when test="${tipusCerca == 'idioma'}"> per idioma</c:when>
+                            <c:when test="${tipusCerca == 'isbn'}"> per ISBN </c:when>
+                            <c:otherwise> per títol </c:otherwise>
+                        </c:choose>
                         <span class="text-tot-principal">
-                            "<c:out value="${textCerca}"/>"
+                            "<c:choose>
+                                <c:when test="${tipusCerca == 'idioma' && textCerca == 'ca'}">català</c:when>
+                                <c:when test="${tipusCerca == 'idioma' && textCerca == 'es'}">castellà</c:when>
+                                <c:otherwise><c:out value="${textCerca}"/></c:otherwise>
+                            </c:choose>"
                         </span>
                     </h1>
                 </c:when>
@@ -129,33 +146,15 @@
                         Llibres 
                         <span class="text-tot-principal">
                             <c:choose>
-                                <c:when test="${categoriaSeleccionada == 'Self-Help'}">
-                                    d'autoajuda
-                                </c:when>
-                                <c:when test="${categoriaSeleccionada == 'Cooking'}">
-                                    de cuina i gastronomia
-                                </c:when>
-                                <c:when test="${categoriaSeleccionada == 'Fiction'}">
-                                    de novel·la i ficció
-                                </c:when>
-                                <c:when test="${categoriaSeleccionada == 'Juvenile Fiction'}">
-                                    de ficció juvenil
-                                </c:when>
-                                <c:when test="${categoriaSeleccionada == 'Young Adult Fiction'}">
-                                    de novel·la juvenil
-                                </c:when>
-                                <c:when test="${categoriaSeleccionada == 'True Crime'}">
-                                    de crims reals
-                                </c:when>
-                                <c:when test="${fn:contains(categoriaSeleccionada, 'Biography')}">
-                                    de biografies i memòries
-                                </c:when>
-                                <c:when test="${categoriaSeleccionada == 'Psychology'}">
-                                    de psicologia
-                                </c:when>
-                                <c:otherwise>
-                                    de <c:out value="${categoriaSeleccionada}"/>
-                                </c:otherwise>
+                                <c:when test="${categoriaSeleccionada == 'Self-Help'}"> d'autoajuda</c:when>
+                                <c:when test="${categoriaSeleccionada == 'Cooking'}">  de cuina i gastronomia</c:when>
+                                <c:when test="${categoriaSeleccionada == 'Fiction'}">  de novel·la i ficció</c:when>
+                                <c:when test="${categoriaSeleccionada == 'Juvenile Fiction'}">  de ficció juvenil</c:when>
+                                <c:when test="${categoriaSeleccionada == 'Young Adult Fiction'}"> de novel·la juvenil</c:when>
+                                <c:when test="${categoriaSeleccionada == 'True Crime'}">  de crims reals</c:when>
+                                <c:when test="${fn:contains(categoriaSeleccionada, 'Biography')}"> de biografies i memòries</c:when>
+                                <c:when test="${categoriaSeleccionada == 'Psychology'}"> de psicologia</c:when>
+                                <c:otherwise>   de <c:out value="${categoriaSeleccionada}"/></c:otherwise>
                             </c:choose>
                         </span>
                     </h1>
@@ -173,6 +172,18 @@
             <c:if test="${empty llibres}">
                 <div class="alert alert-warning text-center my-3" role="alert">
                     <c:choose>
+                        <c:when test="${tipusCerca == 'autor'}">
+                            No s'han trobat llibres de l'autor
+                            "<strong><c:out value="${textCerca}"/></strong>".
+                        </c:when>
+                        <c:when test="${tipusCerca == 'idioma'}">
+                            No s'han trobat llibres en l'idioma
+                            "<strong><c:out value="${textCerca}"/></strong>".
+                        </c:when>
+                        <c:when test="${tipusCerca == 'isbn'}">
+                            No s'ha trobat cap llibre amb l'ISBN
+                            "<strong><c:out value="${textCerca}"/></strong>".
+                        </c:when>
                         <c:when test="${not empty textCerca}">
                             No s'han trobat llibres amb el títol
                             "<strong><c:out value="${textCerca}"/></strong>".

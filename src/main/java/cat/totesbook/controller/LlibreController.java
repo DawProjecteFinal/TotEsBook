@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import cat.totesbook.service.LlibreService;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,6 +56,47 @@ public class LlibreController {
             modelview.addObject("categoriaSeleccionada", null);
         }
         return modelview;
+    }
+
+    @RequestMapping("/cercar")
+    public ModelAndView buscarAvancat(@RequestParam("field") String field,
+            @RequestParam("q") String valor) {
+
+        ModelAndView mv = new ModelAndView("mostrarLlibres");
+
+        List<Llibre> resultats;
+
+        switch (field) {
+            case "autor":
+                resultats = llibreService.getLlibresByAutor(valor);
+                mv.addObject("tipusCerca", "autor");
+                break;
+
+            case "isbn":
+                Optional<Llibre> optLlibre = llibreService.getLlibreByIsbn(valor.trim());
+                // Convertim l'Optional a una llista (0 o 1 element)
+                resultats = optLlibre
+                        .map(Collections::singletonList)
+                        .orElseGet(Collections::emptyList);
+                mv.addObject("tipusCerca", "isbn");
+                break;
+
+            case "idioma":
+                resultats = llibreService.getLlibresByIdioma(valor);
+                mv.addObject("tipusCerca", "idioma");
+                break;
+
+            default:
+                resultats = llibreService.getAllLlibres();
+                mv.addObject("tipusCerca", null);
+                break;
+        }
+
+        mv.addObject("llibres", resultats);
+        mv.addObject("categoriaSeleccionada", null);
+        mv.addObject("textCerca", valor);
+
+        return mv;
     }
 
 }

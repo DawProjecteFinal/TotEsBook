@@ -72,4 +72,14 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> getLlibreByTitol(String titol) {
        return llibreRepository.findByTitolContainingIgnoreCase(titol);
     }
+
+    @Override
+    public List<Llibre> getLlibresByAutor(String autor) {
+       return llibreRepository.findByAutorContainingIgnoreCase(autor);
+    }
+
+    @Override
+    public List<Llibre> getLlibresByIdioma(String idioma) {
+        return llibreRepository.findByIdioma(idioma);
+    }
 }
