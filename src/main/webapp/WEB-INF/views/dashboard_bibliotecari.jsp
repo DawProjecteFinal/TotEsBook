@@ -213,7 +213,68 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-3" id="devolucions">Contingut per a la gestió de devolucions.</div>
+
+                    <!-- Secció de les devolucions -->
+                    <div class="tab-pane fade p-3" id="devolucions">
+                        <h4 class="mb-3">Contingut per a la gestió de devolucions.</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text small text-muted">Introdueix l'ISBN del llibre i l'email de l'usuari per registrar una devolució. En acabar el, prèstec es donarà per finalitzat.</p>
+                                <form action="${pageContext.request.contextPath}/gestionarDevolucio" method="POST">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="isbn" class="form-label">ISBN del Llibre</label>
+                                            <input type="text" class="form-control" id="isbn" name="isbn" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="emailUsuari" class="form-label">Email de l'Usuari</label>
+                                            <input type="email" class="form-control" id="emailUsuari" name="emailUsuari" required>
+                                        </div>
+                                        <div class="col-12 text-end">
+                                            <button type="submit" class="btn btn-primary">Registrar Devolució</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>  
+                        <hr class="my-4"/>
+
+                        <h5 class="mt-4">Devolucions registrades</h5>
+
+                        <div class="table-responsive mt-3">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Llibre</th>
+                                        <th>Usuari</th>
+                                        <th>Data Prèstec</th>
+                                        <th>Data Devolució</th>
+                                        <th>Bibliotecari</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${empty devolucions}">
+                                            <tr><td colspan="5" class="text-center text-muted">Encara no hi ha devolucions registrades.</td></tr>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:forEach var="dev" items="${devolucions}">
+                                                <tr>
+                                                    <td>${dev.llibre.titol}</td>
+                                                    <td>${dev.usuari.email}</td>
+                                                    <td>${dev.dataPrestec}</td>
+                                                    <td>${dev.dataDevolucio}</td>
+                                                    <td>${dev.agentDevolucio.nom}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
                     <div class="tab-pane fade" id="registrar-prestec">
                         <h4 class="mb-3">Registrar un nou préstec</h4>
                         <div class="card">
@@ -238,11 +299,11 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
                     </div>
                 </div>
             </div>

@@ -13,9 +13,9 @@
     </head>
     <body>
         <div class="alert alert-warning shadow-sm mt-5">
-            <h4 class="alert-heading">Biblioteca no assignada</h4>
-            <p>El teu compte de bibliotecari encara no té cap biblioteca assignada.</p>
-            <p>Si us plau, contacta amb un administrador.</p>
+            <h2 class="alert-heading">Biblioteca no assignada</h2>
+            <h3>El teu compte de bibliotecari encara no té cap biblioteca assignada.</h3>
+            <h3>Si us plau, contacta amb un administrador.</h3>
             <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary mt-3">Tancar sessió</a>
         </div>
     </body>
