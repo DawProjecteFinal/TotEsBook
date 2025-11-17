@@ -35,5 +35,20 @@ public class LlibreController {
         modelview.addObject("llibres", llibreService.getAllLlibres());
         return modelview;
     }
- 
+    
+    @RequestMapping("/llibre")
+    public ModelAndView mostrarFitxaLlibre(@RequestParam("isbn") String isbn) {
+
+        ModelAndView mav = new ModelAndView("fitxa_llibre");
+
+        Optional<Llibre> optLlibre = llibreService.getLlibreByIsbn(isbn);
+
+        if (optLlibre.isPresent()) {
+            mav.addObject("llibre", optLlibre.get());
+        } else {
+            mav.addObject("error", "No s'ha trobat el llibre amb ISBN " + isbn);
+        }
+
+        return mav;
+    }
 }

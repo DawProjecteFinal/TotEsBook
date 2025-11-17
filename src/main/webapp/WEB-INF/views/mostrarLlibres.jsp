@@ -97,7 +97,7 @@
                                     <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
                                 </ul>
                                 <div class="mt-auto">
-                                    <a href="#" class="btn btn-tot w-100">Més informació</a>
+                                    <a href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}" class="btn btn-tot w-100">Més informació</a>
                                 </div>
                             </div>
                         </div>

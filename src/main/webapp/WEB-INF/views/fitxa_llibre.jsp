@@ -107,7 +107,7 @@
              <c:choose>
                 <c:when test="${not empty llibre}">
                      <div class="mb-4">
-                        <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-sm btn-outline-secondary">
+                        <a href="${pageContext.request.contextPath}/mostrarLlibres" class="btn btn-sm btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i> Tornar al catàleg
                         </a>
                      </div>
@@ -179,7 +179,7 @@
                                     </c:if>
                                 </c:if>
                                  <c:if test="${empty sessionScope.sessioUsuari}">
-                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login.jsp">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
+                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
                                  </c:if>
                              </div>
                         </div>
