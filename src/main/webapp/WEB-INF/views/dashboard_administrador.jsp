@@ -373,14 +373,27 @@
                                                     <td><c:out value="${llibre.isbn}"/></td>
                                                     <td><c:out value="${llibre.idioma}"/></td>
                                                     <td>
-
-
-                                                        <c:out value="Pendent d'assignar"/>
-
-
-
+                                                        <c:choose>
+                                                            <c:when test="${not empty bibliosPerIsbn[llibre.isbn]}">
+                                                                <c:forEach var="rel" items="${bibliosPerIsbn[llibre.isbn]}" varStatus="st">
+                                                                    ${rel.biblioteca.nom}
+                                                                    <c:if test="${!st.last}">, </c:if>
+                                                                </c:forEach>
+                                                            </c:when>
+                                                            <c:otherwise>Pendent d'assignar</c:otherwise>
+                                                        </c:choose>
                                                     </td>
-                                                    <td><c:out value="0"/></td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${not empty bibliosPerIsbn[llibre.isbn]}">
+                                                                <c:forEach var="rel" items="${bibliosPerIsbn[llibre.isbn]}" varStatus="st">
+                                                                    ${rel.exemplars}
+                                                                    <c:if test="${!st.last}">, </c:if>
+                                                                </c:forEach>
+                                                            </c:when>
+                                                            <c:otherwise>0</c:otherwise>
+                                                        </c:choose>
+                                                    </td>
                                                     <td>
                                                         <div class="btn-accio-group">
                                                             <a href="#" class="btn btn-outline-warning btn-accio-panell">

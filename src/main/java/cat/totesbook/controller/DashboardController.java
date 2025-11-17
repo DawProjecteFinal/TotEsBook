@@ -1,18 +1,26 @@
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.domain.BibliotecaLlibre;
+import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Prestec;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
+
 import cat.totesbook.service.AgentService;
-import cat.totesbook.service.PrestecService;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import cat.totesbook.service.BibliotecaLlibreService;
 import cat.totesbook.service.BibliotecaService;
 import cat.totesbook.service.LlibreService;
+import cat.totesbook.service.PrestecService;
 import cat.totesbook.service.UsuariService;
+
+import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +44,10 @@ public class DashboardController {
     @Autowired
     private LlibreService llibreService;
 
-    // Descomentar quan tinguem el servei de reserves creat
-    // @Autowired private ReservaService reservaService;
-    // SECCIÓ DEL BIBLIOTECARI
+    @Autowired
+    private BibliotecaLlibreService bibliotecaLlibreService;
+
+    //       DASHBOARD BIBLIOTECARI 
     @GetMapping("/dashboard_bibliotecari")
     public String mostrarDashboardBibliotecari(Model model, HttpSession session) {
 
@@ -51,8 +60,9 @@ public class DashboardController {
 
         // Quan el bibliotecari no té biblioteca assiganada se li informa
         if (sessioUsuari.getBibliotecaId() == null) {
-            return "biblioteca_no_assignada"; // Vista JSP
+            return "biblioteca_no_assignada";
         }
+
         Integer idBiblioteca = sessioUsuari.getBibliotecaId();
         Biblioteca biblioteca = bibliotecaService.findById(idBiblioteca).orElse(null);
 
@@ -63,17 +73,13 @@ public class DashboardController {
         List<Prestec> prestecsActius = prestecService.findActiusByBiblioteca(biblioteca);
         List<Prestec> devolucions = prestecService.findDevolucionsByBiblioteca(biblioteca);
 
-        // Informació necessaria per a les targetes de resum
         model.addAttribute("numPrestecsActius", prestecsActius.size());
         model.addAttribute("numDevolucionsPendents", devolucions.size());
         model.addAttribute("numReservesPendents", 0);
         model.addAttribute("numLlibresRetard", 0);
 
-        // Informació necessària per a la realització de prèstecs, reserves...
         model.addAttribute("prestecsActius", prestecsActius);
         model.addAttribute("devolucions", devolucions);
-        //model.addAttribute("reservesPendents", 8);
-
         model.addAttribute("biblioteca", biblioteca);
 
         return "dashboard_bibliotecari";
@@ -103,7 +109,8 @@ public class DashboardController {
         return "redirect:/dashboard_bibliotecari#devolucions";
     }
 
-    // SECCIÓ DE L'ADMINISTRADOR
+    
+    //  DASHBOARD ADMIN
     @GetMapping("/dashboard_administrador")
     public String mostrarDashboardAdministrador(Model model, HttpSession session) {
 
@@ -113,12 +120,27 @@ public class DashboardController {
             return "redirect:/login";
         }
 
+        
         model.addAttribute("llistaBiblioteques", bibliotecaService.getAllBiblioteques());
         model.addAttribute("llistaAgents", agentService.getAllAgents());
         model.addAttribute("llistaUsuaris", usuariService.getAllUsuaris());
-        model.addAttribute("llibres", llibreService.getAllLlibres());
+
+        
+        List<Llibre> llibres = llibreService.getAllLlibres();
+        model.addAttribute("llibres", llibres);
+
+       
+        Map<String, List<BibliotecaLlibre>> bibliosPerIsbn = new HashMap<>();
+
+        for (Llibre l : llibres) {
+            List<BibliotecaLlibre> relacions
+                    = bibliotecaLlibreService.findByLlibre(l);
+            bibliosPerIsbn.put(l.getIsbn(), relacions);
+        }
+
+        model.addAttribute("bibliosPerIsbn", bibliosPerIsbn);
 
         return "dashboard_administrador";
-    }
 
+    }
 }

@@ -63,4 +63,15 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     public void updateBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre) {
         entityManager.merge(bibliotecaLlibre);
     }
+
+    //Busquem per llibre per retornar la biblioteca
+    @Override
+    public List<BibliotecaLlibre> findByLlibre(Llibre llibre) {
+        TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.llibre = :llibre",
+                BibliotecaLlibre.class
+        );
+        query.setParameter("llibre", llibre);
+        return query.getResultList();
+    }
 }

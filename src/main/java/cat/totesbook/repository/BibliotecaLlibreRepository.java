@@ -26,4 +26,6 @@ public interface BibliotecaLlibreRepository {
     void addBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre);
 
     void updateBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre);
+    
+    List<BibliotecaLlibre> findByLlibre(Llibre llibre);
 }

@@ -17,6 +17,9 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
 
     @Autowired
     private BibliotecaLlibreRepository repo;
+    
+    @Autowired
+    private BibliotecaLlibreRepository bibliotecaLlibreRepository;
 
     @Override
     public Optional<BibliotecaLlibre> findByBibliotecaAndLlibre(Biblioteca biblioteca, Llibre llibre) {
@@ -81,5 +84,10 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
     @Override
     public List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca) {
         return repo.getLlibresPerBiblioteca(biblioteca);
+    }
+
+    @Override
+    public List<BibliotecaLlibre> findByLlibre(Llibre llibre) {
+        return bibliotecaLlibreRepository.findByLlibre(llibre);
     }
 }
