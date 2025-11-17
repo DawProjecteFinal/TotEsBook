@@ -21,5 +21,8 @@ public interface PrestecRepository {
     List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
     
     void updatePrestec(Prestec prestec);
+    
+    List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
 
+    
 }

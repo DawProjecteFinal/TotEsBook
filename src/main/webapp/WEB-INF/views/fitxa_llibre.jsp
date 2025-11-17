@@ -112,7 +112,7 @@
              <c:choose>
                 <c:when test="${not empty llibre}">
                      <div class="mb-4">
-                        <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-sm btn-outline-secondary">
+                        <a href="${pageContext.request.contextPath}/mostrarLlibres" class="btn btn-sm btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i> Tornar al catàleg
                         </a>
                      </div>
@@ -164,27 +164,28 @@
 
                              <div class="d-flex mt-4">
                                 <c:if test="${not empty sessionScope.sessioUsuari}">
+                                    <!-- Botó per demanar en préstec (funcionalitat pendent) -->
+                                    <form action="${pageContext.request.contextPath}/prestar" method="POST" class="d-inline me-2">
+                                        <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                        <button type="submit" class="btn btn-tot btn-lg flex-shrink-0" disabled>
+                                            <i class="bi bi-handbag-fill me-1"></i>
+                                            Demanar en préstec
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Botó per reservar, només visible si hi ha exemplars disponibles -->
                                     <c:if test="${llibre.disponibles > 0}">
-                                        <form action="${pageContext.request.contextPath}/prestar" method="POST" class="d-inline me-2">
-                                            <input type="hidden" name="isbn" value="${llibre.isbn}">
-                                            <button type="submit" class="btn btn-tot btn-lg flex-shrink-0" disabled> <%-- TODO: Implementar /prestar --%>
-                                                <i class="bi bi-handbag-fill me-1"></i>
-                                                Demanar en préstec
-                                            </button>
-                                        </form>
-                                    </c:if>
-                                    <c:if test="${llibre.disponibles <= 0}">
-                                         <form action="${pageContext.request.contextPath}/reservar" method="POST" class="d-inline">
-                                            <input type="hidden" name="isbn" value="${llibre.isbn}">
-                                            <button type="submit" class="btn btn-accent-custom btn-lg flex-shrink-0" disabled> <%-- TODO: Implementar /reservar --%>
-                                                <i class="bi bi-bookmark-plus-fill me-1"></i>
-                                                Reservar
-                                            </button>
+                                        <form action="${pageContext.request.contextPath}/reservar" method="POST" class="d-inline">
+                                        <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                        <button type="submit" class="btn btn-accent-custom btn-lg flex-shrink-0">
+                                            <i class="bi bi-bookmark-plus-fill me-1"></i>
+                                            Reservar
+                                        </button>
                                         </form>
                                     </c:if>
                                 </c:if>
                                  <c:if test="${empty sessionScope.sessioUsuari}">
-                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login.jsp">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
+                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
                                  </c:if>
                              </div>
                         </div>

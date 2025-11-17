@@ -101,4 +101,20 @@ public class LlibreDAO implements LlibreRepository {
                 "SELECT l FROM Llibre l " + "WHERE LOWER(l.idioma) = LOWER(:idioma)", Llibre.class).setParameter("idioma", idioma).getResultList();
     }
 
+    /**
+     * Mostra llibres de forma aleatoria
+     *
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Llibre> findRandom(int limit) {
+        String sql = "SELECT * FROM Llibres ORDER BY RAND() LIMIT " + limit;
+
+        return entityManager
+                .createNativeQuery(sql, Llibre.class)
+                .getResultList();
+
+    }
+
 }

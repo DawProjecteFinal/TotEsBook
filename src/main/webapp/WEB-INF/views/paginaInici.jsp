@@ -255,6 +255,7 @@
                                             <%-- CORRECCIÓ: L'enllaç ha d'apuntar al controlador /llibre --%>
                                             <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

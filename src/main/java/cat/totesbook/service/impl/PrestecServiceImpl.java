@@ -150,6 +150,11 @@ public class PrestecServiceImpl implements PrestecService {
     }
 
     @Override
+    public List<Prestec> findPrestecsActiusByUsuari(int idUsuari) {
+        return prestecRepository.findPrestecsActiusByUsuari(idUsuari);
+    }
+
+    @Override
     public List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca) {
         return prestecRepository.findDevolucionsByBiblioteca(biblioteca);
     }

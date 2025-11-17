@@ -36,6 +36,7 @@ public interface LlibreRepository {
 
     List<Llibre> findByBiblioteca(Biblioteca biblioteca);
     
+
     List<Llibre> findByCategoria(String categoria);
     
     List<Llibre>findByTitolContainingIgnoreCase(String titol);
@@ -43,4 +44,7 @@ public interface LlibreRepository {
     List<Llibre>findByAutorContainingIgnoreCase(String autor);
     
     List<Llibre>findByIdioma(String idioma);
+
+    List<Llibre> findRandom(int limit);
+
 }

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jmiro
  */
 @Repository
-//@Transactional
 public class PrestecDAO implements PrestecRepository {
 
     @PersistenceContext
@@ -39,6 +38,13 @@ public class PrestecDAO implements PrestecRepository {
                 .getResultList();
     }
 
+    /**
+     * Metode per a comprovar si un usuari te en prestec un llibre en concret
+     *
+     * @param isbn
+     * @param idUsuari
+     * @return
+     */
     @Override
     public Optional<Prestec> findPrestecActiu(String isbn, Integer idUsuari) {
         try {
@@ -69,28 +75,48 @@ public class PrestecDAO implements PrestecRepository {
     public void updatePrestec(Prestec prestec) {
         entityManager.merge(prestec);
     }
-    
-    /** 
+
+    /**
      * Mètode per a poder representar les devolucions que ha fet un bibliotecari
+     *
      * @param biblioteca
-     * @return 
+     * @return
      */
     @Override
     public List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca) {
-    try {
-        return entityManager.createQuery(
-                "SELECT p FROM Prestec p " +
-                "WHERE p.biblioteca.idBiblioteca = :idBiblioteca " +
-                "AND p.estat = :estat " +
-                "ORDER BY p.dataDevolucio DESC",
-                Prestec.class)
-            .setParameter("idBiblioteca", biblioteca.getIdBiblioteca())
-            .setParameter("estat", EstatPrestec.retornat)
-            .getResultList();
-    } catch (Exception e) {
-        return Collections.emptyList();
+        try {
+            return entityManager.createQuery(
+                    "SELECT p FROM Prestec p "
+                    + "WHERE p.biblioteca.idBiblioteca = :idBiblioteca "
+                    + "AND p.estat = :estat "
+                    + "ORDER BY p.dataDevolucio DESC",
+                    Prestec.class)
+                    .setParameter("idBiblioteca", biblioteca.getIdBiblioteca())
+                    .setParameter("estat", EstatPrestec.retornat)
+                    .getResultList();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
-}
 
+    /**
+     * Metode que retorna tots els prestecs actius d'un ususari per a
+     * mostrar-los a la pàgina inicial del usuari
+    *
+     */
+    @Override
+    public List<Prestec> findPrestecsActiusByUsuari(int idUsuari) {
+
+        return entityManager.createQuery(
+                "SELECT p FROM Prestec p "
+                + "WHERE p.usuari.id = :idUsuari "
+                + "AND p.estat = :estat "
+                + "ORDER BY p.dataPrestec DESC",
+                Prestec.class
+        )
+                .setParameter("idUsuari", idUsuari)
+                .setParameter("estat", EstatPrestec.actiu)
+                .getResultList();
+    }
 
 }

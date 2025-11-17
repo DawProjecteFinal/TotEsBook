@@ -63,6 +63,7 @@ public class LlibreServiceImpl implements LlibreService {
         return llibreRepository.findByBiblioteca(biblioteca);
     }
 
+
     //Retorna els llibres per categoria
     @Override
     public List<Llibre> getLlibresByCategoria(String categoria) {
@@ -83,4 +84,11 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> getLlibresByIdioma(String idioma) {
         return llibreRepository.findByIdioma(idioma);
     }
+
+    @Override
+    public List<Llibre> findRandom(int limit) {
+        return llibreRepository.findRandom(limit);
+    }
+
+
 }
