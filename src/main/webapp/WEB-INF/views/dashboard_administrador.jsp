@@ -23,10 +23,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Panell d'Administració - TotEsBook</title>
         <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/favicon.ico" />
-        
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-        
+
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -335,7 +335,7 @@
                         </div>
                     </div>
                     <!-- ===== PESTANYA 3: GESTIÓ DE LLIBRES ===== -->
-                     <div class="tab-pane fade show active" id="llibres" role="tabpanel">
+                    <div class="tab-pane fade show active" id="llibres" role="tabpanel">
                         <div class="card shadow-sm mb-5">
                             <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0 text-tot-bold">
@@ -359,43 +359,45 @@
                                                 <th>ISBN</th>
                                                 <th>Idioma</th>
                                                 <th>Biblioteca</th>
+                                                <th>Exemplars</th>
                                                 <th>Accions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <!-- Llistat de llibres -->
                                             <c:forEach var="llibre" items="${llibres}">
-                                                
+
                                                 <tr>
                                                     <td>${llibre.titol}</td>
                                                     <td><c:out value="${llibre.autor}"/></td>
                                                     <td><c:out value="${llibre.isbn}"/></td>
                                                     <td><c:out value="${llibre.idioma}"/></td>
                                                     <td>
-                                                    
-                                                            
-                                                                <c:out value="Pendent d'assignar"/>
-                                                            
-                                                            
-                                                        
+
+
+                                                        <c:out value="Pendent d'assignar"/>
+
+
+
                                                     </td>
-                                                    
+                                                    <td><c:out value="0"/></td>
                                                     <td>
-                                                        <div class="btn-group btn-group-sm" role="group">
-                                                            <a href="#" 
-                                                               class="btn btn-outline-primary"><i class="bi bi-gear"></i></a>
-                                                            <a href="#" 
-                                                               class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
-                                                            <form action="#" 
-                                                                  method="POST" style="display:inline;"
-                                                                  onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
-                                                                <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                        <div class="btn-accio-group">
+                                                            <a href="#" class="btn btn-outline-warning btn-accio-panell">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+
+                                                            <form action="#" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
+                                                                <button type="submit" class="btn btn-outline-danger btn-accio-panell">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
                                                             </form>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                
-                                                
+
+
+
                                             </c:forEach>
                                     </table>
                                 </div>
