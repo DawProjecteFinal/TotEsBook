@@ -83,7 +83,7 @@ public class AuthController {
         Usuari usuari = usuariService.getUsuariByEmailAndContrasenya(email, contrasenya);
         if (usuari != null) {
             session.setAttribute("sessioUsuari", new SessioUsuari(usuari));
-            return new ModelAndView("dashboard_usuari");
+            return new ModelAndView("redirect:/dashboard_usuari");
         }
 
         // Credencials incorrectes

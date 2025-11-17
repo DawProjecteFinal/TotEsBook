@@ -16,5 +16,7 @@ public interface PrestecService {
 
     void registrarDevolucio(String isbn, String emailUsuari, Integer idAgentBibliotecari);
 
+    List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
+    
     List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
 }

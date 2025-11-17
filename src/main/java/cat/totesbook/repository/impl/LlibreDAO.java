@@ -51,7 +51,7 @@ public class LlibreDAO implements LlibreRepository {
         Llibre llibre = entityManager.find(Llibre.class, isbn);
         return Optional.ofNullable(llibre);
     }
-    
+
     // Retorna els llibre de una biblioteca en concret
     @Override
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
@@ -75,4 +75,20 @@ public class LlibreDAO implements LlibreRepository {
         desti.setExemplars(origen.getExemplars());
         desti.setDisponibles(origen.getDisponibles());
     }
+
+    /**
+     * Mostra llibres de forma aleatoria
+     *
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Llibre> findRandom(int limit) {
+        String sql = "SELECT * FROM Llibres ORDER BY RAND() LIMIT " + limit;
+
+        return entityManager
+                .createNativeQuery(sql, Llibre.class)
+                .getResultList();
+    }
+
 }

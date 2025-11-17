@@ -38,4 +38,5 @@ public interface LlibreService {
     // Retorna els llibres de una biblioteca en concret
     List<Llibre> findByBiblioteca(Biblioteca biblioteca);
     
+    List<Llibre> findRandom(int limit);
 }

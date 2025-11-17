@@ -63,4 +63,43 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     public void updateBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre) {
         entityManager.merge(bibliotecaLlibre);
     }
+
+    /**
+     * Retorna el primer llibre que troba a una biblioteca
+     *
+     * @param isbn
+     * @return
+     */
+    @Override
+    public Optional<BibliotecaLlibre> findFirstByLlibreIsbn(String isbn) {
+
+        List<BibliotecaLlibre> resultats = entityManager.createQuery(
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.llibre.isbn = :isbn",
+                BibliotecaLlibre.class
+        )
+                .setParameter("isbn", isbn)
+                .setMaxResults(1)
+                .getResultList();
+
+        return resultats.isEmpty() ? Optional.empty() : Optional.of(resultats.get(0));
+    }
+
+    /**
+     * Versió que retorna tots els registres per si el mateix llibre està a
+     * diverses biblioteques
+     *
+     * @param isbn
+     * @return
+     */
+    @Override
+    public List<BibliotecaLlibre> findByLlibreIsbn(String isbn) {
+
+        return entityManager.createQuery(
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.llibre.isbn = :isbn",
+                BibliotecaLlibre.class
+        )
+                .setParameter("isbn", isbn)
+                .getResultList();
+    }
+
 }

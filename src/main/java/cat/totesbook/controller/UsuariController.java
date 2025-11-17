@@ -1,21 +1,27 @@
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
+import cat.totesbook.domain.Llibre;
+import cat.totesbook.domain.Prestec;
+import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
-import cat.totesbook.domain.Usuari; // Import afegit
+import cat.totesbook.domain.Usuari; 
 import cat.totesbook.repository.AgentRepository;
 import cat.totesbook.repository.UsuariRepository;
+import cat.totesbook.service.LlibreService;
+import cat.totesbook.service.ReservaService;
+import cat.totesbook.service.PrestecService;
 
 import jakarta.servlet.http.HttpSession;
-import org.mindrot.jbcrypt.BCrypt; // Import afegit
+import org.mindrot.jbcrypt.BCrypt; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping; // Import afegit
-import org.springframework.web.bind.annotation.RequestParam; // Import afegit
-import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Import afegit
+import org.springframework.web.bind.annotation.PostMapping; 
+import org.springframework.web.bind.annotation.RequestParam; 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -26,6 +32,7 @@ import java.util.List;
  */
 @Controller
 public class UsuariController {
+    private static final int NUMEROLLIBRESMOSTRAR = 8;
 
     // Spring injectarà automàticament les implementacions (DAO)
     @Autowired
@@ -33,6 +40,16 @@ public class UsuariController {
     
     @Autowired
     private AgentRepository agentRepo;
+    
+    // Per englobar les Transaccions les fiquem directament a la capa de servei
+    @Autowired
+    private PrestecService prestecService;
+
+    @Autowired
+    private ReservaService reservaService;
+
+    @Autowired
+    private LlibreService llibreService;
 
     /**
      * Gestiona les peticions GET a /mostrarUsuaris.
@@ -82,17 +99,43 @@ public class UsuariController {
      * Comprova la sessió i mostra el panell de l'usuari.
      */
     @GetMapping("/dashboard_usuari")
-    public String mostrarDashboardUsuari(HttpSession session) {
+    public String mostrarDashboardUsuari(Model model, HttpSession session) {
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
         
-        // Comprovació de seguretat (encara que el filtre ja ho fa)
+        // Comprovació de seguretat
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.USUARI) {
             return "redirect:/login";
         }
         
-        // El ViewResolver buscarà: /WEB-INF/views/dashboard_usuari.jsp
-        // TODO: Més endavant, aquí hauries de carregar els préstecs i reserves
-        // i passar-los al 'model.addAttribute'.
+        int idUsuari = sessioUsuari.getId();
+
+        // Carreguem els llibres destacats primer, fora del try-catch principal.
+        // Així, encara que falli la càrrega de préstecs/reserves, els llibres es mostraran.
+        try {
+            List<Llibre> novetats = llibreService.findRandom(NUMEROLLIBRESMOSTRAR);
+            model.addAttribute("llibres", novetats);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorCarregantLlibres", "No s'han pogut carregar els llibres destacats.");
+        }
+
+        try {
+            // Carregar prestecs actius
+            List<Prestec> meusPrestecs = prestecService.findPrestecsActiusByUsuari(idUsuari);
+            model.addAttribute("meusPrestecs", meusPrestecs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorCarregantPrestecs", "No s'han pogut carregar els teus préstecs.");
+        }
+        try {
+            // Carregar reserves
+            List<Reserva> mevesReserves = reservaService.findReservaByUsuari(idUsuari);
+            model.addAttribute("mevesReserves", mevesReserves);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
+        }
         return "dashboard_usuari";
     }
 

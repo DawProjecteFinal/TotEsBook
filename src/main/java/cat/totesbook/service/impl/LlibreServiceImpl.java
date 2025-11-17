@@ -62,4 +62,10 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
         return llibreRepository.findByBiblioteca(biblioteca);
     }
+
+    @Override
+    public List<Llibre> findRandom(int limit) {
+        return llibreRepository.findRandom(limit);
+    }
+
 }
