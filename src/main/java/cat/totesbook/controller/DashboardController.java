@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import cat.totesbook.service.BibliotecaService;
+import cat.totesbook.service.LlibreService;
 import cat.totesbook.service.UsuariService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,9 @@ public class DashboardController {
 
     @Autowired
     private UsuariService usuariService;
+
+    @Autowired
+    private LlibreService llibreService;
 
     // Descomentar quan tinguem el servei de reserves creat
     // @Autowired private ReservaService reservaService;
@@ -112,6 +116,7 @@ public class DashboardController {
         model.addAttribute("llistaBiblioteques", bibliotecaService.getAllBiblioteques());
         model.addAttribute("llistaAgents", agentService.getAllAgents());
         model.addAttribute("llistaUsuaris", usuariService.getAllUsuaris());
+        model.addAttribute("llibres", llibreService.getAllLlibres());
 
         return "dashboard_administrador";
     }

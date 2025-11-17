@@ -335,7 +335,7 @@
                         </div>
                     </div>
                     <!-- ===== PESTANYA 3: GESTIÓ DE LLIBRES ===== -->
-                    <div class="tab-pane fade show active" id="llibres" role="tabpanel">
+                    <div class="tab-pane fade" id="llibres" role="tabpanel">
                         <div class="card shadow-sm mb-5">
                             <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0 text-tot-bold">
