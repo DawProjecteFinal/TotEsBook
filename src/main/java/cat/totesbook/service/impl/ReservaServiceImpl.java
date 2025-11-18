@@ -1,5 +1,6 @@
 package cat.totesbook.service.impl;
 
+import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Reserva;
@@ -89,4 +90,10 @@ public class ReservaServiceImpl implements ReservaService {
     public List<Reserva> findReservaByUsuari(int idUsuari) {
         return reservaRepository.findByUsuari(idUsuari);
     }
+
+    @Override
+    public List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca) {
+        return reservaRepository.findReservesPendentsByBiblioteca(biblioteca);
+    }
+
 }

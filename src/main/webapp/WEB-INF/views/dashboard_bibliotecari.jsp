@@ -210,11 +210,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%-- Iterar sobre la llista de reserves pendents --%>
-                                    <tr>
-                                        <td colspan="4" class="text-center">No hi ha reserves pendents.</td>
-                                    </tr>
+                                    <c:choose>
+                                        <c:when test="${empty reservesPendents}">
+                                            <tr>
+                                                <td colspan="4" class="text-center">No hi ha reserves pendents.</td>
+                                            </tr>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <c:forEach var="r" items="${reservesPendents}">
+                                                <tr>
+                                                    <td>${r.llibre.titol}</td>
+                                                    <td>${r.usuari.nom} ${r.usuari.cognoms}</td>
+                                                    <td>
+                                            <fmt:formatDate value="${r.dataReserva}" pattern="dd/MM/yyyy HH:mm" />
+                                            </td>
+
+                                            <td>
+                                                <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
+                                                   class="btn btn-sm btn-primary">
+                                                    Gestionar
+                                                </a>
+                                            </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>

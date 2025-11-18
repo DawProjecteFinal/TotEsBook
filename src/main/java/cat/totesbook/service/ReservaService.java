@@ -1,5 +1,6 @@
 package cat.totesbook.service;
 
+import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Reserva;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface ReservaService {
     void crearReserva(int idUsuari, String isbn) throws Exception;
 
     List<Reserva> findReservaByUsuari(int idUsuari);
+    
+    List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca);
 
 }
