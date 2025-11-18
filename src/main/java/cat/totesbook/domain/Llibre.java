@@ -6,7 +6,15 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 
+/**
+ * Classe que representa l'entitat Llibre a la BD.
+ *
+ * @author equip TotEsBook
+ */
 @Entity
 @Table(name = "Llibres")
 public class Llibre {
@@ -32,12 +40,26 @@ public class Llibre {
     @Column(nullable = false)
     private String idioma;   // La Api respòn:(es, ca, en, fr, …)
 
-    // Constructor buit requerit per JPA
+
+    /**
+     * Constructor buit requerit per JPA.
+     */
     public Llibre() {
 
     }
 
-    // Constructor que crea llibre venint de la API
+    /**
+     * Constructor que crea llibre venint de la API
+     *
+     * @param isbn
+     * @param titol
+     * @param autor
+     * @param editorial
+     * @param categoria
+     * @param sinopsis
+     * @param imatgeUrl
+     * @param idioma
+     */
     public Llibre(String isbn, String titol, String autor, String editorial, String categoria, String sinopsis, String imatgeUrl, String idioma) {
         this.isbn = isbn;
         this.titol = titol;

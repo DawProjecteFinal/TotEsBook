@@ -4,15 +4,8 @@ CREATE TABLE IF NOT EXISTS Usuaris (
     cognoms VARCHAR(150) NOT NULL,
     telefon VARCHAR(20),
     email VARCHAR(150) UNIQUE,
-    llibresFavorits TEXT
-);
-
-CREATE TABLE IF NOT EXISTS Biblioteques (
-    idBiblioteca INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(150) NOT NULL,
-    adreca VARCHAR(255),
-    telefon VARCHAR(20),
-    email VARCHAR(150)
+    llibresFavorits TEXT,
+    contrasenya VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Agents (
@@ -21,7 +14,21 @@ CREATE TABLE IF NOT EXISTS Agents (
     cognoms VARCHAR(150) NOT NULL,
     telefon VARCHAR(20),
     email VARCHAR(150),
-    tipus ENUM('bibliotecari', 'administrador') NOT NULL
+    tipus ENUM('bibliotecari', 'administrador') NOT NULL,
+    contrasenya VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Biblioteques (
+    idBiblioteca INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(150) NOT NULL,
+    adreca VARCHAR(255),
+    telefon VARCHAR(20),
+    email VARCHAR(150),
+    idBibliotecari INT,
+    CONSTRAINT fk_biblioteca_bibliotecari
+        FOREIGN KEY (idBibliotecari) REFERENCES Agents(idAgent)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Llibres (
@@ -92,17 +99,19 @@ CREATE TABLE IF NOT EXISTS PropostesAdquisicio (
 -- DADES INICIALS PER A LA BASE DE DADES 
 
 -- USUARIS
-INSERT INTO Usuaris (nom, cognoms, telefon, email, llibresFavorits) VALUES
-('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep'),
-('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa'),
-('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici'),
-('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL),
-('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL),
-('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL),
-('Carla', 'Serra Bosch', '677889900', 'carla@totesbook.cat', NULL),
-('Nil', 'Costa Mora', '688990011', 'nil@totesbook.cat', NULL),
-('Eva', 'Vidal Prat', '699100122', 'eva@totesbook.cat', NULL),
-('Roger', 'Balcells Ruiz', '600111233', 'roger@totesbook.cat', NULL);
+-- Generat amb BCrypt.hashpw("1234", BCrypt.gensalt(12))
+-- El hash és: $2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO
+INSERT INTO Usuaris (nom, cognoms, telefon, email, llibresFavorits, contrasenya) VALUES
+('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Carla', 'Serra Bosch', '677889900', 'carla@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Nil', 'Costa Mora', '688990011', 'nil@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Eva', 'Vidal Prat', '699100122', 'eva@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Roger', 'Balcells Ruiz', '600111233', 'roger@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
 
 -- BIBLIOTEQUES
 INSERT INTO Biblioteques (nom, adreca, telefon, email) VALUES
@@ -111,27 +120,58 @@ INSERT INTO Biblioteques (nom, adreca, telefon, email) VALUES
 ('Biblioteca Sud', 'Passeig del Mar 12', '934334455', 'sud@totesbook.cat');
 
 -- AGENTS
-INSERT INTO Agents (nom, cognoms, telefon, email, tipus) VALUES
-('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari'),
-('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari'),
-('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador'),
-('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador');
+INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
+('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Albert', 'Ferruz', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
+
+-- LLIBRES
+-- INSERT INTO Llibres () VALUES
+-- ('', 'Harry Potter')
 
 -- PRESTECS
-INSERT INTO Prestecs (idUsuari, isbn, idBiblioteca, dataPrestec, dataDevolucio, idAgentPrestec, estat)
-VALUES
-(1, '9780439136365', 1, NOW(), NULL, 1, 'actiu'),
-(2, '9780316769488', 1, NOW(), NULL, 2, 'actiu'),
-(3, '9780307474278', 2, NOW(), NULL, 1, 'actiu');
+-- INSERT INTO Prestecs (idUsuari, isbn, idBiblioteca, dataPrestec, dataDevolucio, idAgentPrestec, estat)
+-- VALUES
+-- (1, '9780439136365', 1, NOW(), NULL, 1, 'actiu'),
+-- (2, '9780316769488', 1, NOW(), NULL, 2, 'actiu'),
+-- (3, '9780307474278', 2, NOW(), NULL, 1, 'actiu');
 
 -- RESERVES
-INSERT INTO Reserves (idUsuari, isbn, dataReserva, estat)
-VALUES
-(4, '9780261103573', NOW(), 'pendent'),
-(5, '9781260440232', NOW(), 'pendent');
+-- INSERT INTO Reserves (idUsuari, isbn, dataReserva, estat)
+-- VALUES
+-- (4, '9780261103573', NOW(), 'pendent'),
+-- (5, '9781260440232', NOW(), 'pendent');
 
 -- PROPOSTES D’ADQUISICIÓ
 INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu, dataProposta, estat)
 VALUES
 (6, 'Crim i càstig', 'Fiódor Dostoievski', NULL, 'Edicions 62', 'Molt demanat pels usuaris', NOW(), 'pendent'),
 (7, 'El Senyor dels Anells', 'J.R.R. Tolkien', NULL, 'Minotauro', 'Per ampliar la secció de fantasia', NOW(), 'pendent');
+
+CREATE TABLE IF NOT EXISTS BibliotecaLlibres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idBiblioteca INT NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    exemplars INT NOT NULL DEFAULT 0,
+    disponibles INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_biblio_llibre_biblioteca
+        FOREIGN KEY (idBiblioteca) REFERENCES Biblioteques(idBiblioteca)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT fk_biblio_llibre_llibres
+        FOREIGN KEY (isbn) REFERENCES Llibres(isbn)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT uc_biblio_llibre UNIQUE (idBiblioteca, isbn)
+);
+
+-- Afegim al final del init.sql aquesta clau forana per a que primer es crein les taules referenciades
+ALTER TABLE Agents
+ADD COLUMN idBiblioteca INT,
+ADD CONSTRAINT fk_agent_biblioteca
+    FOREIGN KEY (idBiblioteca)
+    REFERENCES Biblioteques(idBiblioteca)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;

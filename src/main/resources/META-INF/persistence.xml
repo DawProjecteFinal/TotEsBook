@@ -6,15 +6,29 @@
 
     <persistence-unit name="totesbookPersistenceUnit" transaction-type="JTA">
         
-        <!-- JNDI DataSource creat a GlassFish -->
+        <!-- JNDI DataSource configurat a GlassFish -->
         <jta-data-source>jdbc/TotEsBookDS</jta-data-source>
 
+        <!-- TOTES les entitats gestionades -->
+        <class>cat.totesbook.domain.Agent</class>
+        <class>cat.totesbook.domain.Biblioteca</class> 
         <class>cat.totesbook.domain.Llibre</class>
-
+        <class>cat.totesbook.domain.Prestec</class>
+        <class>cat.totesbook.domain.PropostaAdquisicio</class>
+        <class>cat.totesbook.domain.Reserva</class>
+        <class>cat.totesbook.domain.Rol</class>
+        <class>cat.totesbook.domain.SessioUsuari</class>
+        <class>cat.totesbook.domain.Usuari</class>
 
         <properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
-            <property name="eclipselink.logging.level" value="FINE"/>
+            <!-- CORRECCIÓ 1: Indicar a JPA que NO gestioni l'esquema -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+            
+            <!-- Pots ajustar el nivell de log (FINE és bastant detallat) -->
+            <property name="eclipselink.logging.level" value="INFO"/> 
+            
+            <!-- Propietat recomanada per a aplicacions web -->
+            <property name="eclipselink.weaving" value="false"/> 
         </properties>
     </persistence-unit>
 </persistence>

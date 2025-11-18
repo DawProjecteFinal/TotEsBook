@@ -1,62 +1,57 @@
 package cat.totesbook.config;
 
 import jakarta.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.jndi.JndiObjectFactoryBean;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.util.Properties;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@ComponentScan(
-    basePackages = "cat.totesbook",
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)
-)
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "cat.totesbook.repository.impl")
+@ComponentScan(
+        basePackages = "cat.totesbook",
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ANNOTATION,
+                value = org.springframework.stereotype.Controller.class
+        )
+)
 public class JpaConfig {
 
     @Bean
-    public JndiObjectFactoryBean dataSource() {
-        JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
-        jndiObjectFactoryBean.setJndiName("jdbc/TotEsBookDS");
-        jndiObjectFactoryBean.setResourceRef(true);
-        jndiObjectFactoryBean.setProxyInterface(DataSource.class);
-        return jndiObjectFactoryBean;
+    public DataSource dataSource() throws NamingException {
+        return (DataSource) new InitialContext().lookup("jdbc/TotEsBookDS");
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setDataSource(dataSource);
-        // Nom de la persistence-unit del persistence.xml
-        emf.setPersistenceUnitName("totesbookPersistenceUnit");
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPersistenceUnitName("totesbookPersistenceUnit");
 
-        // Propietats JPA per assegurar que Spring té el control
+        EclipseLinkJpaVendorAdapter vendorAdapter = new EclipseLinkJpaVendorAdapter();
         Properties jpaProperties = new Properties();
-        jpaProperties.put("jakarta.persistence.transactionType", "RESOURCE_LOCAL");
-        emf.setJpaProperties(jpaProperties);
-
-        // especifiquem el provider JPA (EclipseLink) per evitar ambigüitats.
-        emf.setPersistenceProviderClass(org.eclipse.persistence.jpa.PersistenceProvider.class);
-
-        return emf;
+        jpaProperties.setProperty("eclipselink.target-server", "None"); // Evita que EclipseLink intente usar JTA de Glassfish
+        em.setJpaProperties(jpaProperties);
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setPackagesToScan("cat.totesbook.domain");
+        return em;
     }
+
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        // Transaccions JPA gestionades per Spring
         return new JpaTransactionManager(emf);
-    }
-
-    @Bean
-    public WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
     }
 }

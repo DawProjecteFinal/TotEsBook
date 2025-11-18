@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+        "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+    <!-- Pool de connexions JDBC -->
+    <jdbc-connection-pool name="TotEsBookPool"
+                          res-type="javax.sql.DataSource"
+                          datasource-classname="com.mysql.cj.jdbc.MysqlDataSource"
+                          steady-pool-size="5"
+                          max-pool-size="50"
+                          pool-resize-quantity="2"
+                          idle-timeout-in-seconds="300">
+        <property name="serverName" value="db"/>
+        <property name="portNumber" value="3306"/>
+        <property name="databaseName" value="totesbook"/>
+        <property name="User" value="totesuser"/>
+        <property name="Password" value="totespass"/>
+        <property name="URL" value="jdbc:mysql://db:3306/totesbook?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC"/>
+    </jdbc-connection-pool>
+
+    <!-- Recurs JNDI visible per Spring -->
+    <jdbc-resource jndi-name="jdbc/TotEsBookDS" pool-name="TotEsBookPool"/>
+</resources>

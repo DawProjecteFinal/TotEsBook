@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.domain;
 
 /**
@@ -9,6 +5,8 @@ package cat.totesbook.domain;
  * @author jmiro
  */
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Biblioteques")
@@ -25,7 +23,31 @@ public class Biblioteca {
     private String telefon;
     private String email;
 
+    @Transient  // indica que no és una columna a la BD
+    private int numLlibres;
+
+    @Transient
+    private int numPrestecs;
+
+    // Relació amb el bibliotecari responsable
+    @ManyToOne
+    @JoinColumn(name = "idBibliotecari")
+    private Agent bibliotecari;
+
+    // Una biblioteca pot tenir MOLTS agents
+    @OneToMany(mappedBy = "biblioteca", fetch = FetchType.LAZY)
+    private List<Agent> agents = new ArrayList<>();
+
     public Biblioteca() {
+    }
+
+    // Constructor
+    public Biblioteca(String nom, String adreca, String telefon, String email, Agent bibliotecari) {
+        this.nom = nom;
+        this.adreca = adreca;
+        this.telefon = telefon;
+        this.email = email;
+        this.bibliotecari = bibliotecari;
     }
 
     // Getters i Setters
@@ -67,5 +89,46 @@ public class Biblioteca {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Agent getBibliotecari() {
+        return bibliotecari;
+    }
+
+    public void setBibliotecari(Agent bibliotecari) {
+        this.bibliotecari = bibliotecari;
+    }
+
+    public int getNumLlibres() {
+        return numLlibres;
+    }
+
+    public void setNumLlibres(int numLlibres) {
+        this.numLlibres = numLlibres;
+    }
+
+    public int getNumPrestecs() {
+        return numPrestecs;
+    }
+
+    public void setNumPrestecs(int numPrestecs) {
+        this.numPrestecs = numPrestecs;
+    }
+
+    public List<Agent> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agent> agents) {
+        this.agents = agents;
+    }
+
+    @Override
+    public String toString() {
+        return "Biblioteca{"
+                + "idBiblioteca=" + idBiblioteca
+                + ", nom='" + nom + '\''
+                + ", bibliotecari=" + (bibliotecari != null ? bibliotecari.getNom() : "cap")
+                + '}';
     }
 }
