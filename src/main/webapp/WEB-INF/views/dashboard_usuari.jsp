@@ -7,6 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!DOCTYPE html>
 <html lang="ca">
     <head>
@@ -20,22 +21,22 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
 
-    <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}">
-                <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Menú">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
-                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a></li>
-                    <!-- Dropdown + categories -->
+        <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="${pageContext.request.contextPath}">
+                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Menú">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a></li>
+                        <!-- Dropdown + categories -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -51,12 +52,12 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
-                     <c:if test="${not empty sessionScope.sessioUsuari}">
-                         <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                     </c:if>
-                </ul>
-                <div class="d-flex align-items-center ms-lg-auto">
-                    <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
+                        <c:if test="${not empty sessionScope.sessioUsuari}">
+                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
+                            </c:if>
+                    </ul>
+                    <div class="d-flex align-items-center ms-lg-auto">
+                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
                                    placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
                                    oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
@@ -137,12 +138,11 @@
 
                                                             <small class="d-block text-muted">
                                                                 Data préstec:
-                                                                <fmt:formatDate value="${prestec.dataPrestec}" pattern="dd/MM/yyyy"/>
-                                                            </small>
+                                                                ${prestec.dataPrestecFormatada}                                                            </small>
 
                                                             <small class="d-block text-danger fw-bold">
                                                                 Retornar abans de:
-                                                                <fmt:formatDate value="${prestec.dataDevolucio}" pattern="dd/MM/yyyy"/>
+                                                                ${prestec.dataVencimentFormatada}
                                                             </small>
                                                         </div>
 
@@ -157,6 +157,52 @@
                                         <c:otherwise>
                                             <p class="text-muted">Actualment no tens cap préstec actiu.</p>
                                         </c:otherwise>
+                                    </c:choose>
+
+                                </div>
+                            </div>
+
+                            <!-- HISTORIAL DE PRÉSTECS -->
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-header bg-totlight">
+                                    <h4 class="mb-0 text-tot-bold">
+                                        <i class="bi bi-clock-history me-2"></i> Historial de Préstecs
+                                    </h4>
+                                </div>
+
+                                <div class="card-body">
+
+                                    <c:choose>
+
+                                        <c:when test="${not empty historialPrestecs}">
+                                            <ul class="list-group list-group-flush">
+
+                                                <c:forEach var="prestec" items="${historialPrestecs}">
+
+                                                    <li class="list-group-item">
+
+                                                        <strong>${prestec.llibre.titol}</strong>
+
+                                                        <div class="small text-muted">
+                                                            Prestat el:
+                                                            ${prestec.dataPrestecFormatada}
+                                                        </div>
+
+                                                        <div class="small">
+                                                            Retornat el:
+                                                            ${prestec.dataDevolucioFormatada}
+                                                        </div>
+
+                                                    </li>
+                                                </c:forEach>
+
+                                            </ul>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p class="text-muted">Encara no tens cap préstec retornat.</p>
+                                        </c:otherwise>
+
                                     </c:choose>
 
                                 </div>
@@ -231,9 +277,6 @@
                             <div class="card-body">
                                 <p><strong>Nom:</strong> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/></p>
                                 <p><strong>Email:</strong> <c:out value="${sessionScope.sessioUsuari.email}"/></p>
-
-
-
                                 <a href="${pageContext.request.contextPath}/perfil" class="btn btn-sm btn-outline-secondary mt-2">
                                     Editar Perfil
                                 </a>
@@ -274,7 +317,6 @@
                                             <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
                                         </ul>
                                         <div class="mt-auto text-center">
-                                            <%-- L'enllaç ha d'apuntar al controlador /llibre --%>
                                             <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
                                         </div>
                                     </div>

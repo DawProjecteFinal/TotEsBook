@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author jmiro
+ * @author equip TotEsBook
  */
 public interface PrestecService {
 
@@ -19,4 +19,6 @@ public interface PrestecService {
     List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
     
     List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
+    
+    List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari);
 }

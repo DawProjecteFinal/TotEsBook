@@ -5,7 +5,9 @@ package cat.totesbook.domain;
  * @author jmiro
  */
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "Prestecs")
@@ -132,4 +134,25 @@ public class Prestec {
     public void setEstat(EstatPrestec estat) {
         this.estat = estat;
     }
+
+    // Obtenim dates formatades a String
+    public String getDataPrestecFormatada() {
+        return dataPrestec == null ? ""
+                : dataPrestec.toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getDataDevolucioFormatada() {
+        return dataDevolucio == null ? ""
+                : dataDevolucio.toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getDataVencimentFormatada() {
+        if (dataPrestec == null) {
+            return "";
+        }
+
+        LocalDate venciment = dataPrestec.plusDays(30).toLocalDate();
+        return venciment.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
 }
