@@ -45,6 +45,18 @@ public class BibliotecaLlibre {
         this.disponibles = disponibles;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setLlibre(Llibre llibre) {
+        this.llibre = llibre;
+    }
+
+    public void setBiblioteca(Biblioteca biblioteca) {
+        this.biblioteca = biblioteca;
+    }
+
     // Getters i setters
     public int getId() {
         return id;

@@ -17,7 +17,7 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
 
     @Autowired
     private BibliotecaLlibreRepository repo;
-    
+
     @Autowired
     private BibliotecaLlibreRepository bibliotecaLlibreRepository;
 
@@ -89,5 +89,13 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
     @Override
     public List<BibliotecaLlibre> findByLlibre(Llibre llibre) {
         return bibliotecaLlibreRepository.findByLlibre(llibre);
+    }
+
+    @Override
+    public void actualitzarRelacio(BibliotecaLlibre relacio, Biblioteca biblioteca, int exemplars) {
+        relacio.setBiblioteca(biblioteca);
+        relacio.setExemplars(exemplars);
+        relacio.setDisponibles(exemplars);
+        repo.updateBibliotecaLlibre(relacio);
     }
 }

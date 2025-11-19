@@ -114,7 +114,6 @@
         <section class="py-5 flex-grow-1">
             <div class="container px-4 px-lg-5 mt-5">
                 <h1 class="text-center text-tot-bold mb-5">Panell d'Administració</h1>
-
                 <%-- Missatges de feedback o errors --%>
                 <c:if test="${not empty feedbackMessage}">
                     <div class="alert alert-${messageType == 'success' ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
@@ -396,11 +395,11 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-accio-group">
-                                                            <a href="#" class="btn btn-outline-warning btn-accio-panell">
+                                                            <a href="${pageContext.request.contextPath}/gestio/llibres/${llibre.isbn}/editar" class="btn btn-outline-warning btn-accio-panell">
                                                                 <i class="bi bi-pencil"></i>
                                                             </a>
 
-                                                            <form action="#" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
+                                                            <form action="${pageContext.request.contextPath}/gestio/llibres/${llibre.isbn}/eliminar" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
                                                                 <button type="submit" class="btn btn-outline-danger btn-accio-panell">
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
@@ -408,9 +407,6 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-
-
-
                                             </c:forEach>
                                     </table>
                                 </div>

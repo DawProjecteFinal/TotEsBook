@@ -19,4 +19,6 @@ public interface BibliotecaLlibreService {
     List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca);
     
     List<BibliotecaLlibre> findByLlibre(Llibre llibre);
+    
+    void actualitzarRelacio(BibliotecaLlibre relacio, Biblioteca biblioteca, int exemplars);
 }

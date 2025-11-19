@@ -46,5 +46,7 @@ public interface LlibreRepository {
     List<Llibre>findByIdioma(String idioma);
 
     List<Llibre> findRandom(int limit);
+    
+    void deleteLlibreByIsbn(String isbn);
 
 }

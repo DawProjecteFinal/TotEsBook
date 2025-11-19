@@ -40,7 +40,7 @@ public class Llibre {
     @Column(nullable = false)
     private String idioma;   // La Api respòn:(es, ca, en, fr, …)
 
-
+    
     /**
      * Constructor buit requerit per JPA.
      */

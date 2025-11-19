@@ -50,5 +50,7 @@ public interface LlibreService {
     List<Llibre> getLlibresByIdioma(String idioma);
 
     List<Llibre> findRandom(int limit);
+    
+    void deleteLlibre(String isbn);
 
 }
