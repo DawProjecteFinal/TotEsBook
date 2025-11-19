@@ -17,6 +17,7 @@ import cat.totesbook.domain.Llibre;
  * @author equip TotEsBook
  */
 @Service
+@Transactional
 public class LlibreServiceImpl implements LlibreService {
 
     /**
@@ -61,4 +62,33 @@ public class LlibreServiceImpl implements LlibreService {
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
         return llibreRepository.findByBiblioteca(biblioteca);
     }
+
+
+    //Retorna els llibres per categoria
+    @Override
+    public List<Llibre> getLlibresByCategoria(String categoria) {
+        return llibreRepository.findByCategoria(categoria);
+    }
+
+    @Override
+    public List<Llibre> getLlibreByTitol(String titol) {
+       return llibreRepository.findByTitolContainingIgnoreCase(titol);
+    }
+
+    @Override
+    public List<Llibre> getLlibresByAutor(String autor) {
+       return llibreRepository.findByAutorContainingIgnoreCase(autor);
+    }
+
+    @Override
+    public List<Llibre> getLlibresByIdioma(String idioma) {
+        return llibreRepository.findByIdioma(idioma);
+    }
+
+    @Override
+    public List<Llibre> findRandom(int limit) {
+        return llibreRepository.findRandom(limit);
+    }
+
+
 }

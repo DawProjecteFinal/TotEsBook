@@ -4,19 +4,16 @@
  */
 package cat.totesbook.repository;
 
-
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  *
  * @author jmiro
  */
-
 public interface BibliotecaLlibreRepository {
 
     List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca);
@@ -26,4 +23,14 @@ public interface BibliotecaLlibreRepository {
     void addBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre);
 
     void updateBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre);
+
+    
+    List<BibliotecaLlibre> findByLlibre(Llibre llibre);
+
+
+    Optional<BibliotecaLlibre> findFirstByLlibreIsbn(String isbn);
+
+    List<BibliotecaLlibre> findByLlibreIsbn(String isbn);
+
+
 }

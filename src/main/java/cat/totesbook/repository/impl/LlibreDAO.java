@@ -11,7 +11,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Transactional
 public class LlibreDAO implements LlibreRepository {
 
     @PersistenceContext(unitName = "totesbookPersistenceUnit")
@@ -52,7 +51,7 @@ public class LlibreDAO implements LlibreRepository {
         Llibre llibre = entityManager.find(Llibre.class, isbn);
         return Optional.ofNullable(llibre);
     }
-    
+
     // Retorna els llibre de una biblioteca en concret
     @Override
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
@@ -76,4 +75,46 @@ public class LlibreDAO implements LlibreRepository {
         desti.setExemplars(origen.getExemplars());
         desti.setDisponibles(origen.getDisponibles());
     }
+
+    //Retorna els llibres per una categoria concreta
+    @Override
+    public List<Llibre> findByCategoria(String categoria) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l WHERE l.categoria = :categoria", Llibre.class).setParameter("categoria", categoria).getResultList();
+    }
+
+    @Override
+    public List<Llibre> findByTitolContainingIgnoreCase(String titol) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l " + "WHERE LOWER(l.titol) LIKE LOWER(CONCAT('%', :titol, '%'))", Llibre.class).setParameter("titol", titol).getResultList();
+    }
+
+    @Override
+    public List<Llibre> findByAutorContainingIgnoreCase(String autor) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l " + "WHERE LOWER(l.autor) LIKE LOWER(CONCAT('%', :autor, '%'))", Llibre.class).setParameter("autor", autor).getResultList();
+    }
+
+    @Override
+    public List<Llibre> findByIdioma(String idioma) {
+        return entityManager.createQuery(
+                "SELECT l FROM Llibre l " + "WHERE LOWER(l.idioma) = LOWER(:idioma)", Llibre.class).setParameter("idioma", idioma).getResultList();
+    }
+
+    /**
+     * Mostra llibres de forma aleatoria
+     *
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<Llibre> findRandom(int limit) {
+        String sql = "SELECT * FROM Llibres ORDER BY RAND() LIMIT " + limit;
+
+        return entityManager
+                .createNativeQuery(sql, Llibre.class)
+                .getResultList();
+
+    }
+
 }

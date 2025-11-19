@@ -1,0 +1,26 @@
+package cat.totesbook.service;
+
+import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.domain.Prestec;
+import java.util.List;
+
+/**
+ *
+ * @author equip TotEsBook
+ */
+public interface PrestecService {
+
+    void registrarPrestec(String isbn, String emailUsuari, int idAgentBibliotecari);
+
+    List<Prestec> findActiusByBiblioteca(Biblioteca biblioteca);
+
+    void registrarDevolucio(String isbn, String emailUsuari, Integer idAgentBibliotecari);
+
+    List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
+    
+    List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
+    
+    // Mètode per renovar préstec
+    void renovarPrestec(Integer idPrestec);
+    List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari);
+}

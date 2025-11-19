@@ -8,14 +8,6 @@ CREATE TABLE IF NOT EXISTS Usuaris (
     contrasenya VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Biblioteques (
-    idBiblioteca INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(150) NOT NULL,
-    adreca VARCHAR(255),
-    telefon VARCHAR(20),
-    email VARCHAR(150)
-);
-
 CREATE TABLE IF NOT EXISTS Agents (
     idAgent INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
@@ -24,6 +16,19 @@ CREATE TABLE IF NOT EXISTS Agents (
     email VARCHAR(150),
     tipus ENUM('bibliotecari', 'administrador') NOT NULL,
     contrasenya VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Biblioteques (
+    idBiblioteca INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(150) NOT NULL,
+    adreca VARCHAR(255),
+    telefon VARCHAR(20),
+    email VARCHAR(150),
+    idBibliotecari INT,
+    CONSTRAINT fk_biblioteca_bibliotecari
+        FOREIGN KEY (idBibliotecari) REFERENCES Agents(idAgent)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Llibres (
@@ -119,7 +124,7 @@ INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
 ('Marta', 'Vilaseca', '931001001', 'marta@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Joan', 'Arbós', '931002002', 'joan@totesbook.cat', 'bibliotecari', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Laia', 'Roca', '931003003', 'laia@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
-('Albert', 'Ferrer', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
+('Albert', 'Ferruz', '931004004', 'albert@totesbook.cat', 'administrador', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO');
 
 -- LLIBRES
 -- INSERT INTO Llibres () VALUES
@@ -161,3 +166,12 @@ CREATE TABLE IF NOT EXISTS BibliotecaLlibres (
 
     CONSTRAINT uc_biblio_llibre UNIQUE (idBiblioteca, isbn)
 );
+
+-- Afegim al final del init.sql aquesta clau forana per a que primer es crein les taules referenciades
+ALTER TABLE Agents
+ADD COLUMN idBiblioteca INT,
+ADD CONSTRAINT fk_agent_biblioteca
+    FOREIGN KEY (idBiblioteca)
+    REFERENCES Biblioteques(idBiblioteca)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;

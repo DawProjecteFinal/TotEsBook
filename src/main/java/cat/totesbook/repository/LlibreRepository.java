@@ -35,4 +35,16 @@ public interface LlibreRepository {
     Optional<Llibre> getLlibreByIsbn(String isbn);
 
     List<Llibre> findByBiblioteca(Biblioteca biblioteca);
+    
+
+    List<Llibre> findByCategoria(String categoria);
+    
+    List<Llibre>findByTitolContainingIgnoreCase(String titol);
+    
+    List<Llibre>findByAutorContainingIgnoreCase(String autor);
+    
+    List<Llibre>findByIdioma(String idioma);
+
+    List<Llibre> findRandom(int limit);
+
 }

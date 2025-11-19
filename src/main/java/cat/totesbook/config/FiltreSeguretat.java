@@ -7,7 +7,6 @@ package cat.totesbook.config;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
 import jakarta.servlet.*;
-// import jakarta.servlet.annotation.WebFilter; // <-- JA NO ÉS NECESSARI
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -20,14 +19,14 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Filtre de Seguretat (Punts 6 i 7)
+ * Filtre de Seguretat 
  * Controla l'accés a les rutes protegides basant-se en el rol
  * de l'usuari guardat a la sessió.
  * Adaptat per a Spring MVC (protegeix URLs de Controladors, no JSPs).
- * Ara és un Bean de Spring (@Component).
+ * 
  */
-// @WebFilter("/*") // <-- 2. ELIMINAR O COMENTAR AQUESTA LÍNIA
-@Component // <-- 3. AFEGIR AQUESTA ANOTACIÓ
+
+@Component
 public class FiltreSeguretat implements Filter {
 
     // Camins protegits (URLs de Controladors) i rols permesos
@@ -66,8 +65,12 @@ public class FiltreSeguretat implements Filter {
         // TOTS els rols loguejats
         caminsProtegits.put("/dashboard_usuari", List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI));
         
-        // Afegeix aquí altres URLs protegides (ex: /ferPrestec, /ferReserva)
-        // caminsProtegits.put("/ferPrestec", List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI));
+        // TOTS els rols loguejats (AFEGIM /perfil i /dashboard_usuari)
+        List<Rol> totsElsLoguejats = List.of(Rol.ADMIN, Rol.BIBLIOTECARI, Rol.USUARI);
+        caminsProtegits.put("/dashboard_usuari", totsElsLoguejats);
+        caminsProtegits.put("/perfil", totsElsLoguejats); // Protegim la pàgina d'edició de perfil
+        
+        // caminsProtegits.put("/ferPrestec", totsElsLoguejats);
     }
 
     @Override

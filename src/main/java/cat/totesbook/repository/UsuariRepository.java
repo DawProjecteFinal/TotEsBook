@@ -35,4 +35,21 @@ public interface UsuariRepository {
      * @return Llista d'objectes Usuari.
      */
     List<Usuari> getAllUsuaris();
+    
+     // --- INICI NOU CODI AFEGIT ---
+    
+    /**
+     * Busca un usuari complet per la seva ID.
+     * @param id L'ID de l'usuari.
+     * @return L'objecte Usuari, o null si no es troba.
+     */
+    Usuari findUsuariById(int id);
+    
+    /**
+     * Actualitza les dades bàsiques del perfil d'un usuari (sense contrasenya).
+     * @param usuari L'objecte usuari amb les dades actualitzades (necessita ID, nom, cognoms, email, telefon).
+     */
+    void updatePerfil(Usuari usuari);
+    
+    // --- FI NOU CODI AFEGIT ---
 }

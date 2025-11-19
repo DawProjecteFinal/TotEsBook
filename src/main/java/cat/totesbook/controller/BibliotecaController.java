@@ -31,7 +31,7 @@ public class BibliotecaController {
     private LlibreService llibreService;
 
     /**
-     * Envia a la vista tot el llistat de biblioteques
+     * Envia a la vista tot el llistat de biblioteques per e aveure-les els usuaris normals
      *
      * @param model
      * @return
@@ -45,7 +45,7 @@ public class BibliotecaController {
         model.addAttribute("biblioteques", biblioteques);
 
         // Retornem el nom de la vista JSP (sense .jsp ni ruta completa)
-        return "biblioteques";
+        return "biblioteques/llistar_public";
     }
 
     /**
@@ -75,6 +75,4 @@ public class BibliotecaController {
         // Mostrar la vista amb els llibres
         return "llibresPerBiblioteca";
     }
-
-
 }

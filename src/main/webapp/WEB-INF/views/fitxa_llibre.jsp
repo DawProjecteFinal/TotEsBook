@@ -34,20 +34,23 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Biblioteques</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" id="navbarDropdown" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Catàleg</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="#">Autoajuda</a></li>
-                            <li><a class="dropdown-item" href="#">Ficció</a></li>
-                            <li><a class="dropdown-item" href="#">Juvenil</a></li>
-                            <li><a class="dropdown-item" href="#">Novel·la</a></li>
-                            <li><a class="dropdown-item" href="#">True crime</a></li>
-                        </ul>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a></li>
+                    <!-- Dropdown + categories -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>                                   
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Cooking">Cuina i gastronomia</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Juvenile Fiction">Ficció juvenil</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Fiction">Novel·la i ficció</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Young Adult Fiction">Novel·la juvenil</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
+                            </ul>
+                        </li>
                      <c:if test="${not empty sessionScope.sessioUsuari}">
                          <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
                          <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
@@ -56,13 +59,15 @@
                      </c:if>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
-                    <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET">
-                        <input class="form-control form-control-sm me-2" type="search" name="q"
-                               placeholder="Cerca ràpida..." aria-label="Search">
-                        <button class="btn btn-tot btn-sm" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
+                     <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
+                            <input class="form-control form-control-sm me-2" type="search" name="q" 
+                                   placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
+                                   oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                   oninput="this.setCustomValidity('')" />
+                            <button class="btn btn-tot btn-sm" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
                     <c:choose>
                         <c:when test="${empty sessionScope.sessioUsuari}">
                             <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
@@ -107,7 +112,7 @@
              <c:choose>
                 <c:when test="${not empty llibre}">
                      <div class="mb-4">
-                        <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-sm btn-outline-secondary">
+                        <a href="${pageContext.request.contextPath}/mostrarLlibres" class="btn btn-sm btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i> Tornar al catàleg
                         </a>
                      </div>
@@ -159,27 +164,28 @@
 
                              <div class="d-flex mt-4">
                                 <c:if test="${not empty sessionScope.sessioUsuari}">
+                                    <!-- Botó per demanar en préstec (funcionalitat pendent) -->
+                                    <form action="${pageContext.request.contextPath}/prestar" method="POST" class="d-inline me-2">
+                                        <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                        <button type="submit" class="btn btn-tot btn-lg flex-shrink-0" disabled>
+                                            <i class="bi bi-handbag-fill me-1"></i>
+                                            Demanar en préstec
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Botó per reservar, només visible si hi ha exemplars disponibles -->
                                     <c:if test="${llibre.disponibles > 0}">
-                                        <form action="${pageContext.request.contextPath}/prestar" method="POST" class="d-inline me-2">
-                                            <input type="hidden" name="isbn" value="${llibre.isbn}">
-                                            <button type="submit" class="btn btn-tot btn-lg flex-shrink-0" disabled> <%-- TODO: Implementar /prestar --%>
-                                                <i class="bi bi-handbag-fill me-1"></i>
-                                                Demanar en préstec
-                                            </button>
-                                        </form>
-                                    </c:if>
-                                    <c:if test="${llibre.disponibles <= 0}">
-                                         <form action="${pageContext.request.contextPath}/reservar" method="POST" class="d-inline">
-                                            <input type="hidden" name="isbn" value="${llibre.isbn}">
-                                            <button type="submit" class="btn btn-accent-custom btn-lg flex-shrink-0" disabled> <%-- TODO: Implementar /reservar --%>
-                                                <i class="bi bi-bookmark-plus-fill me-1"></i>
-                                                Reservar
-                                            </button>
+                                        <form action="${pageContext.request.contextPath}/reservar" method="POST" class="d-inline">
+                                        <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                        <button type="submit" class="btn btn-accent-custom btn-lg flex-shrink-0">
+                                            <i class="bi bi-bookmark-plus-fill me-1"></i>
+                                            Reservar
+                                        </button>
                                         </form>
                                     </c:if>
                                 </c:if>
                                  <c:if test="${empty sessionScope.sessioUsuari}">
-                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login.jsp">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
+                                      <p class="text-muted"><em><a href="${pageContext.request.contextPath}/login">Inicia sessió</a> per demanar en préstec o reservar.</em></p>
                                  </c:if>
                              </div>
                         </div>

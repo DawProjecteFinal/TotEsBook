@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.domain;
 
 /**
@@ -9,7 +5,9 @@ package cat.totesbook.domain;
  * @author jmiro
  */
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter; // Import per formatar la data
 
 @Entity
 @Table(name = "Prestecs")
@@ -38,6 +36,7 @@ public class Prestec {
     @Column(nullable = false)
     private LocalDateTime dataPrestec;
 
+    // Aquest camp és BUIT/NULL fins que l'usuari retorna el llibre.
     private LocalDateTime dataDevolucio;
 
     @ManyToOne
@@ -55,6 +54,43 @@ public class Prestec {
     public Prestec() {
     }
 
+    public Prestec(Usuari usuari, Llibre llibre, Biblioteca biblioteca, Agent agentPrestec) {
+        this.usuari = usuari;
+        this.llibre = llibre;
+        this.biblioteca = biblioteca;
+        this.agentPrestec = agentPrestec;
+        this.dataPrestec = LocalDateTime.now();
+        this.estat = EstatPrestec.actiu;
+    }
+
+    // --- MÈTODE PER A FORMATAR LA DATA ---
+    
+    public String getDataPrestecFormatted() {
+        if (dataPrestec == null) return "";
+        return dataPrestec.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
+    public String getDataVencimentCalculada() {
+        if (dataPrestec != null) {
+            return dataPrestec.plusDays(30).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+        return "";
+    }
+    /*
+    public String getDataVencimentFormatted() {
+        if (dataDevolucio == null) return "";
+        LocalDateTime venciment = dataPrestec.plusDays(30);
+        return venciment.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+    */
+    public String getDataDevolucioFormatted() {
+        if (dataDevolucio == null) return "";
+        //LocalDateTime devolucio = dataPrestec.plusDays(30);
+        return dataDevolucio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
+    // ---------------------------------------------------
+    
     // Getters i Setters
     public int getIdPrestec() {
         return idPrestec;
@@ -127,4 +163,25 @@ public class Prestec {
     public void setEstat(EstatPrestec estat) {
         this.estat = estat;
     }
+
+    // Obtenim dates formatades a String
+    public String getDataPrestecFormatada() {
+        return dataPrestec == null ? ""
+                : dataPrestec.toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getDataDevolucioFormatada() {
+        return dataDevolucio == null ? ""
+                : dataDevolucio.toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getDataVencimentFormatada() {
+        if (dataPrestec == null) {
+            return "";
+        }
+
+        LocalDate venciment = dataPrestec.plusDays(30).toLocalDate();
+        return venciment.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
 }

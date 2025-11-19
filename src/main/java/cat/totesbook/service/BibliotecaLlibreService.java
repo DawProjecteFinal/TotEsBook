@@ -17,4 +17,6 @@ public interface BibliotecaLlibreService {
     void sumarDisponible(Biblioteca biblioteca, Llibre llibre);
 
     List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca);
+    
+    List<BibliotecaLlibre> findByLlibre(Llibre llibre);
 }

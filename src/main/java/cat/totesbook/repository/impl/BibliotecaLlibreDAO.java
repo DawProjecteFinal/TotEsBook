@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -14,15 +10,12 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author jmiro
  */
-
 @Repository
-@Transactional
 public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
 
     @PersistenceContext
@@ -32,8 +25,8 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     @Override
     public List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca) {
         TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(
-            "SELECT bl FROM BibliotecaLlibre bl WHERE bl.biblioteca = :biblioteca",
-            BibliotecaLlibre.class
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.biblioteca = :biblioteca",
+                BibliotecaLlibre.class
         );
         query.setParameter("biblioteca", biblioteca);
         return query.getResultList();
@@ -43,14 +36,20 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     public Optional<BibliotecaLlibre> findByBibliotecaAndLlibre(Biblioteca biblioteca, Llibre llibre) {
         try {
             TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(
-                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.biblioteca = :biblioteca AND bl.llibre = :llibre",
-                BibliotecaLlibre.class
+                    "SELECT bl FROM BibliotecaLlibre bl "
+                    + "WHERE bl.biblioteca.idBiblioteca = :idBiblioteca "
+                    + "AND bl.llibre.isbn = :isbn",
+                    BibliotecaLlibre.class
             );
-            query.setParameter("biblioteca", biblioteca);
-            query.setParameter("llibre", llibre);
+
+            query.setParameter("idBiblioteca", biblioteca.getIdBiblioteca());
+            query.setParameter("isbn", llibre.getIsbn());
+
             List<BibliotecaLlibre> resultats = query.getResultList();
             return resultats.isEmpty() ? Optional.empty() : Optional.of(resultats.get(0));
+
         } catch (Exception e) {
+            System.err.println("Error a BibliotecaLlibreDAO.findByBibliotecaAndLlibre: " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -64,4 +63,56 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     public void updateBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre) {
         entityManager.merge(bibliotecaLlibre);
     }
+
+
+    //Busquem per llibre per retornar la biblioteca
+    @Override
+    public List<BibliotecaLlibre> findByLlibre(Llibre llibre) {
+        TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.llibre = :llibre",
+                BibliotecaLlibre.class
+        );
+        query.setParameter("llibre", llibre);
+        return query.getResultList();
+    }
+
+    /**
+     * Retorna el primer llibre que troba a una biblioteca
+     *
+     * @param isbn
+     * @return
+     */
+    @Override
+    public Optional<BibliotecaLlibre> findFirstByLlibreIsbn(String isbn) {
+
+        List<BibliotecaLlibre> resultats = entityManager.createQuery(
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.llibre.isbn = :isbn",
+                BibliotecaLlibre.class
+        )
+                .setParameter("isbn", isbn)
+                .setMaxResults(1)
+                .getResultList();
+
+        return resultats.isEmpty() ? Optional.empty() : Optional.of(resultats.get(0));
+    }
+
+    /**
+     * Versió que retorna tots els registres per si el mateix llibre està a
+     * diverses biblioteques
+     *
+     * @param isbn
+     * @return
+     */
+    @Override
+    public List<BibliotecaLlibre> findByLlibreIsbn(String isbn) {
+
+        return entityManager.createQuery(
+                "SELECT bl FROM BibliotecaLlibre bl WHERE bl.llibre.isbn = :isbn",
+                BibliotecaLlibre.class
+        )
+                .setParameter("isbn", isbn)
+                .getResultList();
+    }
+
+
 }
