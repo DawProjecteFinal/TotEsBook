@@ -175,4 +175,9 @@ public class PrestecServiceImpl implements PrestecService {
 
         //prestecRepository.save(p);
     }
+    @Override
+    public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
+        return prestecRepository.findPrestecsRetornatsByUsuari(idUsuari);
+    }
+
 }
