@@ -5,7 +5,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%-- Imports necessaris per carregar les dades directament (millor fer-ho en un Servlet) --%>
 <%@ page import="cat.totesbook.repository.UsuariRepository" %>
 <%@ page import="cat.totesbook.repository.AgentRepository" %>
 <%@ page import="cat.totesbook.repository.impl.UsuariDAO" %>
@@ -83,7 +82,6 @@
                         </form>
                         <c:choose>
                             <c:when test="${empty sessionScope.sessioUsuari}">
-                                <%-- Això no hauria de passar si el filtre funciona bé, ja que aquesta pàgina és protegida --%>
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
@@ -114,7 +112,6 @@
         <section class="py-5 flex-grow-1">
             <div class="container px-4 px-lg-5 mt-5">
                 <h1 class="text-center text-tot-bold mb-5">Panell d'Administració</h1>
-                <%-- Missatges de feedback o errors --%>
                 <c:if test="${not empty feedbackMessage}">
                     <div class="alert alert-${messageType == 'success' ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
                         <c:out value="${feedbackMessage}"/>
@@ -340,7 +337,7 @@
                                 <h4 class="mb-0 text-tot-bold">
                                     <i class="bi bi-building me-2"></i> Gestió de Llibres
                                 </h4>
-                                <a href="#" class="btn btn-sm btn-tot">
+                                <a href="${pageContext.request.contextPath}/gestio/llibres/afegir" class="btn btn-sm btn-tot">
                                     <i class="bi bi-plus-circle-fill me-1"></i> Afegir Llibre
                                 </a>
                             </div>
