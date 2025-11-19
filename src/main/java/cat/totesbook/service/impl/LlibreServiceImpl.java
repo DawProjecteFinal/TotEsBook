@@ -90,5 +90,12 @@ public class LlibreServiceImpl implements LlibreService {
         return llibreRepository.findRandom(limit);
     }
 
+    @Override
+    @Transactional
+    public void deleteLlibre(String isbn) {
+        llibreRepository.deleteLlibreByIsbn(isbn);
+    }
+    
+
 
 }
