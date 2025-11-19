@@ -23,6 +23,10 @@ public interface PrestecRepository {
     void updatePrestec(Prestec prestec);
     
     List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
-
     
+    // Mètodes per la lògica per renovar préstec
+    Optional<Prestec> findById(Integer idPrestec);
+    
+    void save(Prestec prestec);
+    // ----
 }

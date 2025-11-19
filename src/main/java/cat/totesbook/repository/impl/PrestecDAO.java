@@ -118,5 +118,15 @@ public class PrestecDAO implements PrestecRepository {
                 .setParameter("estat", EstatPrestec.actiu)
                 .getResultList();
     }
+    
+    @Override
+    public Optional<Prestec> findById(Integer idPrestec) {
+        Prestec prestec = entityManager.find(Prestec.class, idPrestec);
+        return prestec != null ? Optional.of(prestec) : Optional.empty();
+    }
 
+    @Override
+    public void save(Prestec prestec) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

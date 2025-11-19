@@ -19,4 +19,7 @@ public interface PrestecService {
     List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
     
     List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
+    
+    // Mètode per renovar préstec
+    void renovarPrestec(Integer idPrestec);
 }

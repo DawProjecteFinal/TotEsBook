@@ -75,6 +75,4 @@ public class BibliotecaController {
         // Mostrar la vista amb els llibres
         return "llibresPerBiblioteca";
     }
-
-
 }

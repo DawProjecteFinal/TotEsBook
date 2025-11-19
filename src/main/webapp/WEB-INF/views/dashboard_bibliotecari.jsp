@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!DOCTYPE html>
 <html lang="ca">
     <head>
@@ -174,6 +175,9 @@
                                         <th>ISBN</th>
                                         <th>Usuari</th>
                                         <th>Data Préstec</th>
+                                        <th>Data Devolució</th>
+                                        <th>Data Venciment</th>
+                                        <th>Accions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -181,7 +185,25 @@
                                         <tr>
                                             <td>${p.llibre.isbn}</td>
                                             <td>${p.usuari.nom} ${p.usuari.cognoms}</td>
-                                            <td>${p.dataPrestec}</td>
+                                            <<td>${p.dataPrestecFormatted}</td>
+                                            <td>
+                                                <span class="badge bg-success text-dark">
+                                                    ${p.dataDevolucioFormatted}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-danger text-dark">
+                                                    ${p.dataVencimentCalculada}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/gestionarPrestec/renovar" method="POST" class="d-inline">
+                                                    <input type="hidden" name="idPrestec" value="${p.idPrestec}">
+                                                    <button type="submit" class="btn btn-sm btn-warning">
+                                                        <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
 
@@ -222,16 +244,13 @@
                                                 <tr>
                                                     <td>${r.llibre.titol}</td>
                                                     <td>${r.usuari.nom} ${r.usuari.cognoms}</td>
+                                                    <td>${r.dataReservaFormatted}</td>È
                                                     <td>
-                                            <fmt:formatDate value="${r.dataReserva}" pattern="dd/MM/yyyy HH:mm" />
-                                            </td>
-
-                                            <td>
-                                                <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
-                                                   class="btn btn-sm btn-primary">
-                                                    Gestionar
-                                                </a>
-                                            </td>
+                                                        <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
+                                                           class="btn btn-sm btn-primary">
+                                                            Gestionar
+                                                        </a>
+                                                    </td>
                                             </tr>
                                         </c:forEach>
                                     </c:otherwise>
@@ -290,8 +309,8 @@
                                                 <tr>
                                                     <td>${dev.llibre.titol}</td>
                                                     <td>${dev.usuari.email}</td>
-                                                    <td>${dev.dataPrestec}</td>
-                                                    <td>${dev.dataDevolucio}</td>
+                                                    <td>${dev.dataPrestecFormatted}</td>
+                                                    <td>${dev.dataDevolucioFormatted}</td>
                                                     <td>${dev.agentDevolucio.nom}</td>
                                                 </tr>
                                             </c:forEach>

@@ -6,6 +6,7 @@ package cat.totesbook.domain;
  */
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter; // Import per formatar la data
 
 @Entity
 @Table(name = "Prestecs")
@@ -34,6 +35,7 @@ public class Prestec {
     @Column(nullable = false)
     private LocalDateTime dataPrestec;
 
+    // Aquest camp és BUIT/NULL fins que l'usuari retorna el llibre.
     private LocalDateTime dataDevolucio;
 
     @ManyToOne
@@ -60,6 +62,34 @@ public class Prestec {
         this.estat = EstatPrestec.actiu;
     }
 
+    // --- MÈTODE PER A FORMATAR LA DATA ---
+    
+    public String getDataPrestecFormatted() {
+        if (dataPrestec == null) return "";
+        return dataPrestec.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
+    public String getDataVencimentCalculada() {
+        if (dataPrestec != null) {
+            return dataPrestec.plusDays(30).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+        return "";
+    }
+    /*
+    public String getDataVencimentFormatted() {
+        if (dataDevolucio == null) return "";
+        LocalDateTime venciment = dataPrestec.plusDays(30);
+        return venciment.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+    */
+    public String getDataDevolucioFormatted() {
+        if (dataDevolucio == null) return "";
+        //LocalDateTime devolucio = dataPrestec.plusDays(30);
+        return dataDevolucio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
+    // ---------------------------------------------------
+    
     // Getters i Setters
     public int getIdPrestec() {
         return idPrestec;
