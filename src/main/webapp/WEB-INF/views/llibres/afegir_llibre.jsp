@@ -88,7 +88,7 @@
                 </div>
                 <div class="mt-4">
                     <a href="${pageContext.request.contextPath}/dashboard_administrador"
-                       class="btn btn-primary">
+                       class="btn btn-tot">
                         Tornar al meu panell de gestió
                     </a>
                 </div>

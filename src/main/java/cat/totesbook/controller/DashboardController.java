@@ -47,7 +47,6 @@ public class DashboardController {
     @Autowired
     private BibliotecaLlibreService bibliotecaLlibreService;
 
-    //       DASHBOARD BIBLIOTECARI 
     @GetMapping("/dashboard_bibliotecari")
     public String mostrarDashboardBibliotecari(Model model, HttpSession session) {
 
@@ -58,7 +57,6 @@ public class DashboardController {
             return "redirect:/login";
         }
 
-        // Quan el bibliotecari no té biblioteca assiganada se li informa
         if (sessioUsuari.getBibliotecaId() == null) {
             return "biblioteca_no_assignada";
         }
@@ -109,8 +107,6 @@ public class DashboardController {
         return "redirect:/dashboard_bibliotecari#devolucions";
     }
 
-    
-    //  DASHBOARD ADMIN
     @GetMapping("/dashboard_administrador")
     public String mostrarDashboardAdministrador(Model model, HttpSession session) {
 
@@ -120,27 +116,29 @@ public class DashboardController {
             return "redirect:/login";
         }
 
-        
-        model.addAttribute("llistaBiblioteques", bibliotecaService.getAllBiblioteques());
+        List<Biblioteca> biblioteques = bibliotecaService.getAllBiblioteques();
+        for (Biblioteca b : biblioteques) {
+            int numLlibres = bibliotecaService.countLlibresByBiblioteca(b.getIdBiblioteca());
+            int numPrestecs = bibliotecaService.countPrestecsByBiblioteca(b.getIdBiblioteca());
+            b.setNumLlibres(numLlibres);
+            b.setNumPrestecs(numPrestecs);
+        }
+        model.addAttribute("llistaBiblioteques", biblioteques);
+
         model.addAttribute("llistaAgents", agentService.getAllAgents());
         model.addAttribute("llistaUsuaris", usuariService.getAllUsuaris());
 
-        
         List<Llibre> llibres = llibreService.getAllLlibres();
         model.addAttribute("llibres", llibres);
 
-       
         Map<String, List<BibliotecaLlibre>> bibliosPerIsbn = new HashMap<>();
-
         for (Llibre l : llibres) {
-            List<BibliotecaLlibre> relacions
-                    = bibliotecaLlibreService.findByLlibre(l);
+            List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(l);
             bibliosPerIsbn.put(l.getIsbn(), relacions);
         }
 
         model.addAttribute("bibliosPerIsbn", bibliosPerIsbn);
 
         return "dashboard_administrador";
-
     }
 }
