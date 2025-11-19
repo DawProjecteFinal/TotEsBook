@@ -24,5 +24,6 @@ public interface PrestecRepository {
     
     List<Prestec> findPrestecsActiusByUsuari(int idUsuari);
 
+    List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari);
     
 }

@@ -6,7 +6,7 @@ import cat.totesbook.domain.Prestec;
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
-import cat.totesbook.domain.Usuari; 
+import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.AgentRepository;
 import cat.totesbook.repository.UsuariRepository;
 import cat.totesbook.service.LlibreService;
@@ -14,33 +14,33 @@ import cat.totesbook.service.ReservaService;
 import cat.totesbook.service.PrestecService;
 
 import jakarta.servlet.http.HttpSession;
-import org.mindrot.jbcrypt.BCrypt; 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping; 
-import org.springframework.web.bind.annotation.RequestParam; 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 /**
- * Controlador Spring MVC per a les funcions de gestió d'usuaris
- * i el procés de registre.
- * Només accessible per a l'ADMIN (excepte el registre).
+ * Controlador Spring MVC per a les funcions de gestió d'usuaris i el procés de
+ * registre. Només accessible per a l'ADMIN (excepte el registre).
  */
 @Controller
 public class UsuariController {
+
     private static final int NUMEROLLIBRESMOSTRAR = 8;
 
     // Spring injectarà automàticament les implementacions (DAO)
     @Autowired
     private UsuariRepository usuariRepo;
-    
+
     @Autowired
     private AgentRepository agentRepo;
-    
+
     // Per englobar les Transaccions les fiquem directament a la capa de servei
     @Autowired
     private PrestecService prestecService;
@@ -52,19 +52,19 @@ public class UsuariController {
     private LlibreService llibreService;
 
     /**
-     * Gestiona les peticions GET a /mostrarUsuaris.
-     * Carrega les llistes d'usuaris i agents i les passa a la vista.
+     * Gestiona les peticions GET a /mostrarUsuaris. Carrega les llistes
+     * d'usuaris i agents i les passa a la vista.
      *
-     * @param model   L'objecte Model de Spring per passar atributs a la vista.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
      * @param session La sessió HTTP per comprovar l'autorització.
      * @return El nom de la vista JSP ("mostrarUsuaris") o una redirecció.
      */
     @GetMapping("/mostrarUsuaris")
     public String mostrarLlistatUsuaris(Model model, HttpSession session) {
-        
+
         // --- Comprovació de Seguretat ---
         SessioUsuari sessioUsuari = (session != null) ? (SessioUsuari) session.getAttribute("sessioUsuari") : null;
-        
+
         // Si no està loguejat o no és ADMIN, redirigim a l'inici
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
             return "redirect:/"; // Redirigim a l'IniciController
@@ -82,31 +82,30 @@ public class UsuariController {
 
             // 3. Retornem el NOM de la vista.
             // El ViewResolver buscarà: /WEB-INF/views/mostrarUsuaris.jsp
-            return "mostrarUsuaris"; 
+            return "mostrarUsuaris";
 
         } catch (Exception e) {
             System.err.println("Error a UsuariController.mostrarLlistatUsuaris: " + e.getMessage());
-            e.printStackTrace(); 
+            e.printStackTrace();
             model.addAttribute("error", "No s'han pogut carregar les dades d'usuaris.");
             // I redirigim a l'inici
             return "redirect:/";
         }
     }
-    
-    
+
     /**
-     * Gestiona les peticions GET a /dashboard_usuari.
-     * Comprova la sessió i mostra el panell de l'usuari.
+     * Gestiona les peticions GET a /dashboard_usuari. Comprova la sessió i
+     * mostra el panell de l'usuari.
      */
     @GetMapping("/dashboard_usuari")
     public String mostrarDashboardUsuari(Model model, HttpSession session) {
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
+
         // Comprovació de seguretat
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.USUARI) {
             return "redirect:/login";
         }
-        
+
         int idUsuari = sessioUsuari.getId();
 
         // Carreguem els llibres destacats primer, fora del try-catch principal.
@@ -123,6 +122,9 @@ public class UsuariController {
             // Carregar prestecs actius
             List<Prestec> meusPrestecs = prestecService.findPrestecsActiusByUsuari(idUsuari);
             model.addAttribute("meusPrestecs", meusPrestecs);
+            // Carregar historial de prèstecs
+            List<Prestec> historial = prestecService.findPrestecsRetornatsByUsuari(idUsuari);
+            model.addAttribute("historialPrestecs", historial);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorCarregantPrestecs", "No s'han pogut carregar els teus préstecs.");
@@ -131,8 +133,7 @@ public class UsuariController {
             // Carregar reserves
             List<Reserva> mevesReserves = reservaService.findReservaByUsuari(idUsuari);
             model.addAttribute("mevesReserves", mevesReserves);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
         }
@@ -140,8 +141,8 @@ public class UsuariController {
     }
 
     /**
-     * Gestiona les peticions GET a /dashboard_bibliotecari.
-     * Comprova la sessió i mostra el panell del bibliotecari.
+     * Gestiona les peticions GET a /dashboard_bibliotecari. Comprova la sessió
+     * i mostra el panell del bibliotecari.
      */
     /*
     @GetMapping("/dashboard_bibliotecari")
@@ -156,10 +157,10 @@ public class UsuariController {
         // TODO: Carregar dades necessàries per a aquest panell (ex: reserves pendents)
         return "dashboard_bibliotecario";
     }
-    */
+     */
     /**
-     * Gestiona les peticions GET a /dashboard_admin.
-     * Comprova la sessió i mostra el panell de l'administrador.
+     * Gestiona les peticions GET a /dashboard_admin. Comprova la sessió i
+     * mostra el panell de l'administrador.
      */
     /*
     @GetMapping("/dashboard_admin")
@@ -176,12 +177,12 @@ public class UsuariController {
         // (En una futura refactorització, aquesta lògica hauria de moure's aquí).
         return "dashboard_admin";
     }
-    */
+     */
     // --- Lògica de Registre ---
-
     /**
-     * Gestiona les peticions GET a /registre.
-     * Mostra la pàgina (formulari) de registre.
+     * Gestiona les peticions GET a /registre. Mostra la pàgina (formulari) de
+     * registre.
+     *
      * @param session La sessió HTTP per comprovar si l'usuari ja està loguejat.
      * @return El nom de la vista JSP ("registre") o una redirecció.
      */
@@ -193,7 +194,7 @@ public class UsuariController {
             // Si ja està loguejat, el redirigim a l'inici
             return "redirect:/";
         }
-        
+
         // Retornem el NOM de la vista.
         // El ViewResolver buscarà: /WEB-INF/views/registre.jsp
         return "registre";
@@ -202,13 +203,13 @@ public class UsuariController {
     /**
      * Processa l'enviament del formulari de registre (POST a /registre).
      *
-     * @param nom              Nom de l'usuari.
-     * @param cognoms          Cognoms de l'usuari.
-     * @param email            Email de l'usuari.
+     * @param nom Nom de l'usuari.
+     * @param cognoms Cognoms de l'usuari.
+     * @param email Email de l'usuari.
      * @param contrasenyaPlana Contrasenya en text pla (name="contrasenya").
-     * @param telefon          Telèfon (opcional).
-     * @param model            Model per afegir errors (si fem forward).
-     * @param redirectAttrs    Atributs per afegir missatges (si fem redirect).
+     * @param telefon Telèfon (opcional).
+     * @param model Model per afegir errors (si fem forward).
+     * @param redirectAttrs Atributs per afegir missatges (si fem redirect).
      * @return Redirecció al login (èxit) o forward a registre (error).
      */
     @PostMapping("/registre")
@@ -223,7 +224,7 @@ public class UsuariController {
 
         // 1. Comprovar si l'usuari ja existeix
         Usuari usuariExistent = usuariRepo.getUsuariByEmail(email);
-        
+
         if (usuariExistent != null) {
             // Error: L'email ja existeix
             model.addAttribute("error", "Aquest correu electrònic ja està registrat.");
@@ -241,40 +242,44 @@ public class UsuariController {
         nouUsuari.setEmail(email);
         nouUsuari.setTelefon(telefon);
         nouUsuari.setContrasenya(contrasenyaHashejada); // Guardem el hash
-        
+
         usuariRepo.saveUsuari(nouUsuari);
 
         // 4. Redirigim al login amb un missatge d'èxit
         redirectAttrs.addFlashAttribute("success", "Registre completat! Ara pots iniciar sessió.");
         return "redirect:/login"; // Redirigim a la URL del LoginController
     }
-    
-     // --- INICI NOU CODI PER "EDITAR PERFIL" ---
 
+    // --- INICI NOU CODI PER "EDITAR PERFIL" ---
     /**
-     * Gestiona les peticions GET a /perfil.
-     * Mostra la pàgina (formulari) d'edició de perfil de l'usuari loguejat.
+     * Gestiona les peticions GET a /perfil. Mostra la pàgina (formulari)
+     * d'edició de perfil de l'usuari loguejat.
      *
      * @param session La sessió HTTP per obtenir l'ID de l'usuari.
-     * @param model El model de Spring per passar les dades de l'usuari a la vista.
+     * @param model El model de Spring per passar les dades de l'usuari a la
+     * vista.
      * @return El nom de la vista JSP ("editarPerfil") o una redirecció.
      */
     @GetMapping("/perfil")
     public String mostrarFormulariPerfil(HttpSession session, Model model) {
-        
+
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
+
         // Comprovació de seguretat: si no està loguejat, fora.
         if (sessioUsuari == null) {
             return "redirect:/login";
         }
-        
+
         // Només els Usuaris (lectors) poden editar el seu perfil aquí.
         if (sessioUsuari.getRol() != Rol.USUARI) {
             model.addAttribute("error", "Els administradors o bibliotecaris no poden editar el seu perfil aquí.");
             // Redirigim al dashboard corresponent
-            if (sessioUsuari.getRol() == Rol.ADMIN) return "redirect:/dashboard_admin";
-            if (sessioUsuari.getRol() == Rol.BIBLIOTECARI) return "redirect:/dashboard_bibliotecari";
+            if (sessioUsuari.getRol() == Rol.ADMIN) {
+                return "redirect:/dashboard_admin";
+            }
+            if (sessioUsuari.getRol() == Rol.BIBLIOTECARI) {
+                return "redirect:/dashboard_bibliotecari";
+            }
             return "redirect:/";
         }
 
@@ -286,7 +291,7 @@ public class UsuariController {
                 session.invalidate();
                 return "redirect:/login?error=SessioInvalida";
             }
-            
+
             // Passem l'objecte Usuari a la vista
             model.addAttribute("usuari", usuariComplet);
             return "editarPerfil"; // Busca /WEB-INF/views/editarPerfil.jsp
@@ -319,7 +324,7 @@ public class UsuariController {
             RedirectAttributes redirectAttrs) {
 
         SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
+
         if (sessioUsuari == null || sessioUsuari.getRol() != Rol.USUARI) {
             return "redirect:/login"; // Comprovació de seguretat
         }
@@ -334,7 +339,6 @@ public class UsuariController {
             }
 
             // --- INICI DE LA CORRECCIÓ DE LÒGICA ---
-            
             // 1. Obtenim l'usuari complet de la BBDD (per conservar dades que no són al formulari, com la contrasenya o els favorits)
             Usuari usuariPerActualitzar = usuariRepo.findUsuariById(sessioUsuari.getId());
 
@@ -343,18 +347,17 @@ public class UsuariController {
             usuariPerActualitzar.setCognoms(cognoms);
             usuariPerActualitzar.setEmail(email);
             usuariPerActualitzar.setTelefon(telefon);
-            
+
             // 3. Cridem al mètode updatePerfil (que ara sí que desa els favorits)
             usuariRepo.updatePerfil(usuariPerActualitzar);
-            
+
             // 4. Creem un NOU objecte SessioUsuari amb les dades refrescades
             SessioUsuari novaSessioUsuari = new SessioUsuari(usuariPerActualitzar);
-            
+
             // 5. Substituïm l'objecte antic a la sessió
             session.setAttribute("sessioUsuari", novaSessioUsuari);
 
             // --- FI DE LA CORRECCIÓ DE LÒGICA ---
-
             redirectAttrs.addFlashAttribute("success", "Perfil actualitzat correctament!");
             return "redirect:/dashboard_usuari";
 
