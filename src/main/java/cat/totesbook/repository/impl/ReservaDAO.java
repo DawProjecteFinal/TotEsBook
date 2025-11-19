@@ -1,5 +1,6 @@
 package cat.totesbook.repository.impl;
 
+import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Usuari;
@@ -17,6 +18,13 @@ public class ReservaDAO implements ReservaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Troba només una rserva pendent
+     *
+     * @param usuari
+     * @param llibre
+     * @return
+     */
     @Override
     public Optional<Reserva> findReservaPendent(Usuari usuari, Llibre llibre) {
 
@@ -55,6 +63,19 @@ public class ReservaDAO implements ReservaRepository {
                 Reserva.class
         )
                 .setParameter("idUsuari", idUsuari)
+                .getResultList();
+    }
+
+    @Override
+    public List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca) {
+        return entityManager.createQuery(
+                "SELECT r FROM Reserva r "
+                + "JOIN BibliotecaLlibre bl ON bl.llibre = r.llibre "
+                + "WHERE bl.biblioteca = :biblio "
+                + "AND r.estat = :estat",
+                Reserva.class)
+                .setParameter("biblio", biblioteca)
+                .setParameter("estat", Reserva.EstatReserva.pendent)
                 .getResultList();
     }
 

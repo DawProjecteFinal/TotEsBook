@@ -40,4 +40,27 @@ public class PrestecController {
         }
         return "redirect:/dashboard_bibliotecari";
     }
+    
+    // Endpoint per renovar préstec
+    @PostMapping("/renovar")
+    public String renovarPrestec(@RequestParam("idPrestec") Integer idPrestec,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
+
+        try {
+            SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+            if (sessio == null) {
+                return "redirect:/login";
+            }
+
+            prestecService.renovarPrestec(idPrestec);
+            redirectAttributes.addFlashAttribute("missatge", "Préstec renovat correctament (+30 dies).");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error",
+                    "No s'ha pogut renovar el préstec: " + e.getMessage());
+        }
+
+        return "redirect:/dashboard_bibliotecari";
+    }
 }

@@ -10,6 +10,7 @@ package cat.totesbook.domain;
  */
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "Reserves")
@@ -40,7 +41,13 @@ public class Reserva {
 
     public Reserva() {
     }
-
+    
+    // --- MÈTODE PER A FORMATAR LA DATA ---
+    public String getDataReservaFormatted() {
+        if (dataReserva == null) return "";
+        return dataReserva.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
     // Getters i Setters
     public int getIdReserva() {
         return idReserva;

@@ -7,6 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
+
 <html lang="ca">
     <head>
         <meta charset="UTF-8">
@@ -15,10 +16,12 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     </head>
 
     <body>
+
 
         <!-- ===== Encapçalat ===== -->
         <header class="bg-tot py-1">
@@ -42,6 +45,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
@@ -153,6 +157,7 @@
                 </div>
             </div>
         </nav>
+
         <!-- ===== FI Menu ===== -->
 
         <!-- ===== Secció Principal de Contingut ===== -->
@@ -252,7 +257,7 @@
                                             <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
                                         </ul>
                                         <div class="mt-auto text-center">
-                                            <%-- CORRECCIÓ: L'enllaç ha d'apuntar al controlador /llibre --%>
+                                            <%-- L'enllaç ha d'apuntar al controlador /llibre --%>
                                             <a class="btn btn-tot mt-auto w-100" href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">Més informació</a>
                                         </div>
 
@@ -305,3 +310,4 @@
             <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
         </body>
     </html>
+

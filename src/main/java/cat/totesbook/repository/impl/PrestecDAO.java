@@ -102,7 +102,7 @@ public class PrestecDAO implements PrestecRepository {
     /**
      * Metode que retorna tots els prestecs actius d'un ususari per a
      * mostrar-los a la pàgina inicial del usuari
-    *
+     *
      */
     @Override
     public List<Prestec> findPrestecsActiusByUsuari(int idUsuari) {
@@ -117,6 +117,35 @@ public class PrestecDAO implements PrestecRepository {
                 .setParameter("idUsuari", idUsuari)
                 .setParameter("estat", EstatPrestec.actiu)
                 .getResultList();
+    }
+    
+    @Override
+    public Optional<Prestec> findById(Integer idPrestec) {
+        Prestec prestec = entityManager.find(Prestec.class, idPrestec);
+        return prestec != null ? Optional.of(prestec) : Optional.empty();
+    }
+
+    @Override
+    public void save(Prestec prestec) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
+        try {
+            return entityManager.createQuery(
+                    "SELECT p FROM Prestec p "
+                    + "WHERE p.usuari.id = :idUsuari "
+                    + "AND p.estat IN (:retornat, :retard) "
+                    + "ORDER BY p.dataDevolucio DESC",
+                    Prestec.class
+            )
+                    .setParameter("idUsuari", idUsuari)
+                    .setParameter("retornat", EstatPrestec.retornat)
+                    .setParameter("retard", EstatPrestec.retard)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
 }

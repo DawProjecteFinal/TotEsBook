@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!DOCTYPE html>
 <html lang="ca">
     <head>
@@ -154,6 +155,13 @@
                     </div>
                 </div>
 
+                <!-- BOTÓ PER AFEGIR USUARI AL PANELL DE BIBLIOTECARI -->
+                <div class="d-flex justify-content-end mb-3">
+                    <a href="${pageContext.request.contextPath}/bibliotecari/nou-usuari" class="btn btn-success shadow-sm">
+                        <i class="bi bi-person-plus-fill"></i> Registrar Nou Lector
+                    </a>
+                </div>
+                
                 <!-- ===== Pestanyes ===== -->
                 <ul class="nav nav-tabs mb-4" id="tabsBibliotecari" role="tablist">
                     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prestecs">Préstecs actius</button></li>
@@ -174,6 +182,9 @@
                                         <th>ISBN</th>
                                         <th>Usuari</th>
                                         <th>Data Préstec</th>
+                                        <th>Data Devolució</th>
+                                        <th>Data Venciment</th>
+                                        <th>Accions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -181,7 +192,25 @@
                                         <tr>
                                             <td>${p.llibre.isbn}</td>
                                             <td>${p.usuari.nom} ${p.usuari.cognoms}</td>
-                                            <td>${p.dataPrestec}</td>
+                                            <<td>${p.dataPrestecFormatted}</td>
+                                            <td>
+                                                <span class="badge bg-success text-dark">
+                                                    ${p.dataDevolucioFormatted}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-danger text-dark">
+                                                    ${p.dataVencimentCalculada}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/gestionarPrestec/renovar" method="POST" class="d-inline">
+                                                    <input type="hidden" name="idPrestec" value="${p.idPrestec}">
+                                                    <button type="submit" class="btn btn-sm btn-warning">
+                                                        <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
 
@@ -210,11 +239,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%-- Iterar sobre la llista de reserves pendents --%>
-                                    <tr>
-                                        <td colspan="4" class="text-center">No hi ha reserves pendents.</td>
-                                    </tr>
+                                    <c:choose>
+                                        <c:when test="${empty reservesPendents}">
+                                            <tr>
+                                                <td colspan="4" class="text-center">No hi ha reserves pendents.</td>
+                                            </tr>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <c:forEach var="r" items="${reservesPendents}">
+                                                <tr>
+                                                    <td>${r.llibre.titol}</td>
+                                                    <td>${r.usuari.nom} ${r.usuari.cognoms}</td>
+                                                    <td>${r.dataReservaFormatted}</td>È
+                                                    <td>
+                                                        <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
+                                                           class="btn btn-sm btn-primary">
+                                                            Gestionar
+                                                        </a>
+                                                    </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -267,8 +316,8 @@
                                                 <tr>
                                                     <td>${dev.llibre.titol}</td>
                                                     <td>${dev.usuari.email}</td>
-                                                    <td>${dev.dataPrestec}</td>
-                                                    <td>${dev.dataDevolucio}</td>
+                                                    <td>${dev.dataPrestecFormatted}</td>
+                                                    <td>${dev.dataDevolucioFormatted}</td>
                                                     <td>${dev.agentDevolucio.nom}</td>
                                                 </tr>
                                             </c:forEach>
@@ -304,10 +353,6 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
-
-
-
-
 
                     </div>
                 </div>

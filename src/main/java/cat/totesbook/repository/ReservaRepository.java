@@ -1,5 +1,6 @@
 package cat.totesbook.repository;
 
+import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Usuari;
@@ -17,4 +18,6 @@ public interface ReservaRepository {
     void crearReserva(Reserva reserva);
 
     List<Reserva> findByUsuari(int idUsuari);
+    
+    List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca);
 }

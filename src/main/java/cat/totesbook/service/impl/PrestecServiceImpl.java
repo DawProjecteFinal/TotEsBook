@@ -52,6 +52,7 @@ public class PrestecServiceImpl implements PrestecService {
 
         // Buscar usuari
         Usuari usuari = usuariRepository.getUsuariByEmail(emailUsuari);
+        
         if (usuari == null) {
             throw new RuntimeException("No s'ha trobat cap usuari amb aquest email.");
         }
@@ -157,6 +158,26 @@ public class PrestecServiceImpl implements PrestecService {
     @Override
     public List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca) {
         return prestecRepository.findDevolucionsByBiblioteca(biblioteca);
+    }
+
+    // Implementació per renovar préstec
+    @Override
+    @Transactional
+    public void renovarPrestec(Integer idPrestec) {
+        
+        Prestec p = prestecRepository.findById(idPrestec)
+            .orElseThrow(() -> new IllegalArgumentException("Préstec no trobat"));
+
+        LocalDateTime novaDataInici = p.getDataPrestec().plusDays(30);
+        p.setDataPrestec(novaDataInici);
+        
+        prestecRepository.updatePrestec(p); 
+
+        //prestecRepository.save(p);
+    }
+    @Override
+    public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
+        return prestecRepository.findPrestecsRetornatsByUsuari(idUsuari);
     }
 
 }

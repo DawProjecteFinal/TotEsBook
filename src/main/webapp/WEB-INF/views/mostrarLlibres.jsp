@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
@@ -17,12 +18,14 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 
     </head>
     <body  class="bg-light">
 
         <!-- Encapçalat -->
+
         <header class="bg-tot py-1">
             <div class="container px-4 px-lg-5 my-1">
                 <div class="text-center text-white">
@@ -47,6 +50,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
@@ -110,7 +114,6 @@
                             </button>
                         </form>
 
-
                         <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió <i class="bi bi-person-circle"></i></a>
                     </div>
                 </div>
@@ -118,6 +121,7 @@
         </nav>
 
         <div class="container py-4">
+
             <!-- Títol dinàmic -->
             <c:choose>
                 <%-- Cerca per títol --%>
@@ -197,12 +201,14 @@
                     </c:choose>
                 </div>
             </c:if>
+            
 
             <!-- Llistat de llibres -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 <c:forEach var="llibre" items="${llibres}">
                     <div class="col">
                         <div class="card h-100 shadow-sm">
+
                             <img src="${llibre.imatgeUrl}"
                                  class="card-img-top img-fixed mx-auto d-block"
                                  alt="Portada de ${llibre.titol}">
@@ -262,6 +268,8 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
         <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
 </html>
+

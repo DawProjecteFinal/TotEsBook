@@ -4,6 +4,7 @@ import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Prestec;
+import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
 
@@ -13,6 +14,7 @@ import cat.totesbook.service.BibliotecaService;
 import cat.totesbook.service.LlibreService;
 import cat.totesbook.service.PrestecService;
 import cat.totesbook.service.UsuariService;
+import cat.totesbook.service.ReservaService;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -47,6 +49,9 @@ public class DashboardController {
     @Autowired
     private BibliotecaLlibreService bibliotecaLlibreService;
 
+    @Autowired
+    private ReservaService reservaService;
+
     @GetMapping("/dashboard_bibliotecari")
     public String mostrarDashboardBibliotecari(Model model, HttpSession session) {
 
@@ -70,14 +75,16 @@ public class DashboardController {
 
         List<Prestec> prestecsActius = prestecService.findActiusByBiblioteca(biblioteca);
         List<Prestec> devolucions = prestecService.findDevolucionsByBiblioteca(biblioteca);
+        List<Reserva> reservesPendents = reservaService.findReservesPendentsByBiblioteca(biblioteca);
 
         model.addAttribute("numPrestecsActius", prestecsActius.size());
         model.addAttribute("numDevolucionsPendents", devolucions.size());
-        model.addAttribute("numReservesPendents", 0);
+        model.addAttribute("numReservesPendents", reservesPendents.size());
         model.addAttribute("numLlibresRetard", 0);
 
         model.addAttribute("prestecsActius", prestecsActius);
         model.addAttribute("devolucions", devolucions);
+        model.addAttribute("reservesPendents", reservesPendents);
         model.addAttribute("biblioteca", biblioteca);
 
         return "dashboard_bibliotecari";
@@ -142,3 +149,4 @@ public class DashboardController {
         return "dashboard_administrador";
     }
 }
+
