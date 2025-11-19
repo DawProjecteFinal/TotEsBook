@@ -180,4 +180,35 @@ public class PrestecServiceImpl implements PrestecService {
         return prestecRepository.findPrestecsRetornatsByUsuari(idUsuari);
     }
 
+    // --- MÈTODE NOU: RETORN RÀPID PRÈSTEC AMB BOTÓ ---
+    @Override
+    public void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari) {
+        Prestec prestec = prestecRepository.findById(idPrestec)
+                .orElseThrow(() -> new RuntimeException("No s'ha trobat el préstec amb ID: " + idPrestec));
+        
+        if (prestec.getDataDevolucio() != null) {
+            throw new RuntimeException("Aquest préstec ja ha estat retornat.");
+        }
+
+        finalitzarPrestec(prestec, idAgentBibliotecari);
+    }
+
+    // Mètode privat per no duplicar codi entre les dues formes de retornar
+    private void finalitzarPrestec(Prestec prestec, Integer idAgentBibliotecari) {
+        Agent agent = agentRepository.getAgentById(idAgentBibliotecari);
+        
+        // 1. Tancar el préstec
+        prestec.setDataDevolucio(LocalDateTime.now());
+        prestec.setAgentDevolucio(agent);
+        prestec.setEstat(EstatPrestec.retornat);
+        prestecRepository.updatePrestec(prestec);
+
+        // 2. Incrementar l'estoc
+        Optional<BibliotecaLlibre> optBL = bibliotecaLlibreRepository.findByBibliotecaAndLlibre(prestec.getBiblioteca(), prestec.getLlibre());
+        if (optBL.isPresent()) {
+            BibliotecaLlibre bl = optBL.get();
+            bl.setDisponibles(bl.getDisponibles() + 1);
+            bibliotecaLlibreRepository.updateBibliotecaLlibre(bl);
+        }
+    }
 }

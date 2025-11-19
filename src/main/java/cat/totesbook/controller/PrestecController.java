@@ -41,7 +41,7 @@ public class PrestecController {
         return "redirect:/dashboard_bibliotecari";
     }
     
-    // Endpoint per renovar préstec
+    // --- ENDPOINT PER RENOVAR PRÉSTEC ---
     @PostMapping("/renovar")
     public String renovarPrestec(@RequestParam("idPrestec") Integer idPrestec,
                                  HttpSession session,
@@ -61,6 +61,25 @@ public class PrestecController {
                     "No s'ha pogut renovar el préstec: " + e.getMessage());
         }
 
+        return "redirect:/dashboard_bibliotecari";
+    }
+    
+    // --- NOU ENDPOINT PER A DEVOLUCIÓ RÀPIDA AMB BOTÓ ---
+    @PostMapping("/retornar")
+    public String retornarPrestec(@RequestParam("idPrestec") Integer idPrestec,
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+            if (sessio == null) return "redirect:/login";
+
+            // Cridem al nou mètode del servei passant l'ID del préstec i l'ID del bibliotecari
+            prestecService.retornarPrestec(idPrestec, sessio.getId());
+            
+            redirectAttributes.addFlashAttribute("missatge", "Devolució registrada correctament.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error devolució: " + e.getMessage());
+        }
         return "redirect:/dashboard_bibliotecari";
     }
 }

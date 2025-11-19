@@ -204,10 +204,19 @@
                                                 </span>
                                             </td>
                                             <td>
+                                                <!-- BOTÓ RENOVARÓ -->
                                                 <form action="${pageContext.request.contextPath}/gestionarPrestec/renovar" method="POST" class="d-inline">
                                                     <input type="hidden" name="idPrestec" value="${p.idPrestec}">
                                                     <button type="submit" class="btn btn-sm btn-warning">
                                                         <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
+                                                    </button>
+                                                </form>
+                                                
+                                                <!-- BOTÓ RETORNAR -->
+                                                <form action="${pageContext.request.contextPath}/gestionarPrestec/retornar" method="POST">
+                                                    <input type="hidden" name="idPrestec" value="${p.idPrestec}">
+                                                    <button type="submit" class="btn btn-sm btn-success" title="Registrar Devolució">
+                                                        <i class="bi bi-box-arrow-in-down-left"></i> Tornar
                                                     </button>
                                                 </form>
                                             </td>

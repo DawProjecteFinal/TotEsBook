@@ -47,10 +47,7 @@ public class UsuariServiceImpl implements UsuariService {
              String hashedPassword = BCrypt.hashpw(usuari.getContrasenya(), BCrypt.gensalt(12));
              usuari.setContrasenya(hashedPassword);
         }
-        
-        // ELIMINAT: u.setRol(...) perquè ja no existeix a l'entitat ni a la BD.
-        // L'entitat Usuari retorna sempre Rol.USUARI pel seu mètode getRol().
-
+ 
         usuariRepository.saveUsuari(usuari);
     }
 

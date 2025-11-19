@@ -20,7 +20,12 @@ public interface PrestecService {
     
     List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
     
-    // Mètode per renovar préstec
+    // Mètodes per renovar préstec
     void renovarPrestec(Integer idPrestec);
+    
     List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari);
+    // ---------
+    
+    // Mètode per registar la devolució d'un prèstec amb el botó
+    void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari);
 }
