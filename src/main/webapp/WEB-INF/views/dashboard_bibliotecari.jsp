@@ -155,6 +155,13 @@
                     </div>
                 </div>
 
+                <!-- BOTÓ PER AFEGIR USUARI AL PANELL DE BIBLIOTECARI -->
+                <div class="d-flex justify-content-end mb-3">
+                    <a href="${pageContext.request.contextPath}/bibliotecari/nou-usuari" class="btn btn-success shadow-sm">
+                        <i class="bi bi-person-plus-fill"></i> Registrar Nou Lector
+                    </a>
+                </div>
+                
                 <!-- ===== Pestanyes ===== -->
                 <ul class="nav nav-tabs mb-4" id="tabsBibliotecari" role="tablist">
                     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prestecs">Préstecs actius</button></li>
@@ -346,10 +353,6 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
-
-
-
-
 
                     </div>
                 </div>

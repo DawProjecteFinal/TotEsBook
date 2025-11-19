@@ -12,6 +12,7 @@ import cat.totesbook.repository.UsuariRepository;
 import cat.totesbook.service.LlibreService;
 import cat.totesbook.service.ReservaService;
 import cat.totesbook.service.PrestecService;
+import cat.totesbook.service.UsuariService;
 
 import jakarta.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
@@ -50,6 +51,9 @@ public class UsuariController {
 
     @Autowired
     private LlibreService llibreService;
+    
+    @Autowired
+    private UsuariService usuariService;
 
     /**
      * Gestiona les peticions GET a /mostrarUsuaris. Carrega les llistes
@@ -369,4 +373,48 @@ public class UsuariController {
         }
     }
     // --- FI NOU CODI PER "EDITAR PERFIL" ---
+    
+    // --- MÈTODES PER A CREAR USUARIS DES DEL PANELL BIBLIOTECARI ---
+
+    // 1. Mostrar el formulari (GET)
+    @GetMapping("/bibliotecari/nou-usuari")
+    public String vistaCrearUsuari(HttpSession session, Model model) {
+        SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+        
+        // Seguretat: Només bibliotecari
+        if (sessio == null || sessio.getRol() != Rol.BIBLIOTECARI) {
+            return "redirect:/login";
+        }
+        return "nou_usuari"; // Nom del fitxer JSP 
+    }
+
+    // 2. Processar la creació (POST)
+    @PostMapping("/bibliotecari/crear-usuari")
+    public String crearUsuari(@RequestParam String nom,
+                              @RequestParam String cognoms,
+                              @RequestParam String telefon,
+                              @RequestParam String email,
+                              @RequestParam String password,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+        
+        SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+        if (sessio == null || sessio.getRol() != Rol.BIBLIOTECARI) {
+            return "redirect:/login";
+        }
+
+        try {
+            // Cridem al servei
+            usuariService.crearLectorManual(nom, cognoms, telefon, email, password);
+            
+            redirectAttributes.addFlashAttribute("missatge", "Nou usuari lector registrat correctament.");
+        } catch (Exception e) {
+            // Si falla (ex: email duplicat), tornem al formulari amb l'error
+            redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
+            return "redirect:/bibliotecari/nou-usuari"; 
+        }
+
+        // Si tot va bé, tornem al dashboard
+        return "redirect:/dashboard_bibliotecari";
+    }
 }
