@@ -1,7 +1,7 @@
 <%-- 
     Document   : dashboard_usuari.jsp
     Created on : 23 oct 2025, 14:26:50
-    Author     : edinsonioc
+    Author     : equip totesbook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -290,7 +290,7 @@
                             <div class="card-body">
                                 <p>Has trobat a faltar algun llibre? Fes-nos una proposta!</p>
 
-                                <button class="btn btn-sm btn-tot w-100">Fer una Proposta</button>
+                                <a href="${pageContext.request.contextPath}/propostes/formulari_proposta" class="btn btn-sm btn-tot w-100">Fer una Proposta</a>
                             </div>
                         </div>
                     </div>
