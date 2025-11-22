@@ -107,7 +107,7 @@ public class GoogleBooksService {
 
     public List<Llibre> cercarLlibres(String titol, String autor, String isbn) {
         try {
-            // PRIORITAT: si hi ha ISBN, fem cerca directa cridant al metod anterior
+            // Prioritzem primer si hi ha ISBN, fem cerca directa cridant al metod anterior
             if (isbn != null && !isbn.isBlank()) {
                 Optional<Llibre> llibreOpt = getLlibreByIsbn(isbn);
                 return llibreOpt.map(List::of).orElse(List.of());
@@ -182,6 +182,6 @@ public class GoogleBooksService {
             System.err.println("Error consultant Google Books: " + e.getMessage());
             return List.of();
         }
-    }
-
+              
+    } 
 }

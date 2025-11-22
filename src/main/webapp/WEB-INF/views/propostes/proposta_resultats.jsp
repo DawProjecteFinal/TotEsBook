@@ -40,6 +40,28 @@
                         </h4>
                     </div>
 
+                    <!-- Informació dels criteris de cerca -->
+                    <div class="mb-3 p-3 bg-light border rounded">
+
+                        <h5 class="mb-2 text-secondary">
+                            <i class="bi bi-funnel-fill me-2"></i> Criteris de la cerca:
+                        </h5>
+
+                        <ul class="mb-0">
+                            <c:if test="${not empty titol}">
+                                <li><strong>Títol:</strong> ${titol}</li>
+                                </c:if>
+
+                            <c:if test="${not empty autor}">
+                                <li><strong>Autor:</strong> ${autor}</li>
+                                </c:if>
+
+                            <c:if test="${not empty isbn}">
+                                <li><strong>ISBN:</strong> ${isbn}</li>
+                                </c:if>
+                        </ul>
+                    </div>
+
                     <div class="card-body">
 
                         <!-- Si no hi ha resultats -->
@@ -115,21 +137,18 @@
 
                                             <div class="card-footer text-center bg-white">
 
-                                                <!-- Botó Seleccionar: envia els camps al pròxim formulari -->
-                                                <form action="${pageContext.request.contextPath}/propostes/seleccionar" method="POST">
+                                                <input type="hidden" name="isbn" value="${llibre.isbn}">
+                                                <input type="hidden" name="titol" value="${llibre.titol}">
+                                                <input type="hidden" name="autor" value="${llibre.autor}">
+                                                <input type="hidden" name="editorial" value="${llibre.editorial}">
+                                                <input type="hidden" name="categoria" value="${llibre.categoria}">
+                                                <input type="hidden" name="imatgeUrl" value="${llibre.imatgeUrl}">
+                                                <input type="hidden" name="idioma" value="${llibre.idioma}">
 
-                                                    <input type="hidden" name="isbn" value="${llibre.isbn}">
-                                                    <input type="hidden" name="titol" value="${llibre.titol}">
-                                                    <input type="hidden" name="autor" value="${llibre.autor}">
-                                                    <input type="hidden" name="editorial" value="${llibre.editorial}">
-                                                    <input type="hidden" name="categoria" value="${llibre.categoria}">
-                                                    <input type="hidden" name="imatgeUrl" value="${llibre.imatgeUrl}">
-                                                    <input type="hidden" name="idioma" value="${llibre.idioma}">
-
-                                                    <button class="btn btn-primary w-100">
-                                                        <i class="bi bi-check-circle"></i> Seleccionar
-                                                    </button>
-                                                </form>
+                                                <a href="${pageContext.request.contextPath}/propostes/llibre?isbn=${llibre.isbn}&mode=proposta"
+                                                   class="btn btn-primary w-100">
+                                                    <i class="bi bi-eye"></i> Seleccionar
+                                                </a>
 
                                             </div>
                                         </div>
@@ -140,7 +159,7 @@
 
                             <!-- Botó per tornar a la cerca -->
                             <div class="mt-4">
-                                <a href="${pageContext.request.contextPath}/propostes/nova" 
+                                <a href="${pageContext.request.contextPath}/propostes/buscar_proposta" 
                                    class="btn btn-secondary">
                                     <i class="bi bi-arrow-left"></i> Tornar a la cerca
                                 </a>
