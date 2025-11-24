@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Bibliotecari</title>
     </head>
     <body>
         <div class="alert alert-warning shadow-sm mt-5">

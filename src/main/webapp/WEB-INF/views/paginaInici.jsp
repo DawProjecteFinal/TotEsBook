@@ -169,7 +169,7 @@
                             <div class="col-lg-6 text-center">
                                 <h2 class="text-tot-bold">Benvingut/da de nou, <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>!</h2>
                                 <p class="text-tot-light">Explora el nostre catàleg o gestiona els teus préstecs.</p>
-                                <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-tot">Veure Catàleg</a>
+                                <a href="${pageContext.request.contextPath}/mostrarLlibres" class="btn btn-tot">Veure Catàleg</a>
                             </div>
                         </c:when>
                         <c:otherwise>

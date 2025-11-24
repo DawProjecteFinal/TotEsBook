@@ -65,8 +65,39 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
-                    </ul>
+                        <!-- Dropdown + formulari cerca avançada -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Cerca avançada
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownAdvanced">
+                                <li><a class="dropdown-item" href="#" data-field="autor">Autor</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#" data-field="idioma">Idioma</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
+                            </ul>
+                        </li>
+                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/cercar'/>">
+                            <input type="hidden" name="field" id="field" value="">
 
+                            <div id="searchGroup" class="input-group d-none">
+                                <!-- Input de text per autor / isbn -->
+                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off"
+                                       required oninvalid="this.setCustomValidity('Aquest camp és obligatori')" oninput="this.setCustomValidity('')" />
+                                <select id="idiomaSelect" class="form-select form-select-sm me-2 d-none">
+                                    <option value="">Tria l'idioma</option>
+                                    <option value="ca">Català</option>
+                                    <option value="es">Castellà</option>
+                                </select>
+
+                                <button class="btn btn-tot btn-sm" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </ul>
+                    <!-- Cerca per títol -->            
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
@@ -79,7 +110,39 @@
                         </form>
 
 
-                        <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió <i class="bi bi-person-circle"></i></a>
+                        <%-- Lògica de Sessió per a Login/Logout --%>
+                        <c:choose>
+                            <c:when test="${empty sessionScope.sessioUsuari}">
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
+                                    Inicia sessió <i class="bi bi-person-circle"></i>
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="dropdown">
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
+                                        <c:choose>
+                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                                </c:when>
+                                            </c:choose>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
+                                                <i class="bi bi-box-arrow-right"></i> Tancar Sessió
+                                            </a></li>
+                                    </ul>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
@@ -141,5 +204,6 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
 </html>
