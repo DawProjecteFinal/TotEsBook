@@ -1,14 +1,14 @@
-/**
- *
- * @author Equip TotEsBook
- */
 
 package cat.totesbook.domain;
-
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 @Entity
 @Table(name = "Reserves")

@@ -8,6 +8,7 @@ package cat.totesbook.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "PropostesAdquisicio")
@@ -21,9 +22,8 @@ public class PropostaAdquisicio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProposta;
 
-    @ManyToOne
-    @JoinColumn(name = "idUsuari", nullable = false)
-    private Usuari usuari;
+    @Column(name = "idUsuari", nullable = false)
+    private Integer idUsuari;
 
     @Column(nullable = false)
     private String titol;
@@ -54,12 +54,12 @@ public class PropostaAdquisicio {
         this.idProposta = idProposta;
     }
 
-    public Usuari getUsuari() {
-        return usuari;
+    public int getIdUsuari() {
+        return idUsuari;
     }
 
-    public void setUsuari(Usuari usuari) {
-        this.usuari = usuari;
+    public void setIdUsuari(int idUsuari) {
+        this.idUsuari = idUsuari;
     }
 
     public String getTitol() {
@@ -125,4 +125,14 @@ public class PropostaAdquisicio {
     public void setResposta(String resposta) {
         this.resposta = resposta;
     }
+
+    /**
+     * Per a formatar les dates
+     * @return
+     */
+    public String getDataPropostaFormatted() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return dataProposta != null ? dataProposta.format(fmt) : "";
+    }
+
 }

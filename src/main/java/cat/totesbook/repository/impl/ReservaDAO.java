@@ -84,4 +84,17 @@ public class ReservaDAO implements ReservaRepository {
                 .getResultList();
     }
 
+    @Override
+    public void deleteById(Integer idReserva) {
+        Reserva r = entityManager.find(Reserva.class, idReserva);
+        if (r != null) {
+            entityManager.remove(r);
+        }
+    }
+
+    @Override
+    public Reserva findByIdReserva(int idReserva) {
+        return entityManager.find(Reserva.class, idReserva);
+    }
+
 }

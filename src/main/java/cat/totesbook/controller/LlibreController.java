@@ -119,7 +119,9 @@ public class LlibreController {
      * troba.
      */
     @GetMapping("/llibre")
-    public String mostrarFitxaLlibre(@RequestParam("isbn") String isbn, Model model, RedirectAttributes redirectAttrs) {
+    public String mostrarFitxaLlibre(@RequestParam("isbn") String isbn,
+            @RequestParam(value = "mode", required = false, defaultValue = "reserva") String mode,
+            Model model, RedirectAttributes redirectAttrs) {
         try {
             // Busquem el llibre pel seu ISBN a través del servei
             Optional<Llibre> llibreOpt = llibreService.getLlibreByIsbn(isbn);
@@ -127,6 +129,8 @@ public class LlibreController {
             if (llibreOpt.isPresent()) {
                 // Si el llibre existeix, l'afegim al model i mostrem la vista
                 model.addAttribute("llibre", llibreOpt.get());
+                model.addAttribute("mode", mode);      // Per a saber que crida a la fitxa del llibre
+                
                 return "fitxa_llibre"; // El ViewResolver buscarà /WEB-INF/views/fitxa_llibre.jsp
             } else {
                 // Si no es troba, redirigim a l'inici amb un missatge d'error

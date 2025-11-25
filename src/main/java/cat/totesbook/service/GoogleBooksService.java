@@ -1,24 +1,32 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Llibre;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
+
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 @Service
 public class GoogleBooksService {
 
     // CONSTANTS GLOBALS
     private static final String GOOGLE_BOOKS_API_BASE_URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
+    private static final String GOOGLE_BOOKS_API_CONSULTA_AVANCADA = "https://www.googleapis.com/books/v1/volumes?q=";
     private static final String TITOL_DEFECTE = "Títol desconegut";
     private static final String EDITORIAL_DEFECTE = "Editorial desconeguda";
     private static final String SINOPSIS_DEFECTE = "Sense sinopsis.";
@@ -82,26 +90,116 @@ public class GoogleBooksService {
     /**
      * Importa i guarda un llibre a la BD si no existeix.
      */
-    public void importarILlibrePerIsbn(String isbn) {
+    public List<Llibre> cercarLlibres(String titol, String autor, String isbn) {
         try {
-            Optional<Llibre> optLlibre = getLlibreByIsbn(isbn);
-            if (optLlibre.isPresent()) {
-                Llibre llibre = optLlibre.get();
 
-                Optional<Llibre> existent = llibreService.getLlibreByIsbn(isbn);
-                if (existent.isPresent()) {
-                    System.out.println("Llibre amb ISBN " + isbn + " ja existeix.");
-                    return;
-                }
-
-                System.out.println("Guardant llibre: " + llibre.getTitol());
-                llibreService.guardarLlibre(llibre);
-
-            } else {
-                System.out.println("No s'ha trobat llibre per ISBN " + isbn);
+            // Si hi ha ISBN → cerca directa
+            if (isbn != null && !isbn.isBlank()) {
+                Optional<Llibre> llibreOpt = getLlibreByIsbn(isbn.trim());
+                return llibreOpt.map(List::of).orElse(List.of());
             }
+
+            // Construir query literal (sense encode)
+            StringBuilder query = new StringBuilder();
+
+            if (titol != null && !titol.isBlank()) {
+                query.append("intitle:").append(titol.trim());
+            }
+            if (autor != null && !autor.isBlank()) {
+                if (query.length() > 0) {
+                    query.append("+");
+                }
+                query.append("inauthor:").append(autor.trim());
+            }
+
+            if (query.length() == 0) {
+                return List.of();
+            }
+
+            // Construir URI encodada CORRECTAMENT
+            URI uri = UriComponentsBuilder
+                    .fromHttpUrl("https://www.googleapis.com/books/v1/volumes")
+                    .queryParam("q", query.toString())
+                    .encode() // ← FA L'ENCODING AUTOMÀTIC DELS ACCENTS i ESPAIS
+                    .build()
+                    .toUri();
+
+            JsonNode bookData = restTemplate.getForObject(uri, JsonNode.class);
+
+            List<Llibre> resultats = new ArrayList<>();
+
+            if (bookData != null && bookData.has("items")) {
+                for (JsonNode item : bookData.get("items")) {
+
+                    JsonNode info = item.get("volumeInfo");
+                    if (info == null) {
+                        continue;
+                    }
+
+                    // ISBN
+                    String isbnFound = null;
+
+                    if (info.has("industryIdentifiers")) {
+                        for (JsonNode idNode : info.get("industryIdentifiers")) {
+                            if ("ISBN_13".equals(idNode.path("type").asText())) {
+                                isbnFound = idNode.path("identifier").asText();
+                            }
+                        }
+                        if (isbnFound == null) {
+                            for (JsonNode idNode : info.get("industryIdentifiers")) {
+                                if ("ISBN_10".equals(idNode.path("type").asText())) {
+                                    isbnFound = idNode.path("identifier").asText();
+                                }
+                            }
+                        }
+                    }
+
+                    if (isbnFound == null || isbnFound.isBlank()) {
+                        continue;
+                    }
+
+                    String titolRes = info.path("title").asText("Títol desconegut");
+                    String editorial = info.path("publisher").asText("Editorial desconeguda");
+                    String sinopsis = info.path("description").asText("Sense sinopsi");
+                    String image = info.path("imageLinks").path("thumbnail").asText(null);
+
+                    // Autors
+                    String autors = "Desconegut";
+                    if (info.has("authors") && info.get("authors").isArray()) {
+                        List<String> list = new ArrayList<>();
+                        for (JsonNode a : info.get("authors")) {
+                            list.add(a.asText());
+                        }
+                        autors = String.join(", ", list);
+
+                        // filtre autor
+                        if (autor != null && !autor.isBlank()) {
+                            if (!autors.toLowerCase().contains(autor.toLowerCase())) {
+                                continue;
+                            }
+                        }
+                    }
+
+                    String categoria = info.path("categories").isArray()
+                            ? info.get("categories").get(0).asText()
+                            : "Sense categoria";
+
+                    String idioma = info.path("language").asText("N/A");
+
+                    resultats.add(new Llibre(
+                            isbnFound, titolRes, autors, editorial,
+                            categoria, sinopsis, image, idioma
+                    ));
+                }
+            }
+
+            return resultats;
+
         } catch (Exception e) {
-            System.err.println("Error important llibre per ISBN " + isbn + ": " + e.getMessage());
+            System.err.println("Error consultant Google Books: " + e.getMessage());
+            return List.of();
         }
     }
+
+
 }
