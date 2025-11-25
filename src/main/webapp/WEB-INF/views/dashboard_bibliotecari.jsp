@@ -161,7 +161,7 @@
                         <i class="bi bi-person-plus-fill"></i> Registrar Nou Lector
                     </a>
                 </div>
-                
+
                 <!-- ===== Pestanyes ===== -->
                 <ul class="nav nav-tabs mb-4" id="tabsBibliotecari" role="tablist">
                     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prestecs">Préstecs actius</button></li>
@@ -169,6 +169,7 @@
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#devolucions">Devolucions</button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#registrar-prestec"><strong>+ Registrar Préstec</strong></button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#retards">Llibres amb retard</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#retards">Propostes d'adquisició</button></li>
                 </ul>
 
                 <!-- ===== Contingut pestanyes ===== -->
@@ -211,7 +212,7 @@
                                                         <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
                                                     </button>
                                                 </form>
-                                                
+
                                                 <!-- BOTÓ RETORNAR -->
                                                 <form action="${pageContext.request.contextPath}/gestionarPrestec/retornar" method="POST">
                                                     <input type="hidden" name="idPrestec" value="${p.idPrestec}">
@@ -267,10 +268,10 @@
                                                             Gestionar
                                                         </a>
                                                     </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:otherwise>
-                                </c:choose>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </tbody>
 
                             </table>
@@ -364,43 +365,109 @@
                     <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
 
                     </div>
+
+                    <!-- Secció de les propostes d'adquisició -->       
+                  <div class="tab-pane fade" id="propostes">
+    <h4 class="mb-3">Propostes d'adquisició fetes pels usuaris</h4>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Títol proposat</th>
+                    <th>Autor</th>
+                    <th>ISBN</th>
+                    <th>Usuari</th>
+                    <th>Data Proposta</th>
+                    <th>Estat</th>
+                    <th>Accions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <c:choose>
+                    <c:when test="${empty propostes}">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted fst-italic">
+                                No hi ha propostes d'adquisició.
+                            </td>
+                        </tr>
+                    </c:when>
+
+                    <c:otherwise>
+                        <c:forEach var="p" items="${propostes}">
+                            <tr>
+                                <td>${p.titol}</td>
+                                <td>${p.autor}</td>
+                                <td>${p.isbn}</td>
+
+                                <!--  MOSTREM L'ID D'USUARI -->
+                                <td>Usuari #${p.idUsuari}</td>
+
+                                <td>${p.dataPropostaFormatted}</td>
+
+                                <td>
+                                    <span class="badge 
+                                        ${p.estat == 'pendent' ? 'bg-warning' :
+                                          (p.estat == 'acceptada' ? 'bg-success' :
+                                          (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
+                                        ${p.estat}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
+                                       class="btn btn-sm btn-primary">
+                                        Gestionar
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
 
 
-        <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
-        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <h6 class="fw-bold">TotEsBook</h6>
-                        <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
-                    </div>
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li> 
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-center justify-content-md-end"> 
-                            <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
+            <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
+            <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <h6 class="fw-bold">TotEsBook</h6>
+                            <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
                         </div>
-                        <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li> 
+                                <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
+                                <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-center justify-content-md-end"> 
+                                <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
+                            </div>
+                            <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                        </div>
                     </div>
+                    <hr class="my-3">
+                    <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
                 </div>
-                <hr class="my-3">
-                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
-            </div>
-        </footer>
-        <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+            </footer>
+            <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
 
-        <!-- Script de Bootstrap Bundle -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>
+            <!-- Script de Bootstrap Bundle -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
+    </html>

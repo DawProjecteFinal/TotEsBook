@@ -4,6 +4,7 @@ import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Prestec;
+import cat.totesbook.domain.PropostaAdquisicio;
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
@@ -13,6 +14,7 @@ import cat.totesbook.service.BibliotecaLlibreService;
 import cat.totesbook.service.BibliotecaService;
 import cat.totesbook.service.LlibreService;
 import cat.totesbook.service.PrestecService;
+import cat.totesbook.service.PropostaAdquisicioService;
 import cat.totesbook.service.UsuariService;
 import cat.totesbook.service.ReservaService;
 
@@ -51,6 +53,9 @@ public class DashboardController {
 
     @Autowired
     private ReservaService reservaService;
+    
+    @Autowired
+    private PropostaAdquisicioService propostaAdquisicioService;
 
     @GetMapping("/dashboard_bibliotecari")
     public String mostrarDashboardBibliotecari(Model model, HttpSession session) {
@@ -77,6 +82,8 @@ public class DashboardController {
         List<Prestec> devolucions = prestecService.findDevolucionsByBiblioteca(biblioteca);
         List<Reserva> reservesPendents = reservaService.findReservesPendentsByBiblioteca(biblioteca);
 
+        List<PropostaAdquisicio> propostes = propostaAdquisicioService.findAllPropostes();
+
         model.addAttribute("numPrestecsActius", prestecsActius.size());
         model.addAttribute("numDevolucionsPendents", devolucions.size());
         model.addAttribute("numReservesPendents", reservesPendents.size());
@@ -86,6 +93,9 @@ public class DashboardController {
         model.addAttribute("devolucions", devolucions);
         model.addAttribute("reservesPendents", reservesPendents);
         model.addAttribute("biblioteca", biblioteca);
+
+        model.addAttribute("numPropostes", propostes.size());
+        model.addAttribute("propostes", propostes);
 
         return "dashboard_bibliotecari";
     }
@@ -149,4 +159,3 @@ public class DashboardController {
         return "dashboard_administrador";
     }
 }
-
