@@ -4,6 +4,7 @@ import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Reserva;
+import cat.totesbook.domain.Reserva.EstatReserva;
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.BibliotecaLlibreRepository;
 import cat.totesbook.repository.LlibreRepository;
@@ -94,6 +95,27 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     public List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca) {
         return reservaRepository.findReservesPendentsByBiblioteca(biblioteca);
+    }
+
+    @Override
+    public void cancelReserva(Reserva reserva) {
+        reserva.setEstat(EstatReserva.cancelada);
+        // Si la reserva estava "disponible", alliberem l'exemplar
+        /*if (reserva.getLlibre() != null) {
+            reserva.getLlibre().incrementarDisponible();
+        }*/
+
+        reservaRepository.crearReserva(reserva);
+    }
+
+    @Override
+    public void eliminarReserva(int idReserva) {
+        reservaRepository.deleteById(idReserva);
+    }
+
+    @Override
+    public Reserva findByIdReserva(int idReserva) {
+        return reservaRepository.findByIdReserva(idReserva);
     }
 
 }

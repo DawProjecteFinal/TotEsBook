@@ -24,7 +24,7 @@
                 </div>
             </div>
         </header>
-                
+
         <section>
             <div class="container mt-4">
                 <div class="card shadow-sm">
@@ -50,7 +50,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Títol</label>
                                 <input type="text" name="titol" class="form-control"
-                                       placeholder="Ex: El ingenioso hidalgo Don Quixote de la Mancha
+                                       placeholder="Ex: El rufián dichoso
                                        ">
                             </div>
 
@@ -63,16 +63,17 @@
                             <div class="mb-3">
                                 <label class="form-label">ISBN</label>
                                 <input type="text" name="isbn" class="form-control"
-                                       placeholder="Ex: 9780744525021">
+                                       placeholder="Ex: 9788498972498">
                             </div>
 
                             <button class="btn btn-primary w-100 mt-3">
                                 <i class="bi bi-search"></i> Cercar llibre
                             </button>
 
-                            <button class="btn btn-secondary w-100 mt-3">
-                                <i class="bi bi-search"></i> Anar enrera
-                            </button>
+                            <a href="${pageContext.request.contextPath}/dashboard_usuari"
+                               class="btn btn-secondary w-100 mt-3">
+                                <i class="bi bi-arrow-left"></i> Anar enrere
+                            </a>
                         </form>
                     </div>
                 </div>
@@ -112,8 +113,8 @@
         <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
 
         <!-- Script de Bootstrap Bundle -->
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     </body>
 </html>

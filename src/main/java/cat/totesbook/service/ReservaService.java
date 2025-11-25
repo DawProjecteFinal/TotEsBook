@@ -16,7 +16,12 @@ public interface ReservaService {
     void crearReserva(int idUsuari, String isbn) throws Exception;
 
     List<Reserva> findReservaByUsuari(int idUsuari);
-    
+
     List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca);
 
+    void cancelReserva(Reserva reserva);
+
+    void eliminarReserva(int idReserva);
+
+    Reserva findByIdReserva(int idReserva);
 }

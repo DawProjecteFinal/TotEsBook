@@ -123,7 +123,7 @@
                                 </c:when>
 
                                 <c:when test="${mode == 'proposta'}">
-                                    <a href="${pageContext.request.contextPath}/propostes/buscar_proposta" 
+                                    <a href="${pageContext.request.contextPath}/propostes/buscar_proposta?titol=${titol}&autor=${autor}&isbn=${isbnQuery}"
                                        class="btn btn-sm btn-outline-secondary">
                                         <i class="bi bi-arrow-left"></i> Tornar als resultats
                                     </a>
@@ -229,9 +229,9 @@
                                                     </c:if>
                                                 </c:if>
 
-                                            
+
                                     <c:if test="${mode == 'proposta'}">
-                                        <a href="${pageContext.request.contextPath}/propostes/confirmar?isbn=${llibre.isbn}"
+                                        <a href="${pageContext.request.contextPath}/propostes/confirmar?isbn=${llibre.isbn}&titol=${titol}&autor=${autor}&isbn_cerca=${isbn}"
                                            class="btn btn-warning btn-lg w-100">
                                             <i class="bi bi-lightbulb"></i> Fer proposta d’adquisició
                                         </a>

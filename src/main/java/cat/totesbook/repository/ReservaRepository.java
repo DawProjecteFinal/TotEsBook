@@ -20,4 +20,8 @@ public interface ReservaRepository {
     List<Reserva> findByUsuari(int idUsuari);
     
     List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca);
+    
+    void deleteById(Integer idReserva);
+    
+    Reserva findByIdReserva(int idReserva);
 }

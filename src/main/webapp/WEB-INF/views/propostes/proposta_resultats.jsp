@@ -71,7 +71,7 @@
                                 No s'ha trobat cap llibre amb els criteris indicats.
                             </div>
 
-                            <a href="${pageContext.request.contextPath}/propostes/nova" 
+                            <a href="${pageContext.request.contextPath}/propostes/buscar_proposta" 
                                class="btn btn-secondary mt-2">
                                 <i class="bi bi-arrow-left"></i> Nova cerca
                             </a>
@@ -145,10 +145,11 @@
                                                 <input type="hidden" name="imatgeUrl" value="${llibre.imatgeUrl}">
                                                 <input type="hidden" name="idioma" value="${llibre.idioma}">
 
-                                                <a href="${pageContext.request.contextPath}/propostes/llibre?isbn=${llibre.isbn}&mode=proposta"
+                                                <a href="${pageContext.request.contextPath}/propostes/llibre?isbn=${fn:escapeXml(fn:trim(llibre.isbn))}&mode=proposta&titol=${fn:escapeXml(fn:trim(titol))}&autor=${fn:escapeXml(fn:trim(autor))}&isbnQuery=${fn:escapeXml(fn:trim(isbn))}"
                                                    class="btn btn-primary w-100">
-                                                    <i class="bi bi-eye"></i> Seleccionar
+                                                    Seleccionar
                                                 </a>
+
 
                                             </div>
                                         </div>
