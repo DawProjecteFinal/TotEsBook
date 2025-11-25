@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 package cat.totesbook.repository;
 
@@ -6,10 +10,6 @@ import cat.totesbook.domain.Biblioteca;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author jmiro
- */
 
 public interface BibliotecaRepository {
 

@@ -1,7 +1,5 @@
 <%-- 
-    Document   : gestionar_biblioteques
-    Created on : 9 nov 2025, 11:06:59
-    Author     : jmiro
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

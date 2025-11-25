@@ -1,7 +1,5 @@
 <%-- 
-    Document   : mostrarBiblioteques
-    Created on : 6 nov 2025, 15:11:59
-    Author     : jmiro
+    Author     : Equip TotEsBook
 --%>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

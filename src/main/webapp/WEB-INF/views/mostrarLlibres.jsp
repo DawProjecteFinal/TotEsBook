@@ -1,7 +1,5 @@
 <%-- 
-    Document   : mostrarLlibres.jsp
-    Created on : 28 sept 2025, 7:01:42
-    Author     : equip TotEsBook
+    Author     : Equip TotEsBook
 --%>
 
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>

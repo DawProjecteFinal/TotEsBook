@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -13,8 +18,6 @@ import cat.totesbook.domain.Llibre;
 
 /**
  * Classe que implementa el servei dels llibres.
- *
- * @author equip TotEsBook
  */
 @Service
 @Transactional

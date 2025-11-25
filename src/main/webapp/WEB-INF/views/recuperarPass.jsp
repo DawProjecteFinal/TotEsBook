@@ -1,7 +1,5 @@
 <%-- 
-    Document   : recuperarPass
-    Created on : 28 oct 2025, 14:49:40
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

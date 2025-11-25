@@ -1,4 +1,10 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository;
+
 import cat.totesbook.domain.Biblioteca;
 import java.util.List;
 import cat.totesbook.domain.Llibre;
@@ -6,8 +12,6 @@ import java.util.Optional;
 
 /**
  * Interfície de la capa repositori que gestiona les operacions de l'accés de dades dels llibres.
- * 
- * @author equip TotEsBook
  */
 
 public interface LlibreRepository {

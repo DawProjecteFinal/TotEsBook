@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -11,10 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author jmiro
- */
 @Repository
 public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
 

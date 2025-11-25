@@ -1,7 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ *
+ * @author Equip TotEsBook
  */
+
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Agent;
@@ -9,10 +10,7 @@ import cat.totesbook.domain.Biblioteca;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author jmiro
- */
+
 public interface BibliotecaService {
 
     List<Biblioteca> getAllBiblioteques();

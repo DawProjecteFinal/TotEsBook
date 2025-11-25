@@ -1,7 +1,8 @@
 /**
  *
- * @author edinsonioc
+ * @author Equip TotEsBook
  */
+
 package cat.totesbook.config;
 
 import cat.totesbook.domain.Rol;

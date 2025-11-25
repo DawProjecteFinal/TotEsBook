@@ -1,7 +1,8 @@
 /**
  *
- * @author jmiro
+ * @author Equip TotEsBook
  */
+
 package cat.totesbook.domain;
 
 import jakarta.persistence.*; // Imports JPA necessaris

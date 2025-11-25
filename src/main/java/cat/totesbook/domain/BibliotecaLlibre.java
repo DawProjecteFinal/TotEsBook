@@ -1,7 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ *
+ * @author Equip TotEsBook
  */
+
 package cat.totesbook.domain;
 
 import jakarta.persistence.Entity;
@@ -12,10 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-/**
- *
- * @author jmiro
- */
+
 @Entity
 @Table(name = "BibliotecaLlibres")
 public class BibliotecaLlibre {

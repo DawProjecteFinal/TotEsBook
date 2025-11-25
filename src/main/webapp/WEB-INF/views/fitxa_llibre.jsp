@@ -1,7 +1,5 @@
 <%-- 
-    Document   : fitxa_llibre
-    Created on : 27 oct 2025, 18:44:37
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

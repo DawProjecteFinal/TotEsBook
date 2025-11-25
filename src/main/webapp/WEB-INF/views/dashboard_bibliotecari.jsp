@@ -1,7 +1,5 @@
 <%-- 
-    Document   : dashboard_bibliotecari.jsp
-    Created on : 23 oct 2025, 14:27:27
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

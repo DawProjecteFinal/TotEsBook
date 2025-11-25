@@ -1,7 +1,5 @@
 <%-- 
-    Document   : nou_usuari
-    Created on : 19 nov 2025, 14:30:19
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

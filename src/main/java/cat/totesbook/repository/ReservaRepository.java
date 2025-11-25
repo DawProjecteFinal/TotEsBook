@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Biblioteca;
@@ -7,10 +12,7 @@ import cat.totesbook.domain.Usuari;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author jmiro
- */
+
 public interface ReservaRepository {   
 
     Optional<Reserva> findReservaPendent(Usuari usuari, Llibre llibre);

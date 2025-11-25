@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.domain;
 
 import jakarta.persistence.Entity;
@@ -10,11 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
-/**
- * Classe que representa l'entitat Llibre a la BD.
- *
- * @author equip TotEsBook
- */
+
 @Entity
 @Table(name = "Llibres")
 public class Llibre {

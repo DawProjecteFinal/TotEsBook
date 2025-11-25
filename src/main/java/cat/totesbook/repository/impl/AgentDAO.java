@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Agent;

@@ -1,7 +1,5 @@
 <%-- 
-    Document   : dashboard_usuari.jsp
-    Created on : 23 oct 2025, 14:26:50
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

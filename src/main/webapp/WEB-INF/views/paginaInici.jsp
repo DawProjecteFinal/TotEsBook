@@ -1,7 +1,5 @@
 <%-- 
-    Document   : paginaInici
-    Created on : 28 sept 2025, 17:43:00
-    Author     : equip totEsBook
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

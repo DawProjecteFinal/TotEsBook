@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 package cat.totesbook.service.impl;
 
@@ -13,10 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author jmiro
- */
+
 @Service
 public class UsuariServiceImpl implements UsuariService {
 

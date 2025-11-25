@@ -1,11 +1,5 @@
-
-<%--
-    Document   : llistar_biblioteques
-    Created on : 9 nov 2025, 11:06:03
-    Author     : jmiro
-    Created on : 10 nov 2025
+<%-- 
     Author     : Equip TotEsBook
-    Description: Llista totes les biblioteques per a la gestió (accessible per ADMIN i BIBLIOTECARI).
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

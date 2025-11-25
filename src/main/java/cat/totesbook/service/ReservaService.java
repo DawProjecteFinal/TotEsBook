@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Biblioteca;

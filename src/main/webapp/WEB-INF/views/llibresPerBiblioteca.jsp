@@ -1,7 +1,5 @@
 <%-- 
-    Document   : llibresPerBiblioteca
-    Created on : 6 nov 2025, 16:05:16
-    Author     : jmiro
+    Author     : Equip TotEsBook
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

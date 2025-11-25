@@ -1,7 +1,5 @@
 <%-- 
-    Document   : mostrarUsuaris
-    Created on : 24 oct 2025, 11:48:48
-    Author     : jmiro
+    Author     : Equip TotEsBook
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

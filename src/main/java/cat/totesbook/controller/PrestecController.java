@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.SessioUsuari;

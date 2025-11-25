@@ -1,13 +1,15 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Prestec;
 import java.util.List;
 
-/**
- *
- * @author equip TotEsBook
- */
+
 public interface PrestecService {
 
     void registrarPrestec(String isbn, String emailUsuari, int idAgentBibliotecari);
