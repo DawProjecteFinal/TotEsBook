@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -18,7 +17,10 @@ import cat.totesbook.service.LlibreService;
 import cat.totesbook.service.ReservaService;
 import cat.totesbook.service.PrestecService;
 import cat.totesbook.service.UsuariService;
-
+import cat.totesbook.domain.BibliotecaLlibre;
+import cat.totesbook.service.BibliotecaLlibreService;
+import java.util.Map;
+import java.util.HashMap;
 import jakarta.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +58,12 @@ public class UsuariController {
 
     @Autowired
     private LlibreService llibreService;
-    
+
     @Autowired
     private UsuariService usuariService;
+
+    @Autowired
+    private BibliotecaLlibreService bibliotecaLlibreService;
 
     /**
      * Gestiona les peticions GET a /mostrarUsuaris. Carrega les llistes
@@ -142,6 +147,20 @@ public class UsuariController {
             // Carregar reserves
             List<Reserva> mevesReserves = reservaService.findReservaByUsuari(idUsuari);
             model.addAttribute("mevesReserves", mevesReserves);
+
+            // Mapa ISBN -> biblioteques on és el llibre reservat
+            Map<String, List<BibliotecaLlibre>> bibliosPerIsbn = new HashMap<>();
+
+            for (Reserva r : mevesReserves) {
+                Llibre llibre = r.getLlibre();
+                if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
+                    List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
+                    bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+                }
+            }
+
+            model.addAttribute("bibliosPerIsbn", bibliosPerIsbn);
+
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
@@ -378,14 +397,13 @@ public class UsuariController {
         }
     }
     // --- FI NOU CODI PER "EDITAR PERFIL" ---
-    
-    // --- MÈTODES PER A CREAR USUARIS DES DEL PANELL BIBLIOTECARI ---
 
+    // --- MÈTODES PER A CREAR USUARIS DES DEL PANELL BIBLIOTECARI ---
     // 1. Mostrar el formulari (GET)
     @GetMapping("/bibliotecari/nou-usuari")
     public String vistaCrearUsuari(HttpSession session, Model model) {
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
+
         // Seguretat: Només bibliotecari
         if (sessio == null || sessio.getRol() != Rol.BIBLIOTECARI) {
             return "redirect:/login";
@@ -396,13 +414,13 @@ public class UsuariController {
     // 2. Processar la creació (POST)
     @PostMapping("/bibliotecari/crear-usuari")
     public String crearUsuari(@RequestParam String nom,
-                              @RequestParam String cognoms,
-                              @RequestParam String telefon,
-                              @RequestParam String email,
-                              @RequestParam String password,
-                              HttpSession session,
-                              RedirectAttributes redirectAttributes) {
-        
+            @RequestParam String cognoms,
+            @RequestParam String telefon,
+            @RequestParam String email,
+            @RequestParam String password,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
         if (sessio == null || sessio.getRol() != Rol.BIBLIOTECARI) {
             return "redirect:/login";
@@ -411,12 +429,12 @@ public class UsuariController {
         try {
             // Cridem al servei
             usuariService.crearLectorManual(nom, cognoms, telefon, email, password);
-            
+
             redirectAttributes.addFlashAttribute("missatge", "Nou usuari lector registrat correctament.");
         } catch (Exception e) {
             // Si falla (ex: email duplicat), tornem al formulari amb l'error
             redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
-            return "redirect:/bibliotecari/nou-usuari"; 
+            return "redirect:/bibliotecari/nou-usuari";
         }
 
         // Si tot va bé, tornem al dashboard

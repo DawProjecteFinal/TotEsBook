@@ -2,10 +2,11 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.controller;
 
+import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
+import cat.totesbook.service.BibliotecaLlibreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,9 @@ public class LlibreController {
 
     @Autowired
     private LlibreService llibreService;
+
+    @Autowired
+    private BibliotecaLlibreService bibliotecaLlibreService;
 
     // 
     /**
@@ -123,17 +127,22 @@ public class LlibreController {
             @RequestParam(value = "mode", required = false, defaultValue = "reserva") String mode,
             Model model, RedirectAttributes redirectAttrs) {
         try {
-            // Busquem el llibre pel seu ISBN a través del servei
+            // Bùsqueda del llibre pel seu ISBN a través del servei
             Optional<Llibre> llibreOpt = llibreService.getLlibreByIsbn(isbn);
 
             if (llibreOpt.isPresent()) {
-                // Si el llibre existeix, l'afegim al model i mostrem la vista
-                model.addAttribute("llibre", llibreOpt.get());
-                model.addAttribute("mode", mode);      // Per a saber que crida a la fitxa del llibre
+                Llibre llibre = llibreOpt.get();
+
+                // Biblioteques on es troba aquest llibre
+                List<BibliotecaLlibre> ubicacions = bibliotecaLlibreService.findByLlibre(llibre);
+
                 
-                return "fitxa_llibre"; // El ViewResolver buscarà /WEB-INF/views/fitxa_llibre.jsp
+                model.addAttribute("llibre", llibre);
+                model.addAttribute("mode", mode);      
+                model.addAttribute("ubicacions", ubicacions);
+
+                return "fitxa_llibre"; 
             } else {
-                // Si no es troba, redirigim a l'inici amb un missatge d'error
                 redirectAttrs.addFlashAttribute("error", "El llibre amb ISBN '" + isbn + "' no s'ha trobat.");
                 return "redirect:/";
             }
@@ -142,4 +151,5 @@ public class LlibreController {
             return "redirect:/";
         }
     }
+
 }

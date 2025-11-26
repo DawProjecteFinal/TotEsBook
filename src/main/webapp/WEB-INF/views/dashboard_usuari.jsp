@@ -262,6 +262,20 @@
                                                             Data reserva:
                                                             ${reserva.dataReservaFormatted}
                                                         </small>
+                                                         <small class="d-block text-muted">
+                                                            Recollida a:
+                                                            <c:choose>
+                                                                <c:when test="${not empty bibliosPerIsbn[reserva.llibre.isbn]}">
+                                                                    <c:forEach var="rel" items="${bibliosPerIsbn[reserva.llibre.isbn]}" varStatus="st">
+                                                                        <c:out value="${rel.biblioteca.nom}"/>
+                                                                        <c:if test="${!st.last}"> · </c:if>
+                                                                    </c:forEach>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="text-muted">Consultar biblioteca</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </small>
                                                         <!-- BADGE segons estat -->
                                                         <span class="badge
                                                               ${reserva.estat == 'pendent' ? 'bg-warning text-dark' :
@@ -486,19 +500,19 @@
 
         <!-- Activar Toasts -->
         <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const successToastEl = document.getElementById('successToast');
-                    if (successToastEl) {
-                        const successToast = new bootstrap.Toast(successToastEl);
-                        successToast.show();
-                    }
+                                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                                        const successToastEl = document.getElementById('successToast');
+                                                                        if (successToastEl) {
+                                                                            const successToast = new bootstrap.Toast(successToastEl);
+                                                                            successToast.show();
+                                                                        }
 
-                    const errorToastEl = document.getElementById('errorToast');
-                    if (errorToastEl) {
-                        const errorToast = new bootstrap.Toast(errorToastEl);
-                        errorToast.show();
-                    }
-                });
+                                                                        const errorToastEl = document.getElementById('errorToast');
+                                                                        if (errorToastEl) {
+                                                                            const errorToast = new bootstrap.Toast(errorToastEl);
+                                                                            errorToast.show();
+                                                                        }
+                                                                    });
         </script>
 
         <script>
