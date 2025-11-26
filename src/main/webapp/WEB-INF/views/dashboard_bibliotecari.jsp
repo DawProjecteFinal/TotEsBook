@@ -365,68 +365,68 @@
                     </div>
 
                     <!-- Secció de les propostes d'adquisició -->       
-                  <div class="tab-pane fade" id="propostes">
-    <h4 class="mb-3">Propostes d'adquisició fetes pels usuaris</h4>
+                    <div class="tab-pane fade" id="propostes">
+                        <h4 class="mb-3">Propostes d'adquisició fetes pels usuaris</h4>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Títol proposat</th>
-                    <th>Autor</th>
-                    <th>ISBN</th>
-                    <th>Usuari</th>
-                    <th>Data Proposta</th>
-                    <th>Estat</th>
-                    <th>Accions</th>
-                </tr>
-            </thead>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Títol proposat</th>
+                                        <th>Autor</th>
+                                        <th>ISBN</th>
+                                        <th>Usuari</th>
+                                        <th>Data Proposta</th>
+                                        <th>Estat</th>
+                                        <th>Accions</th>
+                                    </tr>
+                                </thead>
 
-            <tbody>
-                <c:choose>
-                    <c:when test="${empty propostes}">
-                        <tr>
-                            <td colspan="7" class="text-center text-muted fst-italic">
-                                No hi ha propostes d'adquisició.
-                            </td>
-                        </tr>
-                    </c:when>
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${empty propostes}">
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted fst-italic">
+                                                    No hi ha propostes d'adquisició.
+                                                </td>
+                                            </tr>
+                                        </c:when>
 
-                    <c:otherwise>
-                        <c:forEach var="p" items="${propostes}">
-                            <tr>
-                                <td>${p.titol}</td>
-                                <td>${p.autor}</td>
-                                <td>${p.isbn}</td>
+                                        <c:otherwise>
+                                            <c:forEach var="p" items="${propostes}">
+                                                <tr>
+                                                    <td>${p.titol}</td>
+                                                    <td>${p.autor}</td>
+                                                    <td>${p.isbn}</td>
 
-                                <!--  MOSTREM L'ID D'USUARI -->
-                                <td>Usuari #${p.idUsuari}</td>
+                                                    <!--  MOSTREM L'ID D'USUARI -->
+                                                    <td>Usuari #${p.idUsuari}</td>
 
-                                <td>${p.dataPropostaFormatted}</td>
+                                                    <td>${p.dataPropostaFormatted}</td>
 
-                                <td>
-                                    <span class="badge 
-                                        ${p.estat == 'pendent' ? 'bg-warning' :
-                                          (p.estat == 'acceptada' ? 'bg-success' :
-                                          (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
-                                        ${p.estat}
-                                    </span>
-                                </td>
+                                                    <td>
+                                                        <span class="badge 
+                                                              ${p.estat == 'pendent' ? 'bg-warning' :
+                                                                (p.estat == 'acceptada' ? 'bg-success' :
+                                                                (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
+                                                                  ${p.estat}
+                                                              </span>
+                                                        </td>
 
-                                <td>
-                                    <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
-                                       class="btn btn-sm btn-primary">
-                                        Gestionar
-                                    </a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-            </tbody>
-        </table>
-    </div>
-</div>
+                                                        <td>
+                                                            <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
+                                                               class="btn btn-sm btn-primary">
+                                                                Gestionar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
 
                     </div>

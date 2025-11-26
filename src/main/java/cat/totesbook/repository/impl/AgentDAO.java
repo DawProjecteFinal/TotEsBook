@@ -169,4 +169,14 @@ public class AgentDAO implements AgentRepository {
             return null;
         }
     }
+
+    @Override
+    public Agent getAgentByEmail(String email) {
+       List<Agent> resultats = entityManager
+                .createQuery("SELECT a FROM Agent a WHERE a.email = :email", Agent.class)
+                .setParameter("email", email)
+                .getResultList();
+
+        return resultats.isEmpty() ? null : resultats.get(0);
+    }
 }

@@ -493,34 +493,10 @@
                 </div>
             </c:if>
         </div>
-        <!-- ===== FI TOASTS ===== -->
 
         <!-- Script de Bootstrap Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Activar Toasts -->
-        <script>
-                                                                    document.addEventListener("DOMContentLoaded", function () {
-                                                                        const successToastEl = document.getElementById('successToast');
-                                                                        if (successToastEl) {
-                                                                            const successToast = new bootstrap.Toast(successToastEl);
-                                                                            successToast.show();
-                                                                        }
-
-                                                                        const errorToastEl = document.getElementById('errorToast');
-                                                                        if (errorToastEl) {
-                                                                            const errorToast = new bootstrap.Toast(errorToastEl);
-                                                                            errorToast.show();
-                                                                        }
-                                                                    });
-        </script>
-
-        <script>
-            function confirmarCancelacio(idReserva) {
-                if (confirm("Estàs segur que vols cancel·lar aquesta reserva?")) {
-                    document.getElementById("formCancel_" + idReserva).submit();
-                }
-            }
-        </script>
+       <script src="${pageContext.request.contextPath}/assets/js/dashboard_bibliotecari.js"></script>
 
     </body>
+</html>
