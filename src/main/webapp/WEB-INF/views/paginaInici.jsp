@@ -96,7 +96,7 @@
                         </form>
 
                         <c:if test="${not empty sessionScope.sessioUsuari}">
-                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
+                
                                 <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
                                 <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>

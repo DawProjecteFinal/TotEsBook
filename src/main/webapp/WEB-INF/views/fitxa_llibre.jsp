@@ -16,6 +16,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
+        <style>
+            .btn-nowrap { white-space: nowrap; }
+        </style>
     </head>
     <body class="d-flex flex-column min-vh-100">
 
@@ -50,7 +53,6 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
-<<<<<<< HEAD
                         <!-- Dropdown + formulari cerca avançada -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,26 +84,15 @@
                                 </button>
                             </div>
                         </form>
-                     <c:if test="${not empty sessionScope.sessioUsuari}">
-                         <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                         <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
-                         </c:if>
-                     </c:if>
-                </ul>
-                <div class="d-flex align-items-center ms-lg-auto">
-                     <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
-=======
                         <c:if test="${not empty sessionScope.sessioUsuari}">
-                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                                <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                            <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
-                                </c:if>
                             </c:if>
+                        </c:if>
                     </ul>
+
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
->>>>>>> feature-propostes
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
                                    placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
                                    oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
@@ -112,7 +103,7 @@
                         </form>
                         <c:choose>
                             <c:when test="${empty sessionScope.sessioUsuari}">
-                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0 btn-nowrap">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
                             </c:when>
@@ -300,11 +291,7 @@
             </div>
         </section>
 
-<<<<<<< HEAD
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
-</body>
-=======
+
         <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
             <div class="container">
@@ -336,6 +323,7 @@
         <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+     
+        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
->>>>>>> feature-propostes
 </html>

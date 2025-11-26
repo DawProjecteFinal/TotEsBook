@@ -48,46 +48,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}">Inici</a>
                         </li>
-<<<<<<< HEAD
-                        <!-- Dropdown + formulari cerca avançada -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Cerca avançada
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownAdvanced">
-                                <li><a class="dropdown-item" href="#" data-field="autor">Autor</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#" data-field="idioma">Idioma</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
-                            </ul>
-                        </li>
-                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/cercar'/>">
-                            <input type="hidden" name="field" id="field" value="">
 
-                            <div id="searchGroup" class="input-group d-none">
-                                <!-- Input de text per autor / isbn -->
-                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off"
-                                       required oninvalid="this.setCustomValidity('Aquest camp és obligatori')" oninput="this.setCustomValidity('')" />
-                                <select id="idiomaSelect" class="form-select form-select-sm me-2 d-none">
-                                    <option value="">Tria l'idioma</option>
-                                    <option value="ca">Català</option>
-                                    <option value="es">Castellà</option>
-                                </select>
-
-                                <button class="btn btn-tot btn-sm" type="submit">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    
-=======
 
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
 
->>>>>>> feature-propostes
+
                         <c:if test="${not empty sessionScope.sessioUsuari}">
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/propostes/formulari_proposta">
@@ -541,11 +508,5 @@
                 }
             }
         </script>
-<<<<<<< HEAD
-        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
-        <!-- ===== FI CODI NOU: Script per activar el Toast ===== -->
-=======
->>>>>>> feature-propostes
 
     </body>
-</html>

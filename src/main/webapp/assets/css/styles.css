@@ -162,3 +162,7 @@ a.btn-accio-panell {
     display: flex;
     gap: 8px;
 }
+
+.btn-nowrap {
+    white-space: nowrap;
+}
