@@ -7,6 +7,9 @@ package cat.totesbook.service;
 
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Prestec;
+import cat.totesbook.dto.AutorEstadisticaDTO;
+import cat.totesbook.dto.LlibreEstadisticaDTO;
+import cat.totesbook.dto.UsuariEstadisticaDTO;
 import java.util.List;
 
 
@@ -30,4 +33,15 @@ public interface PrestecService {
     
     // Mètode per registar la devolució d'un prèstec amb el botó
     void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari);
+    
+    // --- ==== SPRINT 3 (TEA 5) =====
+    
+    // Mètodes per treure estadístiques
+    List<LlibreEstadisticaDTO> getEstadistiquesLlibres(String autor, String categoria);
+    
+    List<AutorEstadisticaDTO> getEstadistiquesAutors();
+    
+    List<UsuariEstadisticaDTO> getEstadistiquesUsuaris();
+    
+    // ----
 }

@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Agent;
@@ -12,6 +11,9 @@ import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Prestec;
 import cat.totesbook.domain.Prestec.EstatPrestec;
 import cat.totesbook.domain.Usuari;
+import cat.totesbook.dto.AutorEstadisticaDTO;
+import cat.totesbook.dto.LlibreEstadisticaDTO;
+import cat.totesbook.dto.UsuariEstadisticaDTO;
 import cat.totesbook.repository.AgentRepository;
 import cat.totesbook.repository.BibliotecaLlibreRepository;
 import cat.totesbook.repository.LlibreRepository;
@@ -212,4 +214,26 @@ public class PrestecServiceImpl implements PrestecService {
             bibliotecaLlibreRepository.updateBibliotecaLlibre(bl);
         }
     }
+    
+    // --- ===== SPRINT 3 (TEA 5) ===== ---
+    
+    // Mètodes per treure estadístiques
+     @Override
+    @Transactional(readOnly = true)
+    public List<LlibreEstadisticaDTO> getEstadistiquesLlibres(String autor, String categoria) {
+        return prestecRepository.findEstadistiquesLlibres(autor, categoria);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AutorEstadisticaDTO> getEstadistiquesAutors() {
+        return prestecRepository.findEstadistiquesAutors();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuariEstadisticaDTO> getEstadistiquesUsuaris() {
+        return prestecRepository.findEstadistiquesUsuaris();
+    }
+    // ----
 }

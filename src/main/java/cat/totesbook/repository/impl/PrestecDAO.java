@@ -8,6 +8,9 @@ package cat.totesbook.repository.impl;
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Prestec;
 import cat.totesbook.domain.Prestec.EstatPrestec;
+import cat.totesbook.dto.AutorEstadisticaDTO;
+import cat.totesbook.dto.LlibreEstadisticaDTO;
+import cat.totesbook.dto.UsuariEstadisticaDTO;
 import cat.totesbook.repository.PrestecRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -149,5 +152,56 @@ public class PrestecDAO implements PrestecRepository {
             return Collections.emptyList();
         }
     }
+    
+    // SPRINT 3 (TEA 5): Implementacions per a estadístiques
+    @Override
+    public List<LlibreEstadisticaDTO> findEstadistiquesLlibres(String autor, String categoria) {
+        StringBuilder jpql = new StringBuilder(
+            "SELECT new cat.totesbook.dto.LlibreEstadisticaDTO(p.llibre, COUNT(p)) " +
+            "FROM Prestec p " +
+            "WHERE 1=1 ");
 
+        if (autor != null && !autor.isEmpty()) {
+            jpql.append("AND LOWER(p.llibre.autor) LIKE LOWER(:autor) ");
+        }
+        if (categoria != null && !categoria.isEmpty()) {
+            jpql.append("AND LOWER(p.llibre.categoria) LIKE LOWER(:categoria) ");
+        }
+
+        jpql.append("GROUP BY p.llibre ORDER BY COUNT(p) DESC");
+
+        TypedQuery<LlibreEstadisticaDTO> query = entityManager.createQuery(jpql.toString(), LlibreEstadisticaDTO.class);
+
+        if (autor != null && !autor.isEmpty()) {
+            query.setParameter("autor", "%" + autor + "%");
+        }
+        if (categoria != null && !categoria.isEmpty()) {
+            query.setParameter("categoria", "%" + categoria + "%");
+        }
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<AutorEstadisticaDTO> findEstadistiquesAutors() {
+        String jpql = "SELECT new cat.totesbook.dto.AutorEstadisticaDTO(p.llibre.autor, COUNT(p)) " +
+                      "FROM Prestec p " +
+                      "GROUP BY p.llibre.autor " +
+                      "ORDER BY COUNT(p) DESC";
+        
+        return entityManager.createQuery(jpql, AutorEstadisticaDTO.class).setMaxResults(10).getResultList(); 
+    }
+    
+    @Override
+    public List<UsuariEstadisticaDTO> findEstadistiquesUsuaris() {
+        String jpql = "SELECT new cat.totesbook.dto.UsuariEstadisticaDTO(p.usuari, COUNT(p)) " +
+                      "FROM Prestec p " +
+                      "GROUP BY p.usuari " +
+                      "ORDER BY COUNT(p) DESC";
+        
+        return entityManager.createQuery(jpql, UsuariEstadisticaDTO.class)
+                 .setMaxResults(20)
+                 .getResultList();
+    }
+    // ----
 }
