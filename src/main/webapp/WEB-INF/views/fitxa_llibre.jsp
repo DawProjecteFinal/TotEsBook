@@ -17,7 +17,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
         <style>
-            .btn-nowrap { white-space: nowrap; }
+            .btn-nowrap {
+                white-space: nowrap;
+            }
         </style>
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -87,8 +89,8 @@
                         <c:if test="${not empty sessionScope.sessioUsuari}">
                             <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
+                                </c:if>
                             </c:if>
-                        </c:if>
                     </ul>
 
                     <div class="d-flex align-items-center ms-lg-auto">
@@ -221,6 +223,19 @@
 
                                 <p><strong>Editorial:</strong> <c:out value="${llibre.editorial}" default="No especificada"/></p>
                                 <p><strong>Idioma:</strong> <c:out value="${llibre.idioma}" default="No especificat"/></p>
+                                <p><strong>Es troba a:</strong>
+                                    <c:choose>
+                                        <c:when test="${not empty ubicacions}">
+                                            <c:forEach var="rel" items="${ubicacions}" varStatus="st">
+                                                <c:out value="${rel.biblioteca.nom}"/>
+                                                <c:if test="${!st.last}"> · </c:if>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-muted">No disponible a cap biblioteca</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p>
 
                                 <c:if test="${mode == 'reserva'}">
                                     <div class="d-flex align-items-center mb-3">
@@ -323,7 +338,6 @@
         <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-     
         <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
 </html>

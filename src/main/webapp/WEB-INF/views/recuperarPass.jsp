@@ -99,7 +99,7 @@
                                 <input type="email" class="form-control form-control-lg" id="email" name="email" required>
                             </div>
                             
-                            <button type="submit" class="btn btn-accent-custom btn-lg w-100 mt-3">Enviar Instruccions</button>
+                            <button type="submit" class="btn btn-tot btn-lg w-100 mt-3">Enviar Instruccions</button>
                         </form>
 
                         <div class="text-center mt-4">

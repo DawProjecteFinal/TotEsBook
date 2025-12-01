@@ -153,6 +153,14 @@
                             Propostes d'adquisició
                         </button>
                     </li>
+                    <!-- SPRINT 3 (TEA 5): Nova pestanya Estadístiques -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#estadistiques" type="button" role="tab">
+                            <img src="${pageContext.request.contextPath}/assets/icons/estadistiques.png"
+                                 alt="estadistiques" style="width:40px; height:40px;">
+                            Estadístiques
+                        </button>
+                    </li>
                 </ul>
 
                 <div class="tab-content" id="adminTabsContent">
@@ -488,6 +496,32 @@
 
 
                     </div>
+
+                    <!-- ===== PESTANYA 4: ESTADÍSTIQUES ===== -->
+                    <div class="tab-pane fade" id="estadistiques" role="tabpanel">
+                        <div class="card shadow-sm mb-5">
+                            <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0 text-tot-bold">
+                                    <i class="bi bi-bar-chart-line-fill me-2"></i> Centre d'Estadístiques
+                                </h4>
+                                <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> Obrir Panell Complet d'Estadístiques
+                                </a>
+                            </div>
+                            <div class="card-body text-center py-5">
+                                <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
+                                <h5>Consulta el rendiment de la biblioteca</h5>
+                                <p class="text-muted">
+                                    Accedeix al panell detallat per veure els llibres més prestats, 
+                                    els usuaris més actius i exportar informes en PDF i Excel.
+                                </p>
+                                <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-lg btn-tot">
+                                    Veure Estadístiques Detallades
+                                </a>
+                            </div>
+                        </div>
+                    </div>                      
+
                 </div> <!-- fi tab-content -->
             </div>
         </section>

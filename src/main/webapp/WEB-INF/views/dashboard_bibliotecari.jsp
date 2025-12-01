@@ -53,7 +53,13 @@
                             <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
                                 <%-- Enllaços específics per a bibliotecari/admin --%>
                             <li class="nav-item"><a class="nav-link" href="#">Gestionar Préstecs</a></li>
-                            </c:if>
+                            <!-- SPRINT 3 (TEA 5): ENLLAÇ ESTADÍSTIQUES -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/bibliotecari/autors-populars">
+                                    <i class="bi bi-graph-up"></i> Estadístiques
+                                </a>
+                            </li>
+                        </c:if>
                     </ul>
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
@@ -390,7 +396,6 @@
 
                 </div>
         </section>
-
 
 
         <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
