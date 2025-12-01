@@ -93,7 +93,7 @@ public class GoogleBooksService {
     public List<Llibre> cercarLlibres(String titol, String autor, String isbn) {
         try {
 
-            // Si hi ha ISBN → cerca directa
+            // Si hi ha ISBN cerca directa
             if (isbn != null && !isbn.isBlank()) {
                 Optional<Llibre> llibreOpt = getLlibreByIsbn(isbn.trim());
                 return llibreOpt.map(List::of).orElse(List.of());
@@ -120,7 +120,7 @@ public class GoogleBooksService {
             URI uri = UriComponentsBuilder
                     .fromHttpUrl("https://www.googleapis.com/books/v1/volumes")
                     .queryParam("q", query.toString())
-                    .encode() // ← FA L'ENCODING AUTOMÀTIC DELS ACCENTS i ESPAIS
+                    .encode() //  FA L'ENCODING AUTOMÀTIC DELS ACCENTS i ESPAIS
                     .build()
                     .toUri();
 

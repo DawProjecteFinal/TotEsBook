@@ -149,7 +149,6 @@
 
                         <div class="mb-4">
                             <c:choose>
-
                                 <c:when test="${mode == 'reserva'}">
                                     <a href="${pageContext.request.contextPath}/mostrarLlibres" 
                                        class="btn btn-sm btn-outline-secondary">
@@ -158,10 +157,18 @@
                                 </c:when>
 
                                 <c:when test="${mode == 'proposta'}">
-                                    <a href="${pageContext.request.contextPath}/propostes/buscar_proposta?titol=${titol}&autor=${autor}&isbn=${isbnQuery}"
+                                    <a href="${pageContext.request.contextPath}/propostes/buscar_proposta?titol=${titol}&autor=${autor}&isbn=${isbn}"
                                        class="btn btn-sm btn-outline-secondary">
                                         <i class="bi bi-arrow-left"></i> Tornar als resultats
                                     </a>
+                                </c:when>
+
+                                <c:when test="${mode == 'api'}">
+                                    <a href="${pageContext.request.contextPath}/llibres/cercar_api?titol=${titol}&autor=${autor}"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Tornar als resultats
+                                    </a>
+
                                 </c:when>
 
                                 <c:otherwise>
@@ -223,19 +230,23 @@
 
                                 <p><strong>Editorial:</strong> <c:out value="${llibre.editorial}" default="No especificada"/></p>
                                 <p><strong>Idioma:</strong> <c:out value="${llibre.idioma}" default="No especificat"/></p>
-                                <p><strong>Es troba a:</strong>
-                                    <c:choose>
-                                        <c:when test="${not empty ubicacions}">
-                                            <c:forEach var="rel" items="${ubicacions}" varStatus="st">
-                                                <c:out value="${rel.biblioteca.nom}"/>
-                                                <c:if test="${!st.last}"> · </c:if>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="text-muted">No disponible a cap biblioteca</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </p>
+
+                                <c:if test="${mode != 'api'}">
+                                    <p><strong>Es troba a:</strong>
+                                        <c:choose>
+                                            <c:when test="${not empty ubicacions}">
+                                                <c:forEach var="rel" items="${ubicacions}" varStatus="st">
+                                                    <c:out value="${rel.biblioteca.nom}"/>
+                                                    <c:if test="${!st.last}"> · </c:if>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-muted">No disponible a cap biblioteca</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </p>
+                                </c:if>
+
 
                                 <c:if test="${mode == 'reserva'}">
                                     <div class="d-flex align-items-center mb-3">
@@ -283,6 +294,9 @@
                                            class="btn btn-warning btn-lg w-100">
                                             <i class="bi bi-lightbulb"></i> Fer proposta d’adquisició
                                         </a>
+                                    </c:if>
+                                    <c:if test="${mode == 'api'}">
+                                        <!-- En el cas de fer la consulta a la Api no tenim cap botó -->
                                     </c:if>
 
                                 </div>

@@ -112,8 +112,8 @@
                             </button>
                         </form>
 
-                        
-                           <%-- Lògica de Sessió per a Login/Logout --%>
+
+                        <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
                             <c:when test="${empty sessionScope.sessioUsuari}">
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
@@ -220,8 +220,9 @@
                             "<strong><c:out value="${textCerca}"/></strong>".
                         </c:when>
                         <c:when test="${not empty textCerca}">
-                            No s'han trobat llibres amb el títol
-                            "<strong><c:out value="${textCerca}"/></strong>".
+                            A les nostres biblioteques no disposem del llibre 
+                            "<strong><c:out value="${textCerca}"/></strong>",<br>
+                            Si voleu fer-ne una consulta, ho podeu fer a través del següent botó:
                         </c:when>
                         <c:when test="${not empty categoriaSeleccionada}">
                             No s'han trobat llibres per a aquesta categoria.
@@ -230,9 +231,17 @@
                             No s'han trobat llibres.
                         </c:otherwise>
                     </c:choose>
+
+                    <!-- Botó per consultar la api de Google Books -->
+                    <div class="mt-3">
+                        <a href="${pageContext.request.contextPath}/llibres/cercar_api?titol=${fn:escapeXml(textCerca)}"
+                           class="btn btn-primary">
+                            Cercar a Google Books
+                        </a>
+                    </div>
                 </div>
             </c:if>
-            
+
 
             <!-- Llistat de llibres -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">

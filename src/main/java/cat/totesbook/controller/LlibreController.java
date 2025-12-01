@@ -7,6 +7,7 @@ package cat.totesbook.controller;
 import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.service.BibliotecaLlibreService;
+import cat.totesbook.service.GoogleBooksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,9 @@ public class LlibreController {
 
     @Autowired
     private BibliotecaLlibreService bibliotecaLlibreService;
+
+    @Autowired
+    private GoogleBooksService googleBooksService;
 
     // 
     /**
@@ -136,12 +140,11 @@ public class LlibreController {
                 // Biblioteques on es troba aquest llibre
                 List<BibliotecaLlibre> ubicacions = bibliotecaLlibreService.findByLlibre(llibre);
 
-                
                 model.addAttribute("llibre", llibre);
-                model.addAttribute("mode", mode);      
+                model.addAttribute("mode", mode);
                 model.addAttribute("ubicacions", ubicacions);
 
-                return "fitxa_llibre"; 
+                return "fitxa_llibre";
             } else {
                 redirectAttrs.addFlashAttribute("error", "El llibre amb ISBN '" + isbn + "' no s'ha trobat.");
                 return "redirect:/";
@@ -150,6 +153,62 @@ public class LlibreController {
             redirectAttrs.addFlashAttribute("error", "S'ha produït un error en carregar la fitxa del llibre.");
             return "redirect:/";
         }
+    }
+
+    /**
+     * Quan no troba un llibre a la base de dades de les biblioteques, dóna la
+     * opció de buscar-lo a la Api de Google Books
+     *
+     * @param titol
+     * @param autor
+     * @param isbn
+     * @return
+     */
+    @GetMapping("/llibres/cercar_api")
+    public ModelAndView cercarApi(
+            @RequestParam(required = false) String titol,
+            @RequestParam(required = false) String autor,
+            @RequestParam(required = false) String isbn) {
+
+        List<Llibre> resultats = googleBooksService.cercarLlibres(titol, autor, isbn);
+
+        ModelAndView mv = new ModelAndView("llibres/llibres_resultats_api");
+        mv.addObject("resultats", resultats);
+        mv.addObject("titol", titol);
+        mv.addObject("autor", autor);
+        mv.addObject("isbn", isbn);
+
+        return mv;
+    }
+
+    /**
+     * Obre la fitxa del llibre que ha trobat a la api de Google Books
+     *
+     * @param isbn
+     * @param titol
+     * @param mode
+     * @param isbnCerca
+     * @param autor
+     * @return
+     */
+    @GetMapping("/llibres/fitxa_api")
+    public ModelAndView fitxaApi(@RequestParam String isbn,
+            @RequestParam(required = false) String titol,
+            @RequestParam(required = false) String autor,
+            @RequestParam(required = false) String mode){
+
+        Optional<Llibre> llibreOpt = googleBooksService.getLlibreByIsbn(isbn);
+
+        ModelAndView mv = new ModelAndView("fitxa_llibre");
+
+        mv.addObject("llibre", llibreOpt.orElse(null));
+        mv.addObject("mode", "api");
+
+        mv.addObject("titol", titol);
+        mv.addObject("autor", autor);
+        mv.addObject("isbn", isbn);
+
+        return mv;
     }
 
 }
