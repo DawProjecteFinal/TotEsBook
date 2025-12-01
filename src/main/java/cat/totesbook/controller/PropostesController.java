@@ -266,5 +266,43 @@ public class PropostesController {
         redirect.addFlashAttribute("missatge", "Proposta eliminada correctament.");
         return "redirect:/propostes/llista_propostes";
     }
+    /**
+     * Mostra el detall de una proposta a l'administrador
+     * @param idProposta
+     * @param model
+     * @return 
+     */
+    @GetMapping("/detall")
+    public String veureDetall(@RequestParam("id") int idProposta, Model model) {
+
+        PropostaAdquisicio proposta = propostaAdquisicioService.findByIdProposta(idProposta);
+
+        if (proposta == null) {
+            return "redirect:/dashboard_administrador";
+        }
+
+        model.addAttribute("proposta", proposta);
+        model.addAttribute("estats", PropostaAdquisicio.EstatProposta.values());
+
+        return "propostes/detall_proposta";
+    }
+
+    /**
+     * Actualitzem l'estat de la proposta
+     * @param idProposta
+     * @param estat
+     * @param resposta
+     * @return 
+     */
+    @PostMapping("/actualitzar")
+    public String actualitzarProposta(@RequestParam("idProposta") int idProposta,
+                                      @RequestParam("estat") PropostaAdquisicio.EstatProposta estat,
+                                      @RequestParam(value = "resposta", required = false) String resposta) {
+
+        propostaAdquisicioService.actualitzarEstat(idProposta, estat, resposta);
+
+        return "redirect:/dashboard_administrador";
+    }
+
 
 }

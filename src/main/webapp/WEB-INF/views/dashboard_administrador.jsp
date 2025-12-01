@@ -127,17 +127,30 @@
                 <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="biblioteques-tab" data-bs-toggle="tab" data-bs-target="#biblioteques" type="button" role="tab">
-                            🏛️ Biblioteques
+                            <img src="${pageContext.request.contextPath}/assets/icons/biblioteques.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Biblioteques
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="comptes-tab" data-bs-toggle="tab" data-bs-target="#comptes" type="button" role="tab">
-                            👥 Comptes d'Usuari
+                            <img src="${pageContext.request.contextPath}/assets/icons/usuaris.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Comptes d'Usuari
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="llibres-tab" data-bs-toggle="tab" data-bs-target="#llibres" type="button" role="tab">
-                            📚 Llibres
+                            <img src="${pageContext.request.contextPath}/assets/icons/llibres.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Llibres
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="propostes-tab" data-bs-toggle="tab" data-bs-target="#propostes" type="button" role="tab">
+                            <img src="${pageContext.request.contextPath}/assets/icons/propostes.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Propostes d'adquisició
                         </button>
                     </li>
                 </ul>
@@ -333,7 +346,7 @@
                         <div class="card shadow-sm mb-5">
                             <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0 text-tot-bold">
-                                    <i class="bi bi-building me-2"></i> Gestió de Llibres
+                                    <i class="bi bi-bookshelf me-2"></i>Gestió de Llibres
                                 </h4>
                                 <a href="${pageContext.request.contextPath}/gestio/llibres/afegir" class="btn btn-sm btn-tot">
                                     <i class="bi bi-plus-circle-fill me-1"></i> Afegir Llibre
@@ -407,6 +420,73 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Secció de les propostes d'adquisició -->       
+                    <div class="tab-pane fade" id="propostes">
+                        <h4 class="mb-3">Propostes d'adquisició dels usuaris</h4>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Títol proposat</th>
+                                        <th>Autor</th>
+                                        <th>ISBN</th>
+                                        <th>Usuari</th>
+                                        <th>Data Proposta</th>
+                                        <th>Estat</th>
+                                        <th>Accions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${empty propostes}">
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted fst-italic">
+                                                    No hi ha propostes d'adquisició.
+                                                </td>
+                                            </tr>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <c:forEach var="p" items="${propostes}">
+                                                <tr>
+                                                    <td>${p.titol}</td>
+                                                    <td>${p.autor}</td>
+                                                    <td>${p.isbn}</td>
+
+                                                    <!--  MOSTREM L'ID D'USUARI -->
+                                                    <td>Usuari #${p.idUsuari}</td>
+
+                                                    <td>${p.dataPropostaFormatted}</td>
+
+                                                    <td>
+                                                        <span class="badge 
+                                                              ${p.estat == 'pendent' ? 'bg-warning' :
+                                                                (p.estat == 'acceptada' ? 'bg-success' :
+                                                                (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
+                                                                  ${p.estat}
+                                                              </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
+                                                               class="btn btn-sm btn-primary">
+                                                                Gestionar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div> <!-- fi tab-content -->
             </div>

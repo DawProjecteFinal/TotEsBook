@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Biblioteca;
@@ -58,7 +57,7 @@ public class DashboardController {
 
     @Autowired
     private ReservaService reservaService;
-    
+
     @Autowired
     private PropostaAdquisicioService propostaAdquisicioService;
 
@@ -87,8 +86,6 @@ public class DashboardController {
         List<Prestec> devolucions = prestecService.findDevolucionsByBiblioteca(biblioteca);
         List<Reserva> reservesPendents = reservaService.findReservesPendentsByBiblioteca(biblioteca);
 
-        List<PropostaAdquisicio> propostes = propostaAdquisicioService.findAllPropostes();
-
         model.addAttribute("numPrestecsActius", prestecsActius.size());
         model.addAttribute("numDevolucionsPendents", devolucions.size());
         model.addAttribute("numReservesPendents", reservesPendents.size());
@@ -98,9 +95,6 @@ public class DashboardController {
         model.addAttribute("devolucions", devolucions);
         model.addAttribute("reservesPendents", reservesPendents);
         model.addAttribute("biblioteca", biblioteca);
-
-        model.addAttribute("numPropostes", propostes.size());
-        model.addAttribute("propostes", propostes);
 
         return "dashboard_bibliotecari";
     }
@@ -145,6 +139,16 @@ public class DashboardController {
             b.setNumLlibres(numLlibres);
             b.setNumPrestecs(numPrestecs);
         }
+
+        // Enviem al administrador la part de les propostes
+        List<PropostaAdquisicio> propostes = propostaAdquisicioService.findAllPropostes();
+        model.addAttribute("numPropostes", propostes.size());
+        model.addAttribute("propostes", propostes);
+
+        System.out.println("*******************************");
+        System.out.println("Propostes= " + propostes.size());
+        System.out.println("*******************************");
+
         model.addAttribute("llistaBiblioteques", biblioteques);
 
         model.addAttribute("llistaAgents", agentService.getAllAgents());

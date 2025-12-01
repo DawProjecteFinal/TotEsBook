@@ -18,4 +18,6 @@ public interface PropostaAdquisicioRepository {
     PropostaAdquisicio findByIdProposta(int id); 
     
     void eliminarProposta(int id);
+    
+    void actualitzar(PropostaAdquisicio p);
 }

@@ -51,4 +51,8 @@ public class PropostaAdquisicioDAO implements PropostaAdquisicioRepository {
         }
     }
 
+    public void actualitzar(PropostaAdquisicio p) {
+        entityManager.merge(p);
+    }
+
 }

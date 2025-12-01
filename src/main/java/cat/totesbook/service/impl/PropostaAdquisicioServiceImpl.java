@@ -45,4 +45,15 @@ public class PropostaAdquisicioServiceImpl implements PropostaAdquisicioService 
         repo.eliminarProposta(id);
     }
 
+    @Override
+    public void actualitzarEstat(int idProposta, PropostaAdquisicio.EstatProposta estat, String resposta) {
+        PropostaAdquisicio p = repo.findByIdProposta(idProposta);
+
+        if (p != null) {
+            p.setEstat(estat);
+            p.setResposta(resposta);
+            repo.actualitzar(p);
+        }
+    }
+
 }

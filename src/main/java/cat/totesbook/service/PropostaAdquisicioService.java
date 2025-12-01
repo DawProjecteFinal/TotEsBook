@@ -19,4 +19,6 @@ public interface PropostaAdquisicioService {
     PropostaAdquisicio findByIdProposta(int id);
     
     void eliminarProposta(int id);
+    
+    void actualitzarEstat(int idProposta,PropostaAdquisicio.EstatProposta estat,String resposta);
 }
