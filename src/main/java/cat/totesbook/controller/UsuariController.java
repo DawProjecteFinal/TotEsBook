@@ -132,30 +132,56 @@ public class UsuariController {
             model.addAttribute("errorCarregantLlibres", "No s'han pogut carregar els llibres destacats.");
         }
 
+        // Guardem les llistes fora per poder-les reutilitzar per construir el mapa ISBN -> biblioteques
+        List<Prestec> meusPrestecs = null;
+        List<Prestec> historial = null;
+        List<Reserva> mevesReserves = null;
+
         try {
-            // Carregar prestecs actius
-            List<Prestec> meusPrestecs = prestecService.findPrestecsActiusByUsuari(idUsuari);
+            // Carregar préstecs actius
+            meusPrestecs = prestecService.findPrestecsActiusByUsuari(idUsuari);
             model.addAttribute("meusPrestecs", meusPrestecs);
+
             // Carregar historial de prèstecs
-            List<Prestec> historial = prestecService.findPrestecsRetornatsByUsuari(idUsuari);
+            historial = prestecService.findPrestecsRetornatsByUsuari(idUsuari);
             model.addAttribute("historialPrestecs", historial);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorCarregantPrestecs", "No s'han pogut carregar els teus préstecs.");
         }
+
         try {
             // Carregar reserves
-            List<Reserva> mevesReserves = reservaService.findReservaByUsuari(idUsuari);
+            mevesReserves = reservaService.findReservaByUsuari(idUsuari);
             model.addAttribute("mevesReserves", mevesReserves);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
+        }
 
-            // Mapa ISBN -> biblioteques on és el llibre reservat
+        // Construïm el mapa ISBN -> llista de BibliotecaLlibre
+        try {
             Map<String, List<BibliotecaLlibre>> bibliosPerIsbn = new HashMap<>();
 
-            for (Reserva r : mevesReserves) {
-                Llibre llibre = r.getLlibre();
-                if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
-                    List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
-                    bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+            // 1) Afegim les biblioteques dels llibres reservats
+            if (mevesReserves != null) {
+                for (Reserva r : mevesReserves) {
+                    Llibre llibre = r.getLlibre();
+                    if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
+                        List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
+                        bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+                    }
+                }
+            }
+
+            // 2) Afegim també les biblioteques dels llibres en préstec actiu
+            if (meusPrestecs != null) {
+                for (Prestec p : meusPrestecs) {
+                    Llibre llibre = p.getLlibre();
+                    if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
+                        List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
+                        bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+                    }
                 }
             }
 
@@ -163,49 +189,12 @@ public class UsuariController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
+            // No llencem error al model perquè, si falla això, com a molt no es veurà la biblioteca
         }
+
         return "dashboard_usuari";
     }
 
-    /**
-     * Gestiona les peticions GET a /dashboard_bibliotecari. Comprova la sessió
-     * i mostra el panell del bibliotecari.
-     */
-    /*
-    @GetMapping("/dashboard_bibliotecari")
-    public String mostrarDashboardBibliotecari(HttpSession session) {
-        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
-        if (sessioUsuari == null || (sessioUsuari.getRol() != Rol.BIBLIOTECARI && sessioUsuari.getRol() != Rol.ADMIN)) {
-            return "redirect:/login";
-        }
-        
-        // El ViewResolver buscarà: /WEB-INF/views/dashboard_bibliotecario.jsp
-        // TODO: Carregar dades necessàries per a aquest panell (ex: reserves pendents)
-        return "dashboard_bibliotecario";
-    }
-     */
-    /**
-     * Gestiona les peticions GET a /dashboard_admin. Comprova la sessió i
-     * mostra el panell de l'administrador.
-     */
-    /*
-    @GetMapping("/dashboard_admin")
-    public String mostrarDashboardAdmin(HttpSession session) {
-        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
-        if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
-            return "redirect:/login";
-        }
-        
-        // El ViewResolver buscarà: /WEB-INF/views/dashboard_admin.jsp
-        // NOTA: El teu 'dashboard_admin.jsp' actualment carrega les dades
-        // amb scriptlets (<% ... %>) al propi JSP. Això funcionarà.
-        // (En una futura refactorització, aquesta lògica hauria de moure's aquí).
-        return "dashboard_admin";
-    }
-     */
     // --- Lògica de Registre ---
     /**
      * Gestiona les peticions GET a /registre. Mostra la pàgina (formulari) de

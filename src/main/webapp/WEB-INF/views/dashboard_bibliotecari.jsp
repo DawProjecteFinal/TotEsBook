@@ -221,7 +221,7 @@
                                         <tr>
                                             <td>${p.llibre.isbn}</td>
                                             <td>${p.usuari.nom} ${p.usuari.cognoms}</td>
-                                            <<td>${p.dataPrestecFormatted}</td>
+                                            <td>${p.dataPrestecFormatted}</td>
                                             <td>
                                                 <span class="badge bg-success text-dark">
                                                     ${p.dataDevolucioFormatted}
@@ -289,7 +289,7 @@
                                                 <tr>
                                                     <td>${r.llibre.titol}</td>
                                                     <td>${r.usuari.nom} ${r.usuari.cognoms}</td>
-                                                    <td>${r.dataReservaFormatted}</td>È
+                                                    <td>${r.dataReservaFormatted}</td>
                                                     <td>
                                                         <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
                                                            class="btn btn-sm btn-primary">

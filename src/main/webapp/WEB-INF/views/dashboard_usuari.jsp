@@ -226,6 +226,20 @@
                                                         <small class="d-block text-muted">
                                                             Data préstec: ${prestec.dataPrestecFormatada}
                                                         </small>
+                                                        <small class="d-block text-muted">
+                                                            Retornar a:
+                                                            <c:choose>
+                                                                <c:when test="${not empty bibliosPerIsbn[prestec.llibre.isbn]}">
+                                                                    <c:forEach var="rel" items="${bibliosPerIsbn[prestec.llibre.isbn]}" varStatus="st">
+                                                                        <c:out value="${rel.biblioteca.nom}"/>
+                                                                        <c:if test="${!st.last}"> · </c:if>
+                                                                    </c:forEach>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="text-muted">Consultar biblioteca</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </small>
                                                         <small class="d-block text-danger fw-bold">
                                                             Retornar abans de: ${prestec.dataVencimentFormatada}
                                                         </small>
@@ -262,7 +276,7 @@
                                                             Data reserva:
                                                             ${reserva.dataReservaFormatted}
                                                         </small>
-                                                         <small class="d-block text-muted">
+                                                        <small class="d-block text-muted">
                                                             Recollida a:
                                                             <c:choose>
                                                                 <c:when test="${not empty bibliosPerIsbn[reserva.llibre.isbn]}">
@@ -496,7 +510,7 @@
 
         <!-- Script de Bootstrap Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-       <script src="${pageContext.request.contextPath}/assets/js/dashboard_bibliotecari.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/js/dashboard_bibliotecari.js"></script>
 
     </body>
 </html>
