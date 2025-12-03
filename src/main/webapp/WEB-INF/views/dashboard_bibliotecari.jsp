@@ -159,6 +159,7 @@
                     </div>
                 </div>
 
+
                 <!-- BOTÓ PER AFEGIR USUARI AL PANELL DE BIBLIOTECARI -->
                 <div class="d-flex justify-content-end mb-3">
                     <a href="${pageContext.request.contextPath}/bibliotecari/nou-usuari" class="btn btn-success shadow-sm">
@@ -196,6 +197,12 @@
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#retards">
                             <img src="${pageContext.request.contextPath}/assets/icons/retards.png"
                                  alt="Propostes" style="width:40px; height:40px;">Llibres amb retard
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sancions">
+                            <img src="${pageContext.request.contextPath}/assets/icons/sancio.png"
+                                 alt="Propostes" style="width:40px; height:40px;">Sancions actives
                         </button>
                     </li>
                 </ul>
@@ -380,8 +387,50 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
+                    <!-- Sancions actives -->
+                    <div class="tab-pane fade p-3" id="sancions">
+                        <h4 class="mb-3">Sancions actives</h4>
 
+                        <div class="table-responsive">
+                            <table class="table table-striped mt-4">
+                                <thead>
+                                    <tr>
+                                        <th>Usuari</th>
+                                        <th>Data fi sanció</th>
+                                        <th>Motiu</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${empty sancionsActives}">
+                                            <tr>
+                                                <td colspan="3" class="text-center text-muted fst-italic">
+                                                    No hi ha sancions actives.
+                                                </td>
+                                            </tr>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <c:forEach var="u" items="${sancionsActives}">
+                                                <tr>
+                                                    <td>${u.nom} ${u.cognoms}</td>
+
+                                                    <!-- Formato badge en rojo igual que ‘Data venciment’ -->
+                                                    <td>
+                                                        <span class="badge bg-danger text-light">
+                                                            ${u.dataFiSancioFormatted}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>${u.motiuSancio}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>

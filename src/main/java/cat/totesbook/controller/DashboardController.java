@@ -12,6 +12,7 @@ import cat.totesbook.domain.PropostaAdquisicio;
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
+import cat.totesbook.domain.Usuari;
 
 import cat.totesbook.service.AgentService;
 import cat.totesbook.service.BibliotecaLlibreService;
@@ -95,6 +96,9 @@ public class DashboardController {
         model.addAttribute("devolucions", devolucions);
         model.addAttribute("reservesPendents", reservesPendents);
         model.addAttribute("biblioteca", biblioteca);
+
+        List<Usuari> sancionsActives = usuariService.getUsuarisAmbSancioActiva();
+        model.addAttribute("sancionsActives", sancionsActives);
 
         return "dashboard_bibliotecari";
     }

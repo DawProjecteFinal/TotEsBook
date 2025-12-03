@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.config.DBConnection;
@@ -10,7 +9,7 @@ import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.UsuariRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.PersistenceContext; // Manté aquest import
+import jakarta.persistence.PersistenceContext;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -108,7 +108,6 @@ public class UsuariDAO implements UsuariRepository {
         }
     }
 
-
     /**
      * Copia camps d'un usuari origen cap a un usuari existent.
      */
@@ -124,19 +123,14 @@ public class UsuariDAO implements UsuariRepository {
             desti.setContrasenya(BCrypt.hashpw(origen.getContrasenya(), BCrypt.gensalt()));
         }
     }
-    
-    // ===================================
-    // --- INICI NOU CODI AFEGIT ---
-    // ===================================
-    
+
     @Override
     public Usuari findUsuariById(int id) {
         String sql = "SELECT * FROM Usuaris WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, id);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     // Fem servir el mètode d'ajuda per mapejar les dades
@@ -151,26 +145,23 @@ public class UsuariDAO implements UsuariRepository {
 
     @Override
     public void updatePerfil(Usuari usuari) {
-        // Aquest UPDATE NO actualitza la contrasenya, només les dades del perfil
-        // CORRECCIÓ: Afegim llibresFavorits a l'UPDATE
         String sql = "UPDATE Usuaris SET nom = ?, cognoms = ?, email = ?, telefon = ?, llibresFavorits = ? WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, usuari.getNom());
             ps.setString(2, usuari.getCognoms());
             ps.setString(3, usuari.getEmail());
             ps.setString(4, usuari.getTelefon());
-            ps.setString(5, usuari.getLlibresFavorits()); // <-- CORRECCIÓ: S'ha afegit aquest paràmetre
-            ps.setInt(6, usuari.getId());                 // <-- CORRECCIÓ: Ara és el paràmetre 6
-            
+            ps.setString(5, usuari.getLlibresFavorits());
+            ps.setInt(6, usuari.getId());
+
             ps.executeUpdate();
-            
+
         } catch (Exception ex) {
             System.getLogger(UsuariDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
-    
+
     /**
      * Mètode d'ajuda privat per convertir un ResultSet a un objecte Usuari
      * (Evita repetir codi)
@@ -184,10 +175,65 @@ public class UsuariDAO implements UsuariRepository {
         usuari.setTelefon(rs.getString("telefon"));
         usuari.setLlibresFavorits(rs.getString("llibresFavorits"));
         usuari.setContrasenya(rs.getString("contrasenya")); // Obtenim el hash (encara que no el fem servir a la vista)
+
+        java.sql.Timestamp ts = rs.getTimestamp("dataFiSancio");
+        if (ts != null) {
+            usuari.setDataFiSancio(ts.toLocalDateTime());
+        }
+        usuari.setMotiuSancio(rs.getString("motiuSancio"));
+
         return usuari;
     }
-    
-    // ===================================
-    // --- FI NOU CODI AFEGIT ---
-    // ===================================
+
+    @Override
+    public void updateSancioUsuari(int idUsuari, LocalDateTime dataFiSancio, String motiuSancio) {
+        String sql = "UPDATE Usuaris SET dataFiSancio = ?, motiuSancio = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (dataFiSancio != null) {
+                ps.setTimestamp(1, java.sql.Timestamp.valueOf(dataFiSancio));
+            } else {
+                ps.setNull(1, java.sql.Types.TIMESTAMP);
+            }
+
+            ps.setString(2, motiuSancio);
+            ps.setInt(3, idUsuari);
+
+            ps.executeUpdate();
+
+        } catch (Exception ex) {
+            System.getLogger(UsuariDAO.class.getName())
+                    .log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+
+    @Override
+    public List<Usuari> getUsuarisAmbSancioActiva() {
+        try {
+            return entityManager.createQuery(
+                    "SELECT u FROM Usuari u "
+                    + "WHERE u.dataFiSancio IS NOT NULL "
+                    + "AND u.dataFiSancio > :ara", Usuari.class)
+                    .setParameter("ara", java.time.LocalDateTime.now())
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error a UsuariDAO.getUsuarisAmbSancioActiva: " + e.getMessage());
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    @Override
+    public List<Usuari> findUsuarisAmbSancioActiva() {
+        LocalDateTime ara = LocalDateTime.now();
+
+        return entityManager.createQuery(
+                "SELECT u FROM Usuari u "
+                + "WHERE u.dataFiSancio IS NOT NULL AND u.dataFiSancio > :ara",
+                Usuari.class)
+                .setParameter("ara", ara)
+                .getResultList();
+    }
+
 }

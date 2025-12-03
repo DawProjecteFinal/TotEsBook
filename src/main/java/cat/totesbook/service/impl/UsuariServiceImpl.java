@@ -2,13 +2,13 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.repository.UsuariRepository;
 import cat.totesbook.service.UsuariService;
 import cat.totesbook.domain.Rol;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class UsuariServiceImpl implements UsuariService {
@@ -43,12 +42,12 @@ public class UsuariServiceImpl implements UsuariService {
         if (usuariRepository.getUsuariByEmail(usuari.getEmail()) != null) {
             throw new Exception("L'email ja està en ús.");
         }
-        
+
         if (usuari.getContrasenya() != null && !usuari.getContrasenya().startsWith("$2a$")) {
-             String hashedPassword = BCrypt.hashpw(usuari.getContrasenya(), BCrypt.gensalt(12));
-             usuari.setContrasenya(hashedPassword);
+            String hashedPassword = BCrypt.hashpw(usuari.getContrasenya(), BCrypt.gensalt(12));
+            usuari.setContrasenya(hashedPassword);
         }
- 
+
         usuariRepository.saveUsuari(usuari);
     }
 
@@ -57,19 +56,22 @@ public class UsuariServiceImpl implements UsuariService {
     public Usuari getUsuariByEmail(String email) {
         return usuariRepository.getUsuariByEmail(email);
     }
+
     /*
     @Override
     public void updatePerfil(Usuari usuari) {
         usuariRepository.updatePerfil(usuari);
     }
-    */
+     */
 
     @Override
     @Transactional
     public void updateUsuari(Usuari usuariModificat, String nouPassword) throws Exception {
         Usuari usuariBBDD = usuariRepository.findUsuariById(usuariModificat.getId());
-        if (usuariBBDD == null) throw new Exception("L'usuari no existeix.");
-        
+        if (usuariBBDD == null) {
+            throw new Exception("L'usuari no existeix.");
+        }
+
         usuariBBDD.setNom(usuariModificat.getNom());
         usuariBBDD.setCognoms(usuariModificat.getCognoms());
         usuariBBDD.setEmail(usuariModificat.getEmail());
@@ -79,14 +81,14 @@ public class UsuariServiceImpl implements UsuariService {
             usuariBBDD.setContrasenya(hashedPassword);
         }
 
-        usuariRepository.updatePerfil(usuariBBDD); 
+        usuariRepository.updatePerfil(usuariBBDD);
     }
-    
+
     // Implementació per afegir usuari lector manual des del Panell Bibliotecari
     @Override
     @Transactional // Aquí sí volem transacció per guardar
     public void crearLectorManual(String nom, String cognoms, String telefon, String email, String password) throws Exception {
-        
+
         // 1. Validar email (que no existeixi ja)
         if (usuariRepository.getUsuariByEmail(email) != null) {
             throw new Exception("Aquest email ja està registrat al sistema.");
@@ -97,12 +99,33 @@ public class UsuariServiceImpl implements UsuariService {
         u.setCognoms(cognoms);
         u.setTelefon(telefon);
         u.setEmail(email);
-        
+
         // 2. Hashejar password (Seguretat)
         // Si encara no uses BCrypt, posa: u.setContrasenya(password);
         String hash = BCrypt.hashpw(password, BCrypt.gensalt(12));
-        u.setContrasenya(hash); 
+        u.setContrasenya(hash);
 
         usuariRepository.saveUsuari(u);
+    }
+
+    @Override
+    @Transactional
+    public void aplicarSancio(Integer idUsuari, LocalDateTime dataFiSancio, String motiuSancio) {
+
+        Usuari usuari = usuariRepository.findUsuariById(idUsuari);
+        if (usuari == null) {
+            throw new IllegalArgumentException("Usuari no trobat");
+        }
+
+        usuari.setDataFiSancio(dataFiSancio);
+        usuari.setMotiuSancio(motiuSancio);
+
+        usuariRepository.updateSancioUsuari(idUsuari, dataFiSancio, motiuSancio);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Usuari> getUsuarisAmbSancioActiva() {
+       return usuariRepository.getUsuarisAmbSancioActiva();
     }
 }

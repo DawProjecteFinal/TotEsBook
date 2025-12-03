@@ -6,6 +6,7 @@
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Usuari;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -23,4 +24,8 @@ public interface UsuariService {
     
     // Per crear lectors manualment des del Panell Bibliotecari
     void crearLectorManual(String nom, String cognoms, String telefon, String email, String password) throws Exception;
+    
+    void aplicarSancio(Integer idUsuari, LocalDateTime dataFiSancio, String motiuSancio);
+    
+    List<Usuari> getUsuarisAmbSancioActiva();
 }

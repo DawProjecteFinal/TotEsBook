@@ -4,6 +4,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html lang="ca">
@@ -20,9 +21,18 @@
             <h5 class="mb-4">Gestionar Préstec</h5>
 
             <c:if test="${not empty missatge}">
-                <div class="alert alert-success">
-                    ${missatge}
-                </div>
+                <c:choose>
+                    <c:when test="${fn:contains(missatge, 'Sanció')}">
+                        <div class="alert alert-danger">
+                            ${missatge}
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="alert alert-success">
+                            ${missatge}
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </c:if>
 
             <c:if test="${not empty error}">
@@ -30,6 +40,7 @@
                     ${error}
                 </div>
             </c:if>
+
 
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -67,8 +78,7 @@
                     <h6 class="mb-3">Accions</h6>
 
                     <div class="d-flex flex-wrap gap-2">
-
-                        <!-- TORNAR -->
+                        <!-- TORNAR (sempre actiu) -->
                         <form action="${pageContext.request.contextPath}/gestionarPrestec/retornar"
                               method="POST" class="d-inline">
                             <input type="hidden" name="idPrestec" value="${prestec.idPrestec}">
@@ -77,36 +87,39 @@
                             </button>
                         </form>
 
-                        <!-- RENOVAR +30 DIES -->
+                        <!-- RENOVAR +30 DIES (deshabilitat si usuari sancionat) -->
                         <form action="${pageContext.request.contextPath}/gestionarPrestec/renovar"
                               method="POST" class="d-inline">
                             <input type="hidden" name="idPrestec" value="${prestec.idPrestec}">
-                            <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
-                            </button>
-                        </form>
+                            <button type="submit" class="btn btn-warning"
+                                    <c:if test="${usuariSancionat}">disabled</c:if>>
+                                        <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
+                                    </button>
+                            </form>
 
-                        <!-- SANCIONAR (DUES OPCIONS) -->
-                        <form action="${pageContext.request.contextPath}/gestionarPrestec/sancionar"
+                            <!-- SANCIONAR (deshabilitats si ja té sanció activa) -->
+                            <form action="${pageContext.request.contextPath}/gestionarPrestec/sancionar"
                               method="POST" class="d-inline">
                             <input type="hidden" name="idPrestec" value="${prestec.idPrestec}">
 
                             <button type="submit" name="tipus" value="RETARD"
-                                    class="btn btn-outline-danger">
-                                Sanció per retard
-                            </button>
+                                    class="btn btn-outline-danger"
+                                    <c:if test="${usuariSancionat}">disabled</c:if>>
+                                        Sanció per retard
+                                    </button>
 
-                            <button type="submit" name="tipus" value="MAL_ESTAT"
-                                    class="btn btn-danger">
-                                Sanció per mal estat
-                            </button>
-                        </form>
+                                    <button type="submit" name="tipus" value="MAL_ESTAT"
+                                            class="btn btn-danger"
+                                    <c:if test="${usuariSancionat}">disabled</c:if>>
+                                        Sanció per mal estat
+                                    </button>
+                            </form>
 
-                    </div>
+                        </div>
 
-                    <hr>
+                        <hr>
 
-                    <a href="${pageContext.request.contextPath}/dashboard_bibliotecari"
+                        <a href="${pageContext.request.contextPath}/dashboard_bibliotecari"
                        class="btn btn-secondary">
                         &laquo; Tornar al llistat de préstecs
                     </a>

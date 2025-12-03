@@ -224,9 +224,8 @@ public ModelAndView editarBiblioteca(
     biblioteca.setTelefon(form.getTelefon());
     biblioteca.setEmail(form.getEmail());
 
-    // ================================
-    //   ACTUALITZAR BIBLIOTECARI
-    // ================================
+
+    //   Actualitzar bibliotecari
     if (idBibliotecari != null && idBibliotecari != 0) {
 
         Agent agent = agentService.getAgentById(idBibliotecari);

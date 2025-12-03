@@ -36,19 +36,19 @@ import org.springframework.web.servlet.ModelAndView;
 public class AuthController {
 
     @Autowired
-    private UsuariService usuariService;             // Cridem a la capa de servei
+    private UsuariService usuariService;             
 
     @Autowired
     private AgentService agentService;
 
     @Autowired
-    private BibliotecaService bibliotecaService;     // Cridem a la capa de servei
+    private BibliotecaService bibliotecaService;     
 
     @Autowired
     private LlibreService llibreService;
 
     @Autowired
-    private BibliotecaLlibreService bibliotecaLlibreService; // Servei necessari per carregar biblioteques i exemplars
+    private BibliotecaLlibreService bibliotecaLlibreService; 
 
     @GetMapping("/login")
     public ModelAndView loginForm() {

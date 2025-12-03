@@ -6,6 +6,7 @@
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Usuari;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -56,7 +57,9 @@ public interface UsuariRepository {
      */
     void updatePerfil(Usuari usuari);
     
+    void updateSancioUsuari(int idUsuari, LocalDateTime dataFiSancio, String motiuSancio);
     
-    
+   List<Usuari> getUsuarisAmbSancioActiva();
    
+   List<Usuari> findUsuarisAmbSancioActiva();
 }
