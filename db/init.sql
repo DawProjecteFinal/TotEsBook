@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS Reserves (
     idUsuari INT NOT NULL,
     isbn VARCHAR(20) NOT NULL,
     dataReserva DATETIME NOT NULL,
-    estat ENUM('pendent', 'disponible', 'caducada', 'cancelada') NOT NULL DEFAULT 'pendent',
+    estat ENUM('pendent', 'caducada') NOT NULL DEFAULT 'pendent',
 
     CONSTRAINT fk_reserves_usuaris FOREIGN KEY (idUsuari) REFERENCES Usuaris(id)
         ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -144,10 +144,10 @@ INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
 -- (5, '9781260440232', NOW(), 'pendent');
 
 -- PROPOSTES D’ADQUISICIÓ
-INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu, dataProposta, estat)
-VALUES
-(6, 'Crim i càstig', 'Fiódor Dostoievski', NULL, 'Edicions 62', 'Molt demanat pels usuaris', NOW(), 'pendent'),
-(7, 'El Senyor dels Anells', 'J.R.R. Tolkien', NULL, 'Minotauro', 'Per ampliar la secció de fantasia', NOW(), 'pendent');
+-- INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu, dataProposta, estat)
+-- VALUES
+-- (6, 'Crim i càstig', 'Fiódor Dostoievski', NULL, 'Edicions 62', 'Molt demanat pels usuaris', NOW(), 'pendent'),
+-- (7, 'El Senyor dels Anells', 'J.R.R. Tolkien', NULL, 'Minotauro', 'Per ampliar la secció de fantasia', NOW(), 'pendent');
 
 CREATE TABLE IF NOT EXISTS BibliotecaLlibres (
     id INT AUTO_INCREMENT PRIMARY KEY,
