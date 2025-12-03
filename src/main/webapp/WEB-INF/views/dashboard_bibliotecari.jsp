@@ -1,7 +1,5 @@
 <%-- 
-    Document   : dashboard_bibliotecari.jsp
-    Created on : 23 oct 2025, 14:27:27
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -55,7 +53,13 @@
                             <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
                                 <%-- Enllaços específics per a bibliotecari/admin --%>
                             <li class="nav-item"><a class="nav-link" href="#">Gestionar Préstecs</a></li>
-                            </c:if>
+                            <!-- SPRINT 3 (TEA 5): ENLLAÇ ESTADÍSTIQUES -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/bibliotecari/autors-populars">
+                                    <i class="bi bi-graph-up"></i> Estadístiques
+                                </a>
+                            </li>
+                        </c:if>
                     </ul>
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
@@ -155,13 +159,45 @@
                     </div>
                 </div>
 
+                <!-- BOTÓ PER AFEGIR USUARI AL PANELL DE BIBLIOTECARI -->
+                <div class="d-flex justify-content-end mb-3">
+                    <a href="${pageContext.request.contextPath}/bibliotecari/nou-usuari" class="btn btn-success shadow-sm">
+                        <i class="bi bi-person-plus-fill"></i> Registrar Nou Lector
+                    </a>
+                </div>
+
                 <!-- ===== Pestanyes ===== -->
                 <ul class="nav nav-tabs mb-4" id="tabsBibliotecari" role="tablist">
-                    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prestecs">Préstecs actius</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reserves">Reserves pendents</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#devolucions">Devolucions</button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#registrar-prestec"><strong>+ Registrar Préstec</strong></button></li>
-                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#retards">Llibres amb retard</button></li>
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prestecs">
+                            <img src="${pageContext.request.contextPath}/assets/icons/prestecs_actius.png"
+                                 alt="Propostes" style="width:40px; height:40px;">Préstecs actius
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reserves">
+                            <img src="${pageContext.request.contextPath}/assets/icons/reserves.png"
+                                 alt="Propostes" style="width:40px; height:40px;">Reserves pendents
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#devolucions">
+                            <img src="${pageContext.request.contextPath}/assets/icons/devolucions.png"
+                                 alt="Propostes" style="width:40px; height:40px;">Devolucions
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registrar-prestec"><strong>
+                                <img src="${pageContext.request.contextPath}/assets/icons/registrar_prestec.png"
+                                     alt="Propostes" style="width:40px; height:40px;">+ Registrar Préstec</strong>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#retards">
+                            <img src="${pageContext.request.contextPath}/assets/icons/retards.png"
+                                 alt="Propostes" style="width:40px; height:40px;">Llibres amb retard
+                        </button>
+                    </li>
                 </ul>
 
                 <!-- ===== Contingut pestanyes ===== -->
@@ -197,10 +233,19 @@
                                                 </span>
                                             </td>
                                             <td>
+                                                <!-- BOTÓ RENOVARÓ -->
                                                 <form action="${pageContext.request.contextPath}/gestionarPrestec/renovar" method="POST" class="d-inline">
                                                     <input type="hidden" name="idPrestec" value="${p.idPrestec}">
                                                     <button type="submit" class="btn btn-sm btn-warning">
                                                         <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
+                                                    </button>
+                                                </form>
+
+                                                <!-- BOTÓ RETORNAR -->
+                                                <form action="${pageContext.request.contextPath}/gestionarPrestec/retornar" method="POST">
+                                                    <input type="hidden" name="idPrestec" value="${p.idPrestec}">
+                                                    <button type="submit" class="btn btn-sm btn-success" title="Registrar Devolució">
+                                                        <i class="bi bi-box-arrow-in-down-left"></i> Tornar
                                                     </button>
                                                 </form>
                                             </td>
@@ -244,17 +289,23 @@
                                                 <tr>
                                                     <td>${r.llibre.titol}</td>
                                                     <td>${r.usuari.nom} ${r.usuari.cognoms}</td>
-                                                    <td>${r.dataReservaFormatted}</td>È
+                                                    <td>${r.dataReservaFormatted}</td>
                                                     <td>
-                                                        <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
+                                                        <a href="${pageContext.request.contextPath}/bibliotecari/reserves/gestionar?id=${r.idReserva}"
                                                            class="btn btn-sm btn-primary">
-                                                            Gestionar
+                                                            Crear prèstec
                                                         </a>
+                                                        <a href="${pageContext.request.contextPath}/bibliotecari/reserves/eliminar?id=${r.idReserva}"
+                                                           class="btn btn-sm btn-danger"
+                                                           onclick="return confirm('Segur que vols eliminar aquesta reserva?');">
+                                                            Eliminar
+                                                        </a>
+
                                                     </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:otherwise>
-                                </c:choose>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </tbody>
 
                             </table>
@@ -347,15 +398,10 @@
                     </div>
                     <div class="tab-pane fade p-3" id="retards">Llistat de llibres amb retard en la devolució.
 
-
-
-
-
                     </div>
-                </div>
-            </div>
-        </section>
 
+                </div>
+        </section>
 
 
         <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->

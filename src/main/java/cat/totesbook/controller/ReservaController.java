@@ -1,5 +1,11 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.controller;
 
+import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
 import cat.totesbook.service.ReservaService;
@@ -11,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Controlador per a gestionar les operacions relacionades amb les reserves de llibres.
+ * Controlador per a gestionar les operacions relacionades amb les reserves de
+ * llibres.
  */
 @Controller
 public class ReservaController {
@@ -24,8 +31,10 @@ public class ReservaController {
      *
      * @param isbn L'ISBN del llibre a reservar, rebut del formulari.
      * @param session La sessió HTTP per obtenir l'usuari loguejat.
-     * @param redirectAttrs Atributs per enviar missatges de feedback a l'usuari.
-     * @return Una redirecció al dashboard de l'usuari o a la fitxa del llibre en cas d'error.
+     * @param redirectAttrs Atributs per enviar missatges de feedback a
+     * l'usuari.
+     * @return Una redirecció al dashboard de l'usuari o a la fitxa del llibre
+     * en cas d'error.
      */
     @PostMapping("/reservar")
     public String processarReserva(@RequestParam("isbn") String isbn, HttpSession session, RedirectAttributes redirectAttrs) {
@@ -53,4 +62,40 @@ public class ReservaController {
             return "redirect:/llibre?isbn=" + isbn; // Tornem a la fitxa del llibre amb l'error.
         }
     }
+
+    @PostMapping("/cancelReserva")
+    public String cancelReserva(@RequestParam("idReserva") int idReserva,
+            HttpSession session,
+            RedirectAttributes redirect) {
+
+        SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+        if (sessio == null) {
+            return "redirect:/login";
+        }
+
+        Reserva reserva = reservaService.findByIdReserva(idReserva);
+
+        if (reserva == null) {
+            redirect.addFlashAttribute("error", "La reserva no existeix.");
+            return "redirect:/usuari/panell";
+        }
+
+        // Comprovació propietari
+        if (reserva.getUsuari().getId() != sessio.getId()) {
+            redirect.addFlashAttribute("error", "No tens permís per cancel·lar aquesta reserva.");
+            return "redirect:/usuari/panell";
+        }
+
+        // Si estava disponible alliberem exemplar
+        /*if (reserva.getEstat().equals("disponible")) {
+            reservaService.alliberarExemplar(reserva);
+        }*/
+
+        // Eliminar la reserva
+        reservaService.eliminarReserva(idReserva);
+
+        redirect.addFlashAttribute("success", "Reserva cancel·lada i eliminada correctament.");
+        return "redirect:/dashboard_usuari";
+    }
+
 }

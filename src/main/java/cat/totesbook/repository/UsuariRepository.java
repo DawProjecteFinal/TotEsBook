@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Usuari;
@@ -36,7 +41,7 @@ public interface UsuariRepository {
      */
     List<Usuari> getAllUsuaris();
     
-     // --- INICI NOU CODI AFEGIT ---
+
     
     /**
      * Busca un usuari complet per la seva ID.
@@ -51,5 +56,7 @@ public interface UsuariRepository {
      */
     void updatePerfil(Usuari usuari);
     
-    // --- FI NOU CODI AFEGIT ---
+    
+    
+   
 }

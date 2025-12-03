@@ -1,7 +1,5 @@
 <%-- 
-    Document   : mostrarLlibres.jsp
-    Created on : 28 sept 2025, 7:01:42
-    Author     : equip TotEsBook
+    Author     : Equip TotEsBook
 --%>
 
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -114,7 +112,40 @@
                             </button>
                         </form>
 
-                        <a href="#" class="btn btn-tot btn-sm my-2 my-lg-0">Inicia sessió <i class="bi bi-person-circle"></i></a>
+
+                        <%-- Lògica de Sessió per a Login/Logout --%>
+                        <c:choose>
+                            <c:when test="${empty sessionScope.sessioUsuari}">
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
+                                    Inicia sessió <i class="bi bi-person-circle"></i>
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="dropdown">
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
+                                        <c:choose>
+                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                                </c:when>
+                                            </c:choose>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
+                                                <i class="bi bi-box-arrow-right"></i> Tancar Sessió
+                                            </a></li>
+                                    </ul>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
@@ -189,8 +220,9 @@
                             "<strong><c:out value="${textCerca}"/></strong>".
                         </c:when>
                         <c:when test="${not empty textCerca}">
-                            No s'han trobat llibres amb el títol
-                            "<strong><c:out value="${textCerca}"/></strong>".
+                            A les nostres biblioteques no disposem del llibre 
+                            "<strong><c:out value="${textCerca}"/></strong>",<br>
+                            Si voleu fer-ne una consulta, ho podeu fer a través del següent botó:
                         </c:when>
                         <c:when test="${not empty categoriaSeleccionada}">
                             No s'han trobat llibres per a aquesta categoria.
@@ -199,9 +231,17 @@
                             No s'han trobat llibres.
                         </c:otherwise>
                     </c:choose>
+
+                    <!-- Botó per consultar la api de Google Books -->
+                    <div class="mt-3">
+                        <a href="${pageContext.request.contextPath}/llibres/cercar_api?titol=${fn:escapeXml(textCerca)}"
+                           class="btn btn-primary">
+                            Cercar a Google Books
+                        </a>
+                    </div>
                 </div>
             </c:if>
-            
+
 
             <!-- Llistat de llibres -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
@@ -226,7 +266,7 @@
                                     </li>
                                 </ul>
                                 <div class="mt-auto">
-                                    <a href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}" class="btn btn-tot w-100">Més informació</a>
+                                    <a href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}&mode=reserva" class="btn btn-tot w-100">Més informació</a>
                                 </div>
                             </div>
                         </div>
@@ -268,7 +308,6 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
         <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
     </body>
 </html>

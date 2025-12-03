@@ -1,9 +1,10 @@
-package cat.totesbook.domain;
-
 /**
  *
- * @author jmiro
+ * @author Equip TotEsBook
  */
+
+package cat.totesbook.domain;
+
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

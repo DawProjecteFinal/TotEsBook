@@ -1,7 +1,5 @@
 <%-- 
-    Document   : registre
-    Created on : 28 oct 2025, 12:59:40
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

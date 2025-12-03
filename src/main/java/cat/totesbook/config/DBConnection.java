@@ -1,7 +1,8 @@
 /**
  *
- * @author edinsonioc
+ * @author Equip TotEsBook
  */
+
 package cat.totesbook.config; // Corregim el paquet a 'config'
 
 import javax.naming.InitialContext;

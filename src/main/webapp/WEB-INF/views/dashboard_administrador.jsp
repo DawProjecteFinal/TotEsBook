@@ -1,11 +1,8 @@
 <%-- 
-    Document   : dashboard_administrador
-    Created on : 23 oct 2025, 14:34:02
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%-- Imports necessaris per carregar les dades directament (millor fer-ho en un Servlet) --%>
 <%@ page import="cat.totesbook.repository.UsuariRepository" %>
 <%@ page import="cat.totesbook.repository.AgentRepository" %>
 <%@ page import="cat.totesbook.repository.impl.UsuariDAO" %>
@@ -83,7 +80,6 @@
                         </form>
                         <c:choose>
                             <c:when test="${empty sessionScope.sessioUsuari}">
-                                <%-- Això no hauria de passar si el filtre funciona bé, ja que aquesta pàgina és protegida --%>
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
@@ -114,8 +110,6 @@
         <section class="py-5 flex-grow-1">
             <div class="container px-4 px-lg-5 mt-5">
                 <h1 class="text-center text-tot-bold mb-5">Panell d'Administració</h1>
-
-                <%-- Missatges de feedback o errors --%>
                 <c:if test="${not empty feedbackMessage}">
                     <div class="alert alert-${messageType == 'success' ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
                         <c:out value="${feedbackMessage}"/>
@@ -133,17 +127,38 @@
                 <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="biblioteques-tab" data-bs-toggle="tab" data-bs-target="#biblioteques" type="button" role="tab">
-                            🏛️ Biblioteques
+                            <img src="${pageContext.request.contextPath}/assets/icons/biblioteques.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Biblioteques
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="comptes-tab" data-bs-toggle="tab" data-bs-target="#comptes" type="button" role="tab">
-                            👥 Comptes d'Usuari
+                            <img src="${pageContext.request.contextPath}/assets/icons/usuaris.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Comptes d'Usuari
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="llibres-tab" data-bs-toggle="tab" data-bs-target="#llibres" type="button" role="tab">
-                            📚 Llibres
+                            <img src="${pageContext.request.contextPath}/assets/icons/llibres.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Llibres
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="propostes-tab" data-bs-toggle="tab" data-bs-target="#propostes" type="button" role="tab">
+                            <img src="${pageContext.request.contextPath}/assets/icons/propostes.png"
+                                 alt="Propostes" style="width:40px; height:40px;">
+                            Propostes d'adquisició
+                        </button>
+                    </li>
+                    <!-- SPRINT 3 (TEA 5): Nova pestanya Estadístiques -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#estadistiques" type="button" role="tab">
+                            <img src="${pageContext.request.contextPath}/assets/icons/estadistiques.png"
+                                 alt="estadistiques" style="width:40px; height:40px;">
+                            Estadístiques
                         </button>
                     </li>
                 </ul>
@@ -339,9 +354,9 @@
                         <div class="card shadow-sm mb-5">
                             <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0 text-tot-bold">
-                                    <i class="bi bi-building me-2"></i> Gestió de Llibres
+                                    <i class="bi bi-bookshelf me-2"></i>Gestió de Llibres
                                 </h4>
-                                <a href="#" class="btn btn-sm btn-tot">
+                                <a href="${pageContext.request.contextPath}/gestio/llibres/afegir" class="btn btn-sm btn-tot">
                                     <i class="bi bi-plus-circle-fill me-1"></i> Afegir Llibre
                                 </a>
                             </div>
@@ -396,11 +411,11 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-accio-group">
-                                                            <a href="#" class="btn btn-outline-warning btn-accio-panell">
+                                                            <a href="${pageContext.request.contextPath}/gestio/llibres/${llibre.isbn}/editar" class="btn btn-outline-warning btn-accio-panell">
                                                                 <i class="bi bi-pencil"></i>
                                                             </a>
 
-                                                            <form action="#" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
+                                                            <form action="${pageContext.request.contextPath}/gestio/llibres/${llibre.isbn}/eliminar" method="POST" onsubmit="return confirm('Segur que vols eliminar aquest llibre?')">
                                                                 <button type="submit" class="btn btn-outline-danger btn-accio-panell">
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
@@ -408,15 +423,105 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-
-
-
                                             </c:forEach>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Secció de les propostes d'adquisició -->       
+                    <div class="tab-pane fade" id="propostes">
+                        <h4 class="mb-3">Propostes d'adquisició dels usuaris</h4>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Títol proposat</th>
+                                        <th>Autor</th>
+                                        <th>ISBN</th>
+                                        <th>Usuari</th>
+                                        <th>Data Proposta</th>
+                                        <th>Estat</th>
+                                        <th>Accions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${empty propostes}">
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted fst-italic">
+                                                    No hi ha propostes d'adquisició.
+                                                </td>
+                                            </tr>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <c:forEach var="p" items="${propostes}">
+                                                <tr>
+                                                    <td>${p.titol}</td>
+                                                    <td>${p.autor}</td>
+                                                    <td>${p.isbn}</td>
+
+                                                    <!--  MOSTREM L'ID D'USUARI -->
+                                                    <td>Usuari #${p.idUsuari}</td>
+
+                                                    <td>${p.dataPropostaFormatted}</td>
+
+                                                    <td>
+                                                        <span class="badge 
+                                                              ${p.estat == 'pendent' ? 'bg-warning' :
+                                                                (p.estat == 'acceptada' ? 'bg-success' :
+                                                                (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
+                                                                  ${p.estat}
+                                                              </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
+                                                               class="btn btn-sm btn-primary">
+                                                                Gestionar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- ===== PESTANYA 4: ESTADÍSTIQUES ===== -->
+                    <div class="tab-pane fade" id="estadistiques" role="tabpanel">
+                        <div class="card shadow-sm mb-5">
+                            <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0 text-tot-bold">
+                                    <i class="bi bi-bar-chart-line-fill me-2"></i> Centre d'Estadístiques
+                                </h4>
+                                <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> Obrir Panell Complet d'Estadístiques
+                                </a>
+                            </div>
+                            <div class="card-body text-center py-5">
+                                <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
+                                <h5>Consulta el rendiment de la biblioteca</h5>
+                                <p class="text-muted">
+                                    Accedeix al panell detallat per veure els llibres més prestats, 
+                                    els usuaris més actius i exportar informes en PDF i Excel.
+                                </p>
+                                <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-lg btn-tot">
+                                    Veure Estadístiques Detallades
+                                </a>
+                            </div>
+                        </div>
+                    </div>                      
+
                 </div> <!-- fi tab-content -->
             </div>
         </section>

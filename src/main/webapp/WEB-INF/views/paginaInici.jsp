@@ -1,7 +1,5 @@
 <%-- 
-    Document   : paginaInici
-    Created on : 28 sept 2025, 17:43:00
-    Author     : equip totEsBook
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -98,7 +96,7 @@
                         </form>
 
                         <c:if test="${not empty sessionScope.sessioUsuari}">
-                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
+                
                                 <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
                                 <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
@@ -169,7 +167,7 @@
                             <div class="col-lg-6 text-center">
                                 <h2 class="text-tot-bold">Benvingut/da de nou, <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>!</h2>
                                 <p class="text-tot-light">Explora el nostre catàleg o gestiona els teus préstecs.</p>
-                                <a href="${pageContext.request.contextPath}/cataleg" class="btn btn-tot">Veure Catàleg</a>
+                                <a href="${pageContext.request.contextPath}/mostrarLlibres" class="btn btn-tot">Veure Catàleg</a>
                             </div>
                         </c:when>
                         <c:otherwise>

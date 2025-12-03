@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -115,6 +120,20 @@ public class LlibreDAO implements LlibreRepository {
                 .createNativeQuery(sql, Llibre.class)
                 .getResultList();
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteLlibreByIsbn(String isbn) {
+        entityManager.createQuery(
+                "DELETE FROM BibliotecaLlibre b WHERE b.llibre.isbn = :isbn")
+                .setParameter("isbn", isbn)
+                .executeUpdate();
+
+        Llibre llibre = entityManager.find(Llibre.class, isbn);
+        if (llibre != null) {
+            entityManager.remove(llibre);
+        }
     }
 
 }

@@ -1,9 +1,11 @@
-package cat.totesbook.domain;
-
 /**
  *
- * @author jmiro
+ * @author Equip TotEsBook
  */
+
+package cat.totesbook.domain;
+
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

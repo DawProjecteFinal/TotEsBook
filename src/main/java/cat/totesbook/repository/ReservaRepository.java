@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Biblioteca;
@@ -7,10 +12,7 @@ import cat.totesbook.domain.Usuari;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author jmiro
- */
+
 public interface ReservaRepository {   
 
     Optional<Reserva> findReservaPendent(Usuari usuari, Llibre llibre);
@@ -20,4 +22,8 @@ public interface ReservaRepository {
     List<Reserva> findByUsuari(int idUsuari);
     
     List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca);
+    
+    void deleteById(Integer idReserva);
+    
+    Reserva findByIdReserva(int idReserva);
 }

@@ -1,15 +1,19 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Prestec;
+import cat.totesbook.dto.AutorEstadisticaDTO;
+import cat.totesbook.dto.LlibreEstadisticaDTO;
+import cat.totesbook.dto.UsuariEstadisticaDTO;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author jmiro
- */
+
 public interface PrestecRepository {
     
     void registrarPrestec(Prestec prestec);
@@ -30,5 +34,12 @@ public interface PrestecRepository {
     Optional<Prestec> findById(Integer idPrestec);
     
     void save(Prestec prestec);
+    // ----
+    
+    // SPRINT 3 (TEA 5): Mètodes per estadístiques
+    List<LlibreEstadisticaDTO> findEstadistiquesLlibres(String autor, String categoria);
+    List<AutorEstadisticaDTO> findEstadistiquesAutors();
+    
+    List<UsuariEstadisticaDTO> findEstadistiquesUsuaris();
     // ----
 }

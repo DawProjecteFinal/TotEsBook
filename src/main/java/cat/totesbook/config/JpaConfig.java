@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.config;
 
 import jakarta.persistence.EntityManagerFactory;

@@ -1,13 +1,14 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Usuari;
 import java.util.List;
 
-/**
- *
- * @author jmiro
- */
+
 public interface UsuariService {
 
     List<Usuari> getAllUsuaris();
@@ -16,7 +17,10 @@ public interface UsuariService {
 
     Usuari getUsuariByEmail(String email);
 
-    void saveUsuari(Usuari usuari);
+    void saveUsuari(Usuari usuari) throws Exception;
 
-    void updateUsuari(Usuari usuari);
+    void updateUsuari(Usuari usuari, String nouPassword) throws Exception;
+    
+    // Per crear lectors manualment des del Panell Bibliotecari
+    void crearLectorManual(String nom, String cognoms, String telefon, String email, String password) throws Exception;
 }

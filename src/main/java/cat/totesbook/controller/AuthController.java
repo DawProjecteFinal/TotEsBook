@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -46,7 +50,6 @@ public class AuthController {
     @Autowired
     private BibliotecaLlibreService bibliotecaLlibreService; // Servei necessari per carregar biblioteques i exemplars
 
-
     @GetMapping("/login")
     public ModelAndView loginForm() {
         return new ModelAndView("login");
@@ -54,8 +57,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ModelAndView doLogin(@RequestParam String email,
-                                @RequestParam("contrasenya") String contrasenya,
-                                HttpSession session) {
+            @RequestParam("contrasenya") String contrasenya,
+            HttpSession session) {
 
         // Intentem autenticar com a AGENT
         Agent agent = agentService.getAgentByEmailAndContrasenya(email, contrasenya);
@@ -91,19 +94,17 @@ public class AuthController {
                 }
 
                 // Retornem la vista del panell d'administració
-                ModelAndView mv = new ModelAndView("dashboard_administrador");
+                /*ModelAndView mv = new ModelAndView("dashboard_administrador");
                 mv.addObject("llistaBiblioteques", biblioteques);
                 mv.addObject("llistaAgents", agents);
                 mv.addObject("llistaUsuaris", usuaris);
                 mv.addObject("llibres", llibres);
-
-               
                 mv.addObject("bibliosPerIsbn", bibliosPerIsbn);
+                return mv;*/
+                // Redirigim al controlador real de l'administrador
+                return new ModelAndView("redirect:/dashboard_administrador");
 
-                return mv;
-            }
-
-            //     Si és BIBLIOTECARI
+            } //     Si és BIBLIOTECARI
             else {
                 Biblioteca biblioteca = agent.getBiblioteca();
                 if (biblioteca != null) {
@@ -136,4 +137,3 @@ public class AuthController {
         return new ModelAndView("redirect:/");
     }
 }
-

@@ -1,13 +1,20 @@
-package cat.totesbook.service;
-
-import cat.totesbook.domain.Biblioteca;
-import cat.totesbook.domain.Prestec;
-import java.util.List;
-
 /**
  *
- * @author equip TotEsBook
+ * @author Equip TotEsBook
  */
+
+package cat.totesbook.service;
+
+import cat.totesbook.domain.Agent;
+import cat.totesbook.domain.Biblioteca;
+import cat.totesbook.domain.Prestec;
+import cat.totesbook.domain.Reserva;
+import cat.totesbook.dto.AutorEstadisticaDTO;
+import cat.totesbook.dto.LlibreEstadisticaDTO;
+import cat.totesbook.dto.UsuariEstadisticaDTO;
+import java.util.List;
+
+
 public interface PrestecService {
 
     void registrarPrestec(String isbn, String emailUsuari, int idAgentBibliotecari);
@@ -20,7 +27,25 @@ public interface PrestecService {
     
     List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca);
     
-    // Mètode per renovar préstec
+    // Mètodes per renovar préstec
     void renovarPrestec(Integer idPrestec);
+    
     List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari);
+    // ---------
+    
+    // Mètode per registar la devolució d'un prèstec amb el botó
+    void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari);
+    
+    // --- ==== SPRINT 3 (TEA 5) =====
+    
+    // Mètodes per treure estadístiques
+    List<LlibreEstadisticaDTO> getEstadistiquesLlibres(String autor, String categoria);
+    
+    List<AutorEstadisticaDTO> getEstadistiquesAutors();
+    
+    List<UsuariEstadisticaDTO> getEstadistiquesUsuaris();
+    
+    // ----
+    
+    Prestec crearPrestecDesDeReserva(Reserva reserva, Agent agentBibliotecari);
 }

@@ -1,7 +1,5 @@
 <%-- 
-    Document   : recuperarPass
-    Created on : 28 oct 2025, 14:49:40
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -101,7 +99,7 @@
                                 <input type="email" class="form-control form-control-lg" id="email" name="email" required>
                             </div>
                             
-                            <button type="submit" class="btn btn-accent-custom btn-lg w-100 mt-3">Enviar Instruccions</button>
+                            <button type="submit" class="btn btn-tot btn-lg w-100 mt-3">Enviar Instruccions</button>
                         </form>
 
                         <div class="text-center mt-4">

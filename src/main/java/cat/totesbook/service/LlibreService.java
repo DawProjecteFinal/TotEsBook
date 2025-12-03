@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Equip TotEsBook
+ */
+
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Biblioteca;
@@ -7,8 +12,6 @@ import java.util.Optional;
 
 /**
  * Interfície del servei de llibres.
- *
- * @author equip TotEsBook
  */
 public interface LlibreService {
 
@@ -50,5 +53,7 @@ public interface LlibreService {
     List<Llibre> getLlibresByIdioma(String idioma);
 
     List<Llibre> findRandom(int limit);
+    
+    void deleteLlibre(String isbn);
 
 }

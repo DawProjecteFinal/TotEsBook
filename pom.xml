@@ -57,7 +57,7 @@
             <version>${spring.version}</version>
         </dependency>
         
-        <!-- ===== Apache HttpClient (DEPENDÈNCIA NOVA - PER A RestTemplateConfig) ===== -->
+        <!-- ===== Apache HttpClient (PER A RestTemplateConfig) ===== -->
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
@@ -80,7 +80,8 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>${mysql.connector.version}</version>
+            <version>8.0.33</version>
+            <type>jar</type>
         </dependency>
 
         <!-- ===== Utilitats (Jackson, BCrypt) ===== -->
@@ -154,6 +155,23 @@
             <artifactId>jakarta.jakartaee-api</artifactId>
             <version>10.0.0</version>
             <type>jar</type>
+        </dependency>
+        
+        <!-- ===== SPRINT 3 (TEA 5) ===== -->
+        
+        <!-- Dependència per generar informes Excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.5</version>
+            <type>jar</type>
+        </dependency>
+
+        <!-- Dependència per generar informes PDF -->
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>1.3.30</version>
         </dependency>
     </dependencies>
 

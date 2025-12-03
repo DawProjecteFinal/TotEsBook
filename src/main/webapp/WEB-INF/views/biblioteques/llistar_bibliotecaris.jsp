@@ -1,7 +1,5 @@
 <%-- 
-    Document   : llistar_bibliotecaris
-    Created on : 9 nov 2025, 11:55:27
-    Author     : jmiro
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

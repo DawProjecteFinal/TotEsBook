@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS Reserves (
     idUsuari INT NOT NULL,
     isbn VARCHAR(20) NOT NULL,
     dataReserva DATETIME NOT NULL,
-    estat ENUM('pendent', 'disponible', 'caducada', 'cancelada') NOT NULL DEFAULT 'pendent',
+    estat ENUM('pendent', 'caducada') NOT NULL DEFAULT 'pendent',
 
     CONSTRAINT fk_reserves_usuaris FOREIGN KEY (idUsuari) REFERENCES Usuaris(id)
         ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -102,9 +102,9 @@ CREATE TABLE IF NOT EXISTS PropostesAdquisicio (
 -- Generat amb BCrypt.hashpw("1234", BCrypt.gensalt(12))
 -- El hash és: $2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO
 INSERT INTO Usuaris (nom, cognoms, telefon, email, llibresFavorits, contrasenya) VALUES
-('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'Moby Dick, El Petit Príncep', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
-('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', '1984, El Nom de la Rosa', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
-('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Orgull i Prejudici', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Anna', 'Ribas Soler', '611223344', 'anna@totesbook.cat', 'El secret de la casa del riu, Punxa de temps', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Marc', 'Pérez Vila', '622334455', 'marc@totesbook.cat', 'El foc invisible, El domador de lleons', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
+('Júlia', 'Torra Puig', '633445566', 'julia@totesbook.cat', 'Un estrany a casa', '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Oriol', 'Grau Font', '644556677', 'oriol@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Laura', 'Dalmau Roca', '655667788', 'laura@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
 ('Pau', 'Casas Romeu', '666778899', 'pau@totesbook.cat', NULL, '$2a$12$wovjHMsHrLKgh.95YUjxkuEXiF0fLTuQD3tDaBzyl1Lb4lgTcANnO'),
@@ -144,10 +144,10 @@ INSERT INTO Agents (nom, cognoms, telefon, email, tipus, contrasenya) VALUES
 -- (5, '9781260440232', NOW(), 'pendent');
 
 -- PROPOSTES D’ADQUISICIÓ
-INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu, dataProposta, estat)
-VALUES
-(6, 'Crim i càstig', 'Fiódor Dostoievski', NULL, 'Edicions 62', 'Molt demanat pels usuaris', NOW(), 'pendent'),
-(7, 'El Senyor dels Anells', 'J.R.R. Tolkien', NULL, 'Minotauro', 'Per ampliar la secció de fantasia', NOW(), 'pendent');
+-- INSERT INTO PropostesAdquisicio (idUsuari, titol, autor, isbn, editorial, motiu, dataProposta, estat)
+-- VALUES
+-- (6, 'Crim i càstig', 'Fiódor Dostoievski', NULL, 'Edicions 62', 'Molt demanat pels usuaris', NOW(), 'pendent'),
+-- (7, 'El Senyor dels Anells', 'J.R.R. Tolkien', NULL, 'Minotauro', 'Per ampliar la secció de fantasia', NOW(), 'pendent');
 
 CREATE TABLE IF NOT EXISTS BibliotecaLlibres (
     id INT AUTO_INCREMENT PRIMARY KEY,

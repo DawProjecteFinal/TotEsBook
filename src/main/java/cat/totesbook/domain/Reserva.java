@@ -1,23 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package cat.totesbook.domain;
 
-/**
- *
- * @author jmiro
- */
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+/**
+ *
+ * @author Equip TotEsBook
+ */
 
 @Entity
 @Table(name = "Reserves")
 public class Reserva {
 
     public enum EstatReserva {
-        pendent, disponible, caducada, cancelada
+        pendent, cancelada, caducada
     }
 
     @Id
