@@ -233,20 +233,10 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <!-- BOTÓ RENOVARÓ -->
-                                                <form action="${pageContext.request.contextPath}/gestionarPrestec/renovar" method="POST" class="d-inline">
+                                                <!-- Gestionar -->
+                                                <form action="${pageContext.request.contextPath}/gestionarPrestec" method="GET" class="d-inline">
                                                     <input type="hidden" name="idPrestec" value="${p.idPrestec}">
-                                                    <button type="submit" class="btn btn-sm btn-warning">
-                                                        <i class="bi bi-arrow-repeat"></i> Renovar +30 dies
-                                                    </button>
-                                                </form>
-
-                                                <!-- BOTÓ RETORNAR -->
-                                                <form action="${pageContext.request.contextPath}/gestionarPrestec/retornar" method="POST">
-                                                    <input type="hidden" name="idPrestec" value="${p.idPrestec}">
-                                                    <button type="submit" class="btn btn-sm btn-success" title="Registrar Devolució">
-                                                        <i class="bi bi-box-arrow-in-down-left"></i> Tornar
-                                                    </button>
+                                                    <button type="submit" class="btn btn-sm btn-primary">Gestionar</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -254,7 +244,7 @@
 
                                     <c:if test="${empty prestecsActius}">
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted fst-italic">
+                                            <td colspan="6" class="text-center text-muted fst-italic">
                                                 No hi ha préstecs actius.
                                             </td>
                                         </tr>

@@ -29,10 +29,12 @@ public interface PrestecService {
     void renovarPrestec(Integer idPrestec);
     
     List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari);
-    // ---------
+    
     
     // Mètode per registar la devolució d'un prèstec amb el botó
     void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari);
+    
+    Prestec getPrestecPerId(Integer idPrestec);
     
     // --- ==== SPRINT 3 (TEA 5) =====
     
@@ -43,5 +45,4 @@ public interface PrestecService {
     
     List<UsuariEstadisticaDTO> getEstadistiquesUsuaris();
     
-    // ----
 }

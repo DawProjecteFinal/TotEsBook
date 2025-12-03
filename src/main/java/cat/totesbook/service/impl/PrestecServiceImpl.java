@@ -235,5 +235,10 @@ public class PrestecServiceImpl implements PrestecService {
     public List<UsuariEstadisticaDTO> getEstadistiquesUsuaris() {
         return prestecRepository.findEstadistiquesUsuaris();
     }
-    // ----
+
+
+    @Override
+    public Prestec getPrestecPerId(Integer idPrestec) {
+        return prestecRepository.findById(idPrestec).orElse(null);
+    }
 }

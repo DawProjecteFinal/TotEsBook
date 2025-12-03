@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.SessioUsuari;
@@ -10,6 +9,7 @@ import cat.totesbook.service.PrestecService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +26,37 @@ public class PrestecController {
     @Autowired
     private PrestecService prestecService;
 
+    @GetMapping
+    public String mostrarGestioPrestec(@RequestParam("idPrestec") Integer idPrestec,
+            HttpSession session,
+            org.springframework.ui.Model model,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+            if (sessio == null) {
+                return "redirect:/login";
+            }
+
+            // Obtenir el préstec
+            var prestec = prestecService.getPrestecPerId(idPrestec);
+
+            if (prestec == null) {
+                redirectAttributes.addFlashAttribute("error", "El préstec no existeix.");
+                return "redirect:/dashboard_bibliotecari";
+            }
+
+            model.addAttribute("prestec", prestec);
+
+            
+            return "gestionarPrestec";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error carregant el préstec: " + e.getMessage());
+            return "redirect:/dashboard_bibliotecari";
+        }
+    }
+
     @PostMapping
     public String registrarPrestec(@RequestParam String isbn,
             @RequestParam String emailUsuari,
@@ -37,7 +68,7 @@ public class PrestecController {
             if (sessio == null) {
                 return "redirect:/login";
             }
-            
+
             prestecService.registrarPrestec(isbn, emailUsuari, sessio.getId());
             redirectAttributes.addFlashAttribute("missatge", "Préstec registrat correctament.");
         } catch (Exception e) {
@@ -45,12 +76,12 @@ public class PrestecController {
         }
         return "redirect:/dashboard_bibliotecari";
     }
-    
+
     // --- ENDPOINT PER RENOVAR PRÉSTEC ---
     @PostMapping("/renovar")
     public String renovarPrestec(@RequestParam("idPrestec") Integer idPrestec,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         try {
             SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -66,21 +97,23 @@ public class PrestecController {
                     "No s'ha pogut renovar el préstec: " + e.getMessage());
         }
 
-        return "redirect:/dashboard_bibliotecari";
+        return "redirect:/gestionarPrestec?idPrestec=" + idPrestec;
     }
-    
+
     // --- NOU ENDPOINT PER A DEVOLUCIÓ RÀPIDA AMB BOTÓ ---
     @PostMapping("/retornar")
     public String retornarPrestec(@RequestParam("idPrestec") Integer idPrestec,
-                                  HttpSession session,
-                                  RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
-            if (sessio == null) return "redirect:/login";
+            if (sessio == null) {
+                return "redirect:/login";
+            }
 
             // Cridem al nou mètode del servei passant l'ID del préstec i l'ID del bibliotecari
             prestecService.retornarPrestec(idPrestec, sessio.getId());
-            
+
             redirectAttributes.addFlashAttribute("missatge", "Devolució registrada correctament.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error devolució: " + e.getMessage());
