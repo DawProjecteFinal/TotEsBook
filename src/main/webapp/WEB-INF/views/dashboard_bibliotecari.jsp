@@ -288,10 +288,16 @@
                                                     <td>${r.usuari.nom} ${r.usuari.cognoms}</td>
                                                     <td>${r.dataReservaFormatted}</td>
                                                     <td>
-                                                        <a href="${pageContext.request.contextPath}/gestionarReserva?id=${r.idReserva}"
+                                                        <a href="${pageContext.request.contextPath}/bibliotecari/reserves/gestionar?id=${r.idReserva}"
                                                            class="btn btn-sm btn-primary">
-                                                            Gestionar
+                                                            Crear prèstec
                                                         </a>
+                                                        <a href="${pageContext.request.contextPath}/bibliotecari/reserves/eliminar?id=${r.idReserva}"
+                                                           class="btn btn-sm btn-danger"
+                                                           onclick="return confirm('Segur que vols eliminar aquesta reserva?');">
+                                                            Eliminar
+                                                        </a>
+
                                                     </td>
                                                 </tr>
                                             </c:forEach>

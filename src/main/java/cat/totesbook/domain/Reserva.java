@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class Reserva {
 
     public enum EstatReserva {
-        pendent, disponible, caducada, cancelada
+        pendent, cancelada, caducada
     }
 
     @Id

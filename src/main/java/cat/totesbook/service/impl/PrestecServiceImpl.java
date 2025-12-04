@@ -10,6 +10,8 @@ import cat.totesbook.domain.BibliotecaLlibre;
 import cat.totesbook.domain.Llibre;
 import cat.totesbook.domain.Prestec;
 import cat.totesbook.domain.Prestec.EstatPrestec;
+import cat.totesbook.domain.Reserva;
+import cat.totesbook.domain.Reserva.EstatReserva;
 import cat.totesbook.domain.Usuari;
 import cat.totesbook.dto.AutorEstadisticaDTO;
 import cat.totesbook.dto.LlibreEstadisticaDTO;
@@ -55,7 +57,7 @@ public class PrestecServiceImpl implements PrestecService {
 
         // Buscar usuari
         Usuari usuari = usuariRepository.getUsuariByEmail(emailUsuari);
-        
+
         if (usuari == null) {
             throw new RuntimeException("No s'ha trobat cap usuari amb aquest email.");
         }
@@ -165,30 +167,30 @@ public class PrestecServiceImpl implements PrestecService {
 
     // Implementació per renovar préstec
     @Override
-    @Transactional
     public void renovarPrestec(Integer idPrestec) {
-        
+
         Prestec p = prestecRepository.findById(idPrestec)
-            .orElseThrow(() -> new IllegalArgumentException("Préstec no trobat"));
+                .orElseThrow(() -> new IllegalArgumentException("Préstec no trobat"));
 
         LocalDateTime novaDataInici = p.getDataPrestec().plusDays(30);
         p.setDataPrestec(novaDataInici);
-        
-        prestecRepository.updatePrestec(p); 
+
+        prestecRepository.updatePrestec(p);
 
         //prestecRepository.save(p);
     }
+
     @Override
     public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
         return prestecRepository.findPrestecsRetornatsByUsuari(idUsuari);
     }
 
-    // --- MÈTODE NOU: RETORN RÀPID PRÈSTEC AMB BOTÓ ---
+    // Retornar prèstec en botó
     @Override
     public void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari) {
         Prestec prestec = prestecRepository.findById(idPrestec)
                 .orElseThrow(() -> new RuntimeException("No s'ha trobat el préstec amb ID: " + idPrestec));
-        
+
         if (prestec.getDataDevolucio() != null) {
             throw new RuntimeException("Aquest préstec ja ha estat retornat.");
         }
@@ -199,14 +201,14 @@ public class PrestecServiceImpl implements PrestecService {
     // Mètode privat per no duplicar codi entre les dues formes de retornar
     private void finalitzarPrestec(Prestec prestec, Integer idAgentBibliotecari) {
         Agent agent = agentRepository.getAgentById(idAgentBibliotecari);
-        
-        // 1. Tancar el préstec
+
+        // Tancar el préstec
         prestec.setDataDevolucio(LocalDateTime.now());
         prestec.setAgentDevolucio(agent);
         prestec.setEstat(EstatPrestec.retornat);
         prestecRepository.updatePrestec(prestec);
 
-        // 2. Incrementar l'estoc
+        // Incrementar l'estoc
         Optional<BibliotecaLlibre> optBL = bibliotecaLlibreRepository.findByBibliotecaAndLlibre(prestec.getBiblioteca(), prestec.getLlibre());
         if (optBL.isPresent()) {
             BibliotecaLlibre bl = optBL.get();
@@ -214,28 +216,81 @@ public class PrestecServiceImpl implements PrestecService {
             bibliotecaLlibreRepository.updateBibliotecaLlibre(bl);
         }
     }
-    
+
+    public Prestec crearPrestecDesDeReserva(Reserva reserva, Agent agentBibliotecari) {
+
+        if (reserva == null) {
+            throw new RuntimeException("La reserva és nul·la.");
+        }
+
+        if (reserva.getEstat() != EstatReserva.pendent) {
+            throw new RuntimeException("Només es poden gestionar reserves pendents.");
+        }
+
+        Usuari usuari = reserva.getUsuari();
+        Llibre llibre = reserva.getLlibre();
+        Biblioteca biblioteca = agentBibliotecari.getBiblioteca();
+        // Validar agent
+        if (agentBibliotecari == null) {
+            throw new RuntimeException("No s'ha proporcionat cap bibliotecari.");
+        }
+
+        if (agentBibliotecari.getBiblioteca() == null
+                || !agentBibliotecari.getBiblioteca().equals(biblioteca)) {
+
+            throw new RuntimeException("El bibliotecari no pertany a la biblioteca d'aquesta reserva.");
+        }
+
+        // Buscar relació Biblioteca - Llibre
+        Optional<BibliotecaLlibre> optBL
+                = bibliotecaLlibreRepository.findByBibliotecaAndLlibre(biblioteca, llibre);
+
+        if (optBL.isEmpty()) {
+            throw new RuntimeException("Aquest llibre no està disponible en aquesta biblioteca.");
+        }
+
+        BibliotecaLlibre bl = optBL.get();
+
+        // Comprovar disponibilitat
+        if (bl.getDisponibles() <= 0) {
+            throw new RuntimeException("No hi ha exemplars disponibles per fer el préstec.");
+        }
+
+        // Descomptar un exemplar
+        bl.setDisponibles(bl.getDisponibles() - 1);
+        bibliotecaLlibreRepository.updateBibliotecaLlibre(bl);
+
+        // Crear objecte préstec
+        Prestec prestec = new Prestec();
+        prestec.setUsuari(usuari);
+        prestec.setLlibre(llibre);
+        prestec.setBiblioteca(biblioteca);
+        prestec.setAgentPrestec(agentBibliotecari);
+        prestec.setDataPrestec(LocalDateTime.now());
+        prestec.setEstat(EstatPrestec.actiu);
+
+        // Guardar el préstec
+        prestecRepository.registrarPrestec(prestec);
+
+        return prestec;
+    }
+
     // --- ===== SPRINT 3 (TEA 5) ===== ---
-    
     // Mètodes per treure estadístiques
-     @Override
-    @Transactional(readOnly = true)
+    @Override
     public List<LlibreEstadisticaDTO> getEstadistiquesLlibres(String autor, String categoria) {
         return prestecRepository.findEstadistiquesLlibres(autor, categoria);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<AutorEstadisticaDTO> getEstadistiquesAutors() {
         return prestecRepository.findEstadistiquesAutors();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<UsuariEstadisticaDTO> getEstadistiquesUsuaris() {
         return prestecRepository.findEstadistiquesUsuaris();
     }
-
 
     @Override
     public Prestec getPrestecPerId(Integer idPrestec) {

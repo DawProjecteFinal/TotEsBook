@@ -110,13 +110,11 @@ public class ReservaServiceImpl implements ReservaService {
         return reservaRepository.findReservesPendentsByBiblioteca(biblioteca);
     }
 
+    
     @Override
     public void cancelReserva(Reserva reserva) {
         reserva.setEstat(EstatReserva.cancelada);
         // Si la reserva estava "disponible", alliberem l'exemplar
-        /*if (reserva.getLlibre() != null) {
-            reserva.getLlibre().incrementarDisponible();
-        }*/
 
         reservaRepository.crearReserva(reserva);
     }

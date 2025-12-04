@@ -5,8 +5,10 @@
 
 package cat.totesbook.service;
 
+import cat.totesbook.domain.Agent;
 import cat.totesbook.domain.Biblioteca;
 import cat.totesbook.domain.Prestec;
+import cat.totesbook.domain.Reserva;
 import cat.totesbook.dto.AutorEstadisticaDTO;
 import cat.totesbook.dto.LlibreEstadisticaDTO;
 import cat.totesbook.dto.UsuariEstadisticaDTO;
@@ -45,4 +47,6 @@ public interface PrestecService {
     
     List<UsuariEstadisticaDTO> getEstadistiquesUsuaris();
     
+    Prestec crearPrestecDesDeReserva(Reserva reserva, Agent agentBibliotecari);
+
 }
