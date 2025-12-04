@@ -49,13 +49,10 @@
                         </li>
                         <c:if test="${not empty sessionScope.sessioUsuari}">
                             <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                            <%-- Enllaços específics per a bibliotecari/admin --%>
+
                             <li class="nav-item"><a class="nav-link" href="#">Gestionar Préstecs</a></li>
-                            <!-- SPRINT 3 (TEA 5): ENLLAÇ ESTADÍSTIQUES -->
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/bibliotecari/autors-populars">
-                                    <i class="bi bi-graph-up"></i> Estadístiques
-                                </a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/bibliotecari/autors-populars"> Autors més populars</a>
                             </li>
                         </c:if>
                     </ul>
@@ -85,14 +82,14 @@
                                         <c:choose>
                                             <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                            </c:when>
-                                            <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
                                                 <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li> <%-- Marcat com actiu --%>
-                                            </c:when>
-                                            <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                                </c:when>
+                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                            </c:when>
-                                        </c:choose>
+                                                </c:when>
+                                            </c:choose>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
@@ -264,8 +261,8 @@
                     <div class="tab-pane fade" id="reserves">
                         <h4 class="mb-3">Reserves pendents de recollida</h4>
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="table-light">
+                            <table class="table table-striped mt-4">
+                                <thead>
                                     <tr>
                                         <th>Llibre</th>
                                         <th>Usuari</th>
@@ -277,7 +274,7 @@
                                     <c:choose>
                                         <c:when test="${empty reservesPendents}">
                                             <tr>
-                                                <td colspan="4" class="text-center">No hi ha reserves pendents.</td>
+                                                <td colspan="6" class="text-center text-muted fst-italic">No hi ha reserves pendents.</td>
                                             </tr>
                                         </c:when>
 
@@ -350,7 +347,7 @@
                                 <tbody>
                                     <c:choose>
                                         <c:when test="${empty devolucions}">
-                                            <tr><td colspan="5" class="text-center text-muted">Encara no hi ha devolucions registrades.</td></tr>
+                                            <tr><td colspan="6" class="text-center text-muted fst-italic">No hi ha devolucions registrades.</td></tr>
                                         </c:when>
                                         <c:otherwise>
                                             <c:forEach var="dev" items="${devolucions}">
@@ -403,6 +400,55 @@
                         </div>
                     </div>
 
+                    <div class="tab-pane fade p-3" id="retards">
+                        <h4 class="mb-3">Llibres amb retard a la teva biblioteca</h4>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped mt-3 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>ISBN</th>
+                                        <th>Usuari</th>
+                                        <th>Data Préstec</th>
+                                        <th>Data Venciment</th>
+                                        <th>Accions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="p" items="${prestecsRetard}">
+                                        <tr>
+                                            <td>${p.llibre.isbn}</td>
+                                            <td>${p.usuari.nom} ${p.usuari.cognoms}</td>
+                                            <td>${p.dataPrestecFormatted}</td>
+                                            <td>
+                                                <span class="badge bg-danger text-light">
+                                                    ${p.dataVencimentCalculada}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <form action="${pageContext.request.contextPath}/gestionarPrestec"
+                                                      method="GET" class="d-inline">
+                                                    <input type="hidden" name="idPrestec" value="${p.idPrestec}">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        Gestionar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+
+                                    <c:if test="${empty prestecsRetard}">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted fst-italic">
+                                                No hi ha llibres amb retard.
+                                            </td>
+                                        </tr>
+                                    </c:if>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <!-- Sancions actives -->
                     <div class="tab-pane fade p-3" id="sancions">
                         <h4 class="mb-3">Sancions actives</h4>
@@ -452,7 +498,7 @@
                 </div>
         </section>
 
-        <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
+        <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
                 <div class="row align-items-center">
@@ -462,9 +508,10 @@
                     </div>
                     <div class="col-md-4 mb-3 mb-md-0">
                         <ul class="list-unstyled mb-0">
-                            <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li> 
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4">
@@ -480,7 +527,8 @@
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
         </footer>
-        <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+        <!-- ===== FI Peu de pàgina ===== -->
+
 
         <!-- Script de Bootstrap Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -488,3 +536,4 @@
         <script src="${pageContext.request.contextPath}/assets/js/alerts.js"></script>
     </body>
 </html>
+

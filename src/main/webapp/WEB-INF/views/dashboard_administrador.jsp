@@ -62,10 +62,10 @@
                         <%-- Només mostrem gestió d'usuaris si l'usuari és ADMIN --%>
                         <c:if test="${not empty sessionScope.sessioUsuari && sessionScope.sessioUsuari.rol == 'ADMIN'}">
                             <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li> <%-- Enllaç al Servlet --%>
-                            <li class="nav-item"><a class="nav-link" href="#">Estadístiques</a></li> <%-- TODO: Implementar --%>
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/estadistiques">Estadístiques</a></li> <%-- TODO: Implementar --%>
                             </c:if>
                             <c:if test="${not empty sessionScope.sessioUsuari}">
-                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li> <%-- TODO: Implementar --%>
+                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
                             </c:if>
                     </ul>
                     <div class="d-flex align-items-center ms-lg-auto">
@@ -431,104 +431,116 @@
                     </div>
 
                     <!-- Secció de les propostes d'adquisició -->       
-                    <div class="tab-pane fade" id="propostes">
-                        <h4 class="mb-3">Propostes d'adquisició dels usuaris</h4>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Títol proposat</th>
-                                        <th>Autor</th>
-                                        <th>ISBN</th>
-                                        <th>Usuari</th>
-                                        <th>Data Proposta</th>
-                                        <th>Estat</th>
-                                        <th>Accions</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <c:choose>
-                                        <c:when test="${empty propostes}">
-                                            <tr>
-                                                <td colspan="7" class="text-center text-muted fst-italic">
-                                                    No hi ha propostes d'adquisició.
-                                                </td>
-                                            </tr>
-                                        </c:when>
-
-                                        <c:otherwise>
-                                            <c:forEach var="p" items="${propostes}">
-                                                <tr>
-                                                    <td>${p.titol}</td>
-                                                    <td>${p.autor}</td>
-                                                    <td>${p.isbn}</td>
-
-                                                    <!--  MOSTREM L'ID D'USUARI -->
-                                                    <td>Usuari #${p.idUsuari}</td>
-
-                                                    <td>${p.dataPropostaFormatted}</td>
-
-                                                    <td>
-                                                        <span class="badge 
-                                                              ${p.estat == 'pendent' ? 'bg-warning' :
-                                                                (p.estat == 'acceptada' ? 'bg-success' :
-                                                                (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
-                                                                  ${p.estat}
-                                                              </span>
-                                                        </td>
-
-                                                        <td>
-                                                            <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
-                                                               class="btn btn-sm btn-primary">
-                                                                Gestionar
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <!-- ===== PESTANYA 4: ESTADÍSTIQUES ===== -->
-                    <div class="tab-pane fade" id="estadistiques" role="tabpanel">
+                    <div class="tab-pane fade" id="propostes" role="tabpanel">
                         <div class="card shadow-sm mb-5">
+
                             <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0 text-tot-bold">
-                                    <i class="bi bi-bar-chart-line-fill me-2"></i> Centre d'Estadístiques
+                                    <i class="bi bi-journal-plus me-2"></i> Propostes d'Adquisició
                                 </h4>
-                                <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-box-arrow-up-right me-1"></i> Obrir Panell Complet d'Estadístiques
-                                </a>
                             </div>
-                            <div class="card-body text-center py-5">
-                                <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
-                                <h5>Consulta el rendiment de la biblioteca</h5>
-                                <p class="text-muted">
-                                    Accedeix al panell detallat per veure els llibres més prestats, 
-                                    els usuaris més actius i exportar informes en PDF i Excel.
-                                </p>
-                                <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-lg btn-tot">
-                                    Veure Estadístiques Detallades
-                                </a>
+
+                            <div class="card-body">
+                                <p>Aquí pots revisar totes les propostes d’adquisició enviades pels usuaris.</p>
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover caption-top small align-middle">
+                                        <caption>Llista de propostes enviades pels usuaris</caption>
+
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Títol proposat</th>
+                                                <th>Autor</th>
+                                                <th>ISBN</th>
+                                                <th>Usuari</th>
+                                                <th>Data Proposta</th>
+                                                <th>Estat</th>
+                                                <th>Accions</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <c:choose>
+                                                <c:when test="${empty propostes}">
+                                                    <tr>
+                                                        <td colspan="7" class="text-center text-muted fst-italic">
+                                                            No hi ha propostes d'adquisició.
+                                                        </td>
+                                                    </tr>
+                                                </c:when>
+
+                                                <c:otherwise>
+                                                    <c:forEach var="p" items="${propostes}">
+                                                        <tr>
+                                                            <td><c:out value="${p.titol}"/></td>
+                                                            <td><c:out value="${p.autor}"/></td>
+                                                            <td><c:out value="${p.isbn}"/></td>
+
+                                                            <td>Usuari #${p.idUsuari}</td>
+
+                                                            <td>${p.dataPropostaFormatted}</td>
+
+                                                            <td>
+                                                                <span class="badge 
+                                                                      ${p.estat == 'pendent' ? 'bg-warning' :
+                                                                        (p.estat == 'acceptada' ? 'bg-success' :
+                                                                        (p.estat == 'rebutjada' ? 'bg-danger' : 'bg-primary'))}">
+                                                                          ${p.estat}
+                                                                      </span>
+                                                                </td>
+
+                                                                <td>
+                                                                    <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
+                                                                       class="btn btn-sm btn-outline-primary">
+                                                                        <i class="bi bi-gear"></i> Gestionar
+                                                                    </a>
+                                                                </td>
+
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                    </div>                      
 
-                </div> <!-- fi tab-content -->
-            </div>
-        </section>
+                        <!-- ===== PESTANYA 4: ESTADÍSTIQUES ===== -->
+                        <div class="tab-pane fade" id="estadistiques" role="tabpanel">
+                            <div class="card shadow-sm mb-5">
+                                <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0 text-tot-bold">
+                                        <i class="bi bi-bar-chart-line-fill me-2"></i> Centre d'Estadístiques
+                                    </h4>
+                                    <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i> Obrir Panell Complet d'Estadístiques
+                                    </a>
+                                </div>
+                                <div class="card-body text-center py-5">
+                                    <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
+                                    <h5>Consulta el rendiment de la biblioteca</h5>
+                                    <p class="text-muted">
+                                        Accedeix al panell detallat per veure els llibres més prestats, 
+                                        els usuaris més actius i exportar informes en PDF i Excel.
+                                    </p>
+                                    <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-lg btn-tot">
+                                        Veure Estadístiques Detallades
+                                    </a>
+                                </div>
+                            </div>
+                        </div>                      
+
+                    </div> 
+                </div>
+            </section>
 
 
-        <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
-        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
+            <!-- ===== Peu de pàgina ===== -->
+        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 mb-3 mb-md-0">
@@ -537,13 +549,14 @@
                     </div>
                     <div class="col-md-4 mb-3 mb-md-0">
                         <ul class="list-unstyled mb-0">
-                            <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4">
-                        <div class="d-flex justify-content-center justify-content-md-end">
+                        <div class="d-flex justify-content-center justify-content-md-end"> 
                             <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
                             <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
                             <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
@@ -555,8 +568,9 @@
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
         </footer>
-        <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+        <!-- ===== FI Peu de pàgina ===== -->
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        </body>
+    </html>

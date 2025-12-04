@@ -321,8 +321,8 @@
         </section>
 
 
-        <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
-        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
+        <!-- ===== Peu de pàgina ===== -->
+        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-4 mb-3 mb-md-0">
@@ -331,13 +331,14 @@
                     </div>
                     <div class="col-md-4 mb-3 mb-md-0">
                         <ul class="list-unstyled mb-0">
-                            <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4">
-                        <div class="d-flex justify-content-center justify-content-md-end">
+                        <div class="d-flex justify-content-center justify-content-md-end"> 
                             <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
                             <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
                             <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
@@ -349,7 +350,8 @@
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
         </footer>
-        <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+        <!-- ===== FI Peu de pàgina ===== -->
+
 
         <c:if test="${not empty error}">
             <div class="modal fade" id="errorReservaModal" tabindex="-1" aria-hidden="true">
