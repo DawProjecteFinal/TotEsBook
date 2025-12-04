@@ -48,7 +48,7 @@ public class ReservaServiceImpl implements ReservaService {
         if (usuari == null) {
             throw new Exception("L'usuari amb ID " + idUsuari + " no existeix.");
         }
-
+/*
         if (usuari.teSancioActiva()) {
             throw new Exception(
                     "No pots fer la reserva. Tens una sanció activa fins al "
@@ -57,7 +57,7 @@ public class ReservaServiceImpl implements ReservaService {
                     + ". No podràs fer cap reserva fins aquesta data."
             );
         }
-
+*/
         // Llibre
         Llibre llibre = llibreRepository.getLlibreByIsbn(isbn)
                 .orElseThrow(() -> new Exception("El llibre amb ISBN " + isbn + " no existeix."));

@@ -144,7 +144,7 @@
                                 <hr class="my-4">
                                 
                                 <p class="text-muted small">
-                                    Per canviar la contrasenya, fes-ho des de la secció "Canviar Contrasenya" (funció no implementada).
+                                    Per canviar la contrasenya, fes-ho des de la secció "Canviar Contrasenya".
                                 </p>
                                 
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-between">

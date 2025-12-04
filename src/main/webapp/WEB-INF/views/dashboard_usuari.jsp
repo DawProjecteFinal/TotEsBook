@@ -417,31 +417,39 @@
                     </div>
                 </c:if>
 
-                <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <c:forEach var="llibre" items="${llibres}">
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
-                            <div class="card h-100 shadow-sm" style="max-width: 240px;">
+                        <div class="col mb-5">
+                            <div class="card h-100 shadow-sm">
                                 <img src="<c:url value='${llibre.imatgeUrl}'/>"
                                      class="card-img-top img-fixed mx-auto d-block"
                                      alt="Portada de ${llibre.titol}">
+
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title mb-1 text-tot-bold text-center">
+
+                                    <h5 class="card-titlealeat mb-1 text-tot-bold text-center">
                                         <c:out value="${llibre.titol}"/>
                                     </h5>
+
                                     <p class="text-muted mb-2 text-center">
                                         <c:out value="${llibre.autor}"/>
                                     </p>
+
                                     <ul class="list-unstyled small mb-3 text-center">
                                         <li><strong>ISBN:</strong> <c:out value="${llibre.isbn}"/></li>
                                     </ul>
+
                                     <a class="btn btn-tot mt-auto w-100"
                                        href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}">
                                         Més informació
                                     </a>
+
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
+
+
 
                     <c:if test="${empty llibres && empty errorCarregantLlibres}">
                         <div class="col-12 text-center text-muted">

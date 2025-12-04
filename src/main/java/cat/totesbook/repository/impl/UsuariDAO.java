@@ -187,24 +187,21 @@ public class UsuariDAO implements UsuariRepository {
 
     @Override
     public void updateSancioUsuari(int idUsuari, LocalDateTime dataFiSancio, String motiuSancio) {
-        String sql = "UPDATE Usuaris SET dataFiSancio = ?, motiuSancio = ? WHERE id = ?";
-
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            if (dataFiSancio != null) {
-                ps.setTimestamp(1, java.sql.Timestamp.valueOf(dataFiSancio));
-            } else {
-                ps.setNull(1, java.sql.Types.TIMESTAMP);
+        try {
+            Usuari u = entityManager.find(Usuari.class, idUsuari);
+            if (u == null) {
+                System.err.println("Usuari no trobat amb id = " + idUsuari);
+                return;
             }
 
-            ps.setString(2, motiuSancio);
-            ps.setInt(3, idUsuari);
+            u.setDataFiSancio(dataFiSancio);
+            u.setMotiuSancio(motiuSancio);
 
-            ps.executeUpdate();
-
-        } catch (Exception ex) {
-            System.getLogger(UsuariDAO.class.getName())
-                    .log(System.Logger.Level.ERROR, (String) null, ex);
+            // Opcional si vols assegurar que es fa l’UPDATE immediatament
+            // entityManager.flush();
+        } catch (Exception e) {
+            System.err.println("Error a UsuariDAO.updateSancioUsuari: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -223,17 +220,4 @@ public class UsuariDAO implements UsuariRepository {
             return List.of();
         }
     }
-
-    @Override
-    public List<Usuari> findUsuarisAmbSancioActiva() {
-        LocalDateTime ara = LocalDateTime.now();
-
-        return entityManager.createQuery(
-                "SELECT u FROM Usuari u "
-                + "WHERE u.dataFiSancio IS NOT NULL AND u.dataFiSancio > :ara",
-                Usuari.class)
-                .setParameter("ara", ara)
-                .getResultList();
-    }
-
 }

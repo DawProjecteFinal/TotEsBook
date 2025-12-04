@@ -8,6 +8,7 @@ services:
       MYSQL_DATABASE: totesbook
       MYSQL_USER: totesuser
       MYSQL_PASSWORD: totespass
+
     ports:
       - "3306:3306"
     volumes:

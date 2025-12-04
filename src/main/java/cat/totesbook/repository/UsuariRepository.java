@@ -61,5 +61,5 @@ public interface UsuariRepository {
     
    List<Usuari> getUsuarisAmbSancioActiva();
    
-   List<Usuari> findUsuarisAmbSancioActiva();
+   
 }

@@ -11,6 +11,7 @@ import cat.totesbook.domain.Rol;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -122,7 +123,7 @@ public class UsuariServiceImpl implements UsuariService {
         usuariRepository.updateSancioUsuari(idUsuari, dataFiSancio, motiuSancio);
     }
 
-    @Override
+    @Override 
     @Transactional(readOnly = true)
     public List<Usuari> getUsuarisAmbSancioActiva() {
         return usuariRepository.getUsuarisAmbSancioActiva();

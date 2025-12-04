@@ -53,7 +53,7 @@ public class PrestecController {
 
             model.addAttribute("prestec", prestec);
 
-            boolean usuariSancionat = prestec.getUsuari().teSancioActiva();
+            boolean usuariSancionat = usuariService.teSancioActiva(prestec.getUsuari().getId());
             model.addAttribute("usuariSancionat", usuariSancionat);
 
             return "gestionarPrestec";
