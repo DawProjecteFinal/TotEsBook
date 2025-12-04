@@ -2,13 +2,11 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.service;
 
 import cat.totesbook.domain.Usuari;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 public interface UsuariService {
 
@@ -21,11 +19,15 @@ public interface UsuariService {
     void saveUsuari(Usuari usuari) throws Exception;
 
     void updateUsuari(Usuari usuari, String nouPassword) throws Exception;
-    
+
     // Per crear lectors manualment des del Panell Bibliotecari
     void crearLectorManual(String nom, String cognoms, String telefon, String email, String password) throws Exception;
-    
+
     void aplicarSancio(Integer idUsuari, LocalDateTime dataFiSancio, String motiuSancio);
-    
+
     List<Usuari> getUsuarisAmbSancioActiva();
+
+    boolean teSancioActiva(int idUsuari);
+
+    Usuari findUsuariById(int idUsuari);
 }

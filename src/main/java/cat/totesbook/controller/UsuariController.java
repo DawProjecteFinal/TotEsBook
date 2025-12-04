@@ -122,6 +122,13 @@ public class UsuariController {
 
         int idUsuari = sessioUsuari.getId();
 
+        Usuari usuari = usuariRepo.findUsuariById(idUsuari);
+        if (usuari != null && usuari.teSancioActiva()) {
+            model.addAttribute("teSancioActiva", true);
+            model.addAttribute("dataFiSancio", usuari.getDataFiSancioFormatted());
+            model.addAttribute("motiuSancio", usuari.getMotiuSancio());
+        }
+
         // Carreguem els llibres destacats primer, fora del try-catch principal.
         // Així, encara que falli la càrrega de préstecs/reserves, els llibres es mostraran.
         try {

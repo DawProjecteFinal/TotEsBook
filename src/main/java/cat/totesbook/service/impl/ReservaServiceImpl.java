@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -48,6 +47,15 @@ public class ReservaServiceImpl implements ReservaService {
         Usuari usuari = usuariRepository.findUsuariById(idUsuari);
         if (usuari == null) {
             throw new Exception("L'usuari amb ID " + idUsuari + " no existeix.");
+        }
+
+        if (usuari.teSancioActiva()) {
+            throw new Exception(
+                    "No pots fer la reserva. Tens una sanció activa fins al "
+                    + usuari.getDataFiSancioFormatted()
+                    + " per " + usuari.getMotiuSancio()
+                    + ". No podràs fer cap reserva fins aquesta data."
+            );
         }
 
         // Llibre

@@ -63,7 +63,6 @@ public class UsuariServiceImpl implements UsuariService {
         usuariRepository.updatePerfil(usuari);
     }
      */
-
     @Override
     @Transactional
     public void updateUsuari(Usuari usuariModificat, String nouPassword) throws Exception {
@@ -126,6 +125,19 @@ public class UsuariServiceImpl implements UsuariService {
     @Override
     @Transactional(readOnly = true)
     public List<Usuari> getUsuarisAmbSancioActiva() {
-       return usuariRepository.getUsuarisAmbSancioActiva();
+        return usuariRepository.getUsuarisAmbSancioActiva();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean teSancioActiva(int idUsuari) {
+        Usuari u = usuariRepository.findUsuariById(idUsuari);
+        return u != null && u.teSancioActiva();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Usuari findUsuariById(int idUsuari) {
+        return usuariRepository.findUsuariById(idUsuari);
     }
 }

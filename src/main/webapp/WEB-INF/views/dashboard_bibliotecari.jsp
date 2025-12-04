@@ -190,7 +190,7 @@
                     <li class="nav-item">
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registrar-prestec"><strong>
                                 <img src="${pageContext.request.contextPath}/assets/icons/registrar_prestec.png"
-                                     alt="Propostes" style="width:40px; height:40px;">+ Registrar Préstec</strong>
+                                     alt="Propostes" style="width:40px; height:40px;">Registrar Préstec</strong>
                         </button>
                     </li>
                     <li class="nav-item">

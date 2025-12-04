@@ -153,6 +153,19 @@
                     Hola <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 👋
                 </h3>
 
+                <c:if test="${teSancioActiva}">
+                    <div class="alert alert-danger d-flex align-items-center justify-content-between mb-4" role="alert">
+                        <div>
+                            <strong>Atenció!</strong><br>
+                            Recorda que tens una sanció activa fins al 
+                            <strong>${dataFiSancio}</strong> per 
+                            <strong>${motiuSancio}</strong>.<br>
+                            No podràs fer cap reserva fins aquesta data.
+                        </div>
+                        <i class="bi bi-exclamation-triangle-fill fs-3 ms-3"></i>
+                    </div>
+                </c:if>
+
                 <!-- BLOC DE CERCA PRINCIPAL -->
                 <div class="mb-5">
                     <div class="p-4 shadow-sm bg-white rounded-3">

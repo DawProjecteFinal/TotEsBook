@@ -8,7 +8,9 @@ package cat.totesbook.controller;
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
+import cat.totesbook.domain.Usuari;
 import cat.totesbook.service.ReservaService;
+import cat.totesbook.service.UsuariService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+    @Autowired
+    private UsuariService usuariService;
+    
     /**
      * Processa la petició per crear una nova reserva per a un llibre.
      *
@@ -49,6 +54,21 @@ public class ReservaController {
 
         try {
             int idUsuari = sessioUsuari.getId();
+            
+            if (usuariService.teSancioActiva(idUsuari)) {
+            
+            Usuari u = usuariService.findUsuariById(idUsuari);
+
+            String missatge = "No pots fer la reserva. Tens una sanció activa fins al "
+                    + u.getDataFiSancioFormatted()
+                    + " motiu: " + u.getMotiuSancio()
+                    + ". No podràs fer cap reserva fins aquesta data.";
+
+            redirectAttrs.addFlashAttribute("error", missatge);
+
+            
+            return "redirect:/llibre?isbn=" + isbn;
+        }
 
             // Cridem al servei per crear la reserva.
             reservaService.crearReserva(idUsuari, isbn);
