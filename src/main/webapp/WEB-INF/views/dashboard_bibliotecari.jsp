@@ -4,7 +4,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
 <!DOCTYPE html>
 <html lang="ca">
     <head>
@@ -16,7 +15,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     </head>
-
 
     <body class="d-flex flex-column min-vh-100">
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
@@ -51,7 +49,7 @@
                         </li>
                         <c:if test="${not empty sessionScope.sessioUsuari}">
                             <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                                <%-- Enllaços específics per a bibliotecari/admin --%>
+                            <%-- Enllaços específics per a bibliotecari/admin --%>
                             <li class="nav-item"><a class="nav-link" href="#">Gestionar Préstecs</a></li>
                             <!-- SPRINT 3 (TEA 5): ENLLAÇ ESTADÍSTIQUES -->
                             <li class="nav-item">
@@ -79,21 +77,22 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="dropdown">
-                                    <button class="btn btn-tot btn-sm dropdown-toggle active" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false"> <%-- Marcat com actiu --%>
+                                    <button class="btn btn-tot btn-sm dropdown-toggle active" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <%-- Marcat com actiu --%>
                                         <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
                                         <c:choose>
                                             <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            </c:when>
+                                            <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
                                                 <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li> <%-- Marcat com actiu --%>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            </c:when>
+                                            <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
                                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                                </c:when>
-                                            </c:choose>
+                                            </c:when>
+                                        </c:choose>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
@@ -126,7 +125,6 @@
                             <div class="card-body">
                                 <h2 class="fw-bold mb-0">${numPrestecsActius}</h2>
                                 <p class="text-muted small mb-0">Préstecs actius</p>
-
                             </div>
                         </div>
                     </div>
@@ -159,7 +157,6 @@
                     </div>
                 </div>
 
-
                 <!-- BOTÓ PER AFEGIR USUARI AL PANELL DE BIBLIOTECARI -->
                 <div class="d-flex justify-content-end mb-3">
                     <a href="${pageContext.request.contextPath}/bibliotecari/nou-usuari" class="btn btn-success shadow-sm">
@@ -170,7 +167,8 @@
                 <!-- ===== Pestanyes ===== -->
                 <ul class="nav nav-tabs mb-4" id="tabsBibliotecari" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#prestecs">
+                        <button class="nav-link ${empty sancioError ? 'active' : ''}"
+                                data-bs-toggle="tab" data-bs-target="#prestecs">
                             <img src="${pageContext.request.contextPath}/assets/icons/prestecs_actius.png"
                                  alt="Propostes" style="width:40px; height:40px;">Préstecs actius
                         </button>
@@ -188,7 +186,8 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registrar-prestec"><strong>
+                        <button class="nav-link ${not empty sancioError ? 'active' : ''}"
+                                data-bs-toggle="tab" data-bs-target="#registrar-prestec"><strong>
                                 <img src="${pageContext.request.contextPath}/assets/icons/registrar_prestec.png"
                                      alt="Propostes" style="width:40px; height:40px;">Registrar Préstec</strong>
                         </button>
@@ -209,7 +208,7 @@
 
                 <!-- ===== Contingut pestanyes ===== -->
                 <div class="tab-content">
-                    <div class="tab-pane fade show active" id="prestecs">
+                    <div class="tab-pane fade ${empty sancioError ? 'show active' : ''}" id="prestecs">
                         <h4 class="mb-3">Préstecs actius a la teva biblioteca</h4>
                         <div class="table-responsive">
                             <table class="table table-striped mt-4">
@@ -261,6 +260,7 @@
 
                         </div>
                     </div>
+
                     <div class="tab-pane fade" id="reserves">
                         <h4 class="mb-3">Reserves pendents de recollida</h4>
                         <div class="table-responsive">
@@ -364,8 +364,17 @@
 
                     </div>
 
-                    <div class="tab-pane fade" id="registrar-prestec">
+                    <div class="tab-pane fade ${not empty sancioError ? 'show active' : ''}" id="registrar-prestec">
                         <h4 class="mb-3">Registrar un nou préstec</h4>
+                        <c:if test="${not empty sancioError}">
+                            <div id="alertSancio"
+                                 class="alert alert-danger alert-dismissible fade show"
+                                 role="alert">
+                                <i class="bi bi-exclamation-octagon-fill"></i>
+                                ${sancioError}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </c:if>
                         <div class="card">
                             <div class="card-body">
                                 <p class="card-text small text-muted">Introdueix l'ISBN del llibre i l'email de l'usuari per registrar el préstec. Si existeix una reserva per a aquest llibre i usuari, es completarà automàticament.</p>
@@ -387,6 +396,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Sancions actives -->
                     <div class="tab-pane fade p-3" id="sancions">
                         <h4 class="mb-3">Sancions actives</h4>
@@ -436,7 +446,6 @@
                 </div>
         </section>
 
-
         <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
@@ -469,5 +478,7 @@
 
         <!-- Script de Bootstrap Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="${pageContext.request.contextPath}/assets/js/alerts.js"></script>
     </body>
 </html>

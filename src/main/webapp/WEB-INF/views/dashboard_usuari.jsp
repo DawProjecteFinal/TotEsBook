@@ -531,7 +531,7 @@
 
         <!-- Script de Bootstrap Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/assets/js/dashboard_bibliotecari.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/js/alerts.js"></script>
 
     </body>
 </html>
