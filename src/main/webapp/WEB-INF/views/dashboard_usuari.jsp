@@ -150,7 +150,11 @@
 
                 <!-- Salutació compacta -->
                 <h3 class="text-center text-tot-bold mb-3">
-                    Hola <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 👋
+                    <img src="${pageContext.request.contextPath}/assets/icons/books.png"
+                         alt="" style="width:60px; height:60px;">
+                    Hola <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
+                    <img src="${pageContext.request.contextPath}/assets/icons/book_pen.png"
+                         alt="👋" style="width:60px; height:60px;">
                 </h3>
 
                 <!-- BLOC DE CERCA PRINCIPAL -->
@@ -186,8 +190,9 @@
 
                             <!-- Botó de cerca -->
                             <div class="col-12 col-md-2 d-grid">
-                                <button type="submit" class="btn btn-tot btn-lg">
-                                    <i class="bi bi-search me-2"></i>Cercar
+                                <button type="submit" class="btn btn-tot btn-lg d-flex align-items-center">
+                                    <img src="${pageContext.request.contextPath}/assets/icons/buscar.png"
+                                         alt="" style="width:30px; height:30px;">  Cercar
                                 </button>
                             </div>
                         </form>
@@ -204,7 +209,8 @@
                         <div class="card shadow-sm mb-4">
                             <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0 text-tot-bold">
-                                    <i class="bi bi-book-fill me-2"></i> Els Meus Préstecs Actius
+                                    <img src="${pageContext.request.contextPath}/assets/icons/prestec_usuari.png"
+                                         alt="Prèstecs actius" style="width:40px; height:40px;"> Els Meus Préstecs Actius
                                 </h4>
 
                                 <!-- Enllaç a historial (modal) -->
@@ -212,6 +218,8 @@
                                         class="btn btn-link btn-sm text-decoration-none"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalHistorialPrestecs">
+                                    <img src="${pageContext.request.contextPath}/assets/icons/historial.png"
+                                         alt="Historial" style="width:40px; height:40px;">
                                     Veure historial
                                 </button>
                             </div>
@@ -247,7 +255,8 @@
                         <div class="card shadow-sm mb-4">
                             <div class="card-header bg-totlight">
                                 <h4 class="mb-0 text-tot-bold">
-                                    <i class="bi bi-bookmark-fill me-2"></i> Les Meves Reserves
+                                    <img src="${pageContext.request.contextPath}/assets/icons/reservat_usuari.png"
+                                         alt="Les meves reserves" style="width:40px; height:40px;"> Les Meves Reserves
                                 </h4>
                             </div>
                             <div class="card-body">
@@ -262,7 +271,7 @@
                                                             Data reserva:
                                                             ${reserva.dataReservaFormatted}
                                                         </small>
-                                                         <small class="d-block text-muted">
+                                                        <small class="d-block text-muted">
                                                             Recollida a:
                                                             <c:choose>
                                                                 <c:when test="${not empty bibliosPerIsbn[reserva.llibre.isbn]}">
@@ -318,7 +327,8 @@
                         <div class="card shadow-sm mb-4">
                             <div class="card-header bg-totlight">
                                 <h4 class="mb-0 text-tot-bold">
-                                    <i class="bi bi-lightbulb-fill me-2"></i> Propostes d'Adquisició
+                                    <img src="${pageContext.request.contextPath}/assets/icons/sugerencies_usuari.png"
+                                         alt="Propostes usuari" style="width:40px; height:40px;"> Propostes d'Adquisició
                                 </h4>
                             </div>
 
@@ -496,7 +506,7 @@
 
         <!-- Script de Bootstrap Bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-       <script src="${pageContext.request.contextPath}/assets/js/dashboard_bibliotecari.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/js/dashboard_bibliotecari.js"></script>
 
     </body>
 </html>
