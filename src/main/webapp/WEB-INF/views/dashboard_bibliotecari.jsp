@@ -499,6 +499,7 @@
         </section>
 
         <!-- ===== Peu de pàgina ===== -->
+        <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
                 <div class="row align-items-center">
@@ -536,4 +537,3 @@
         <script src="${pageContext.request.contextPath}/assets/js/alerts.js"></script>
     </body>
 </html>
-

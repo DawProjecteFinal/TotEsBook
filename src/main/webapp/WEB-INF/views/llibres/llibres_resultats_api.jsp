@@ -172,6 +172,7 @@
 
             </div>
         </section> 
+                
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
@@ -202,6 +203,5 @@
             </div>
         </footer>
         <!-- ===== FI Peu de pàgina ===== -->
-
     </body>
 </html>

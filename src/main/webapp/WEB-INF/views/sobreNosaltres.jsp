@@ -1,49 +1,48 @@
 <%-- 
-    Author     : Equip TotEsBook
+    Document   : sobreNosaltres
+    Created on : 1 dic 2025, 8:51:43
+    Author     : Diana Martin Vilá
 --%>
-<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ca">
     <head>
         <meta charset="UTF-8">
-        <title>Biblioteques</title>
-
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sobre nosaltres</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
-
     </head>
-    <body  class="bg-light d-flex flex-column min-vh-100">
 
-        <!-- Encapçalat -->
+    <body class="d-flex flex-column min-vh-100">
+        <!-- ===== Encapçalat ===== -->
         <header class="bg-tot py-1">
             <div class="container px-4 px-lg-5 my-1">
                 <div class="text-center text-white">
-                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo" class="logo-header">
+                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo" class="logo-header"> 
                 </div>
             </div>
         </header>
+        <!-- ===== FI Encapçalat ===== -->
 
-
-        <!-- Menu -->
+        <!-- ===== Menu ===== -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight">
             <div class="container px-4 px-lg-5">
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                        aria-label="Menú">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
@@ -94,8 +93,19 @@
                                 </button>
                             </div>
                         </form>
+
+                        <c:if test="${not empty sessionScope.sessioUsuari}">
+                
+                                <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
+                                <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
+                                </c:if>
+                            </c:if>
                     </ul>
-                    <!-- Cerca per títol -->            
+
+
+
+                    <!-- Cerca per títol -->        
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
@@ -106,7 +116,6 @@
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
-
 
                         <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
@@ -146,27 +155,62 @@
             </div>
         </nav>
 
-        <div class="container py-5">
-            <h1 class="mb-4 text-center text-tot-principal">Xarxa de Biblioteques TotEsBook</h1>
+        <!-- ===== FI Menu ===== -->
 
-            <div class="row justify-content-center text-center">
-                <c:forEach var="biblioteca" items="${biblioteques}">
-                    <div class="col-md-4 mb-4">
-                        <div class="card border-0 shadow-lg p-4 h-100">
-                            <i class="bi bi-book-half display-3 text-tot-principal mb-3"></i>
-                            <h4 class="fw-bold mb-2"><c:out value="${biblioteca.nom}"/></h4>
-                            <p class="text-muted mb-1"><c:out value="${biblioteca.adreca}"/></p>
-                            <p class="small text-tot-light"><i class="bi bi-telephone"></i> <c:out value="${biblioteca.telefon}"/></p>
-                            <a href="${pageContext.request.contextPath}/biblioteques/${biblioteca.idBiblioteca}/llibres" 
-                               class="btn btn-tot w-100">
-                                Entra a la biblioteca
-                            </a>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
+        <!-- ===== Secció Principal de Contingut ===== -->
+        <div class="container mt-5">
+            <h2>Descobreix del projecte de TotEsBook</h2>
+            <p>TotEsBook és un projecte del mòdul 12, Projecte de desenvolupament d’aplicacions web, del cicle superior de Desenvolupament d’Aplicacions Web de l’Institut Obert de Catalunya. El projecte ha estat proposat per l’equip 5 i està format per l’Edinson Javier Intriago Romero, la Diana Martin Vilá, en Jose Andres Miro Ferre i la Roser Ruiz Rojas.
+            </p>
+            <p>Aquest grup es va formar perquè ens van interessar els perfils dels integrants del fòrum. Vam valorar experiències prèvies i personals, com per exemple, l'experiència que tenim cadascú amb companys al treball amb perfils semblants dels perfils de la resta d’integrants del grup de l’assignatura.</p>
+            <p>El servei que volem oferir es tracta de la gestió integral de préstec de llibres de biblioteques. Aquesta aplicació permetrà gestionar una base de dades de llibres i també la gestió de diferents usuaris amb els seus rols. La nostra aplicació permetrà gestionar l’estoc de llibres disponibles, els préstecs, les estadístiques dels llibres i els usuaris, d’entre altres funcions. </p>
         </div>
+        <div class="container mt-5">
+        <h2>Coneix els membres de l'equip TotEsBook</h2>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+          <!-- Columna 1 -->
+           <div class="col text-center">
+            <img src="${pageContext.request.contextPath}/assets/images/edinson.jpg"
+                 class="rounded-circle"
+                 width="140" height="140"
+                 alt="Edinson">
+            <h3 class="fw-normal mt-3">Edinson</h3>
+            <p>Perfil de gestió d’equips, amb més experiència d’administrador de sistemes, intervenció en el desplegament, implementació dels sistemes i l’administració dels serveis.</p>
+          </div>
 
+          <!-- Columna 2 -->
+          <div class="col text-center">
+          <img src="${pageContext.request.contextPath}/assets/images/diana.jpg"
+                 class="rounded-circle"
+                 width="140" height="140"
+                 alt="Diana">
+            <h3 class="fw-normal mt-3">Diana</h3>
+            <p>Perfil de dissenyador d'interfície que pot aportar idees sobre el disseny de l’aplicatiu.</p>
+          </div>
+
+          <!-- Columna 3 -->
+          <div class="col text-center">
+          <img src="${pageContext.request.contextPath}/assets/images/josep.jpg"
+                 class="rounded-circle"
+                 width="140" height="140"
+                 alt="Josep">
+            <h3 class="fw-normal mt-3">Josep</h3>
+            <p>Perfil de desenvolupador de software que pot aportar idees amb relació a la codificació del programari.</p>
+          </div>
+
+          <!-- Columna 4 -->
+          <div class="col text-center">
+          <img src="${pageContext.request.contextPath}/assets/images/roser.jpg"
+                 class="rounded-circle"
+                 width="140" height="140"
+                 alt="Roser">
+            <h3 class="fw-normal mt-3">Roser</h3>
+            <p>Perfil de tester, aportant una mirada clau per adaptar l’aplicació a qualsevol usuari.</p>
+          </div>
+        </div>
+      </div>
+
+        
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">

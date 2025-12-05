@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     </head>
-    <body class="bg-light">
+    <body class="bg-light d-flex flex-column min-vh-100">
 
         <div class="container py-5">
             <h1 class="text-center mb-4 text-tot-bold">Afegir Nova Biblioteca</h1>
@@ -59,6 +59,7 @@
                 </div>
             </form>
         </div>
+                
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">

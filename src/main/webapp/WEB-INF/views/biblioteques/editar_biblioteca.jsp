@@ -13,7 +13,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     </head>
-    <body class="bg-light">
+    <body class="bg-light d-flex flex-column min-vh-100">
 
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -61,6 +61,7 @@
                 <a href="${pageContext.request.contextPath}/gestio/biblioteques" class="btn btn-secondary">Cancel·lar</a>
             </form>
         </div>
+
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
