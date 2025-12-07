@@ -504,7 +504,7 @@
                                                                 <td>
                                                                     <a href="${pageContext.request.contextPath}/propostes/detall?id=${p.idProposta}"
                                                                        class="btn btn-sm btn-outline-primary">
-                                                                        <i class="bi bi-gear"></i> Gestionar
+                                                                        <i class="bi bi-gear"></i> 
                                                                     </a>
                                                                 </td>
 
@@ -585,7 +585,7 @@
                                             <i class="bi bi-bar-chart-line-fill me-2"></i>
                                             Veure Estadístiques Detallades
                                         </a>
-                                        <a href="${pageContext.request.contextPath}/admin/estadistiques/autors"
+                                        <a href="${pageContext.request.contextPath}/bibliotecari/autors-populars"
                                            class="btn btn-lg btn-outline-primary">
                                             <i class="bi bi-stars me-2"></i>
                                             Autors Destacats

@@ -20,7 +20,7 @@
 
 
     <body class="d-flex flex-column min-vh-100">
-              <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
+        <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
             <div class="container px-4 px-lg-5">
 
@@ -100,41 +100,66 @@
             </div>
         </nav>
 
-        <section>
-            <a href="${pageContext.request.contextPath}/dashboard_usuari" class="btn btn-outline-secondary mb-4">
-                        <i class="bi bi-arrow-left"></i> Tornar al Panell
-                    </a>
-            <h3>Gestió de Proposta</h3>
+        <section class="flex-grow-1">
+            <div class="container mt-4 mb-5">
 
-            <div class="card p-3">
-                <h5>${proposta.titol}</h5>
-                <p><strong>Autor:</strong> ${proposta.autor}</p>
-                <p><strong>ISBN:</strong> ${proposta.isbn}</p>
-                <p><strong>Usuari ID:</strong> ${proposta.idUsuari}</p>
+                <!-- Botó tornar al panell -->
+                <a href="${pageContext.request.contextPath}/dashboard_usuari"
+                   class="btn btn-outline-secondary mb-4 mt-3">
+                    <i class="bi bi-arrow-left"></i> Tornar al Panell
+                </a>
 
-                <form action="${pageContext.request.contextPath}/propostes/actualitzar" method="POST">
-                    <input type="hidden" name="idProposta" value="${proposta.idProposta}"/>
+                <!-- Títol -->
+                <h3 class="text-tot-bold text-center mb-4">Gestió de Proposta</h3>
 
-                    <div class="mb-3">
-                        <label class="form-label">Estat</label>
-                        <select class="form-select" name="estat">
-                            <c:forEach items="${estats}" var="e">
-                                <option value="${e}" ${proposta.estat == e ? 'selected' : ''}>${e}</option>
-                            </c:forEach>
-                        </select>
+                <!-- Contingut centrat -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+
+                        <div class="card p-4 shadow-sm">
+
+                            <h5 class="fw-bold mb-3">${proposta.titol}</h5>
+
+                            <p><strong>Autor:</strong> ${proposta.autor}</p>
+                            <p><strong>ISBN:</strong> ${proposta.isbn}</p>
+                            <p><strong>Usuari ID:</strong> ${proposta.idUsuari}</p>
+
+                            <form action="${pageContext.request.contextPath}/propostes/actualitzar" method="POST">
+
+                                <input type="hidden" name="idProposta" value="${proposta.idProposta}"/>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Estat</label>
+                                    <select class="form-select" name="estat">
+                                        <c:forEach items="${estats}" var="e">
+                                            <option value="${e}" ${proposta.estat == e ? 'selected' : ''}>${e}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Resposta / Observacions</label>
+                                    <textarea class="form-control" rows="4" name="resposta">${proposta.resposta}</textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary">Guardar canvis</button>
+                                    <a href="${pageContext.request.contextPath}/dashboard_administrador"
+                                       class="btn btn-secondary">
+                                        Cancel·lar
+                                    </a>
+                                </div>
+
+                            </form>
+
+                        </div>
+
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Resposta / Observacions</label>
-                        <textarea class="form-control" name="resposta">${proposta.resposta}</textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Guardar canvis</button>
-                    <a href="${pageContext.request.contextPath}/dashboard_administrador" class="btn btn-secondary">Cancel·lar</a>
-                </form>
             </div>
-        </section>       
-                
+        </section>
+
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
