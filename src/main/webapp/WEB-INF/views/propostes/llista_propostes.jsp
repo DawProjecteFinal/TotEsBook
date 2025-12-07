@@ -163,7 +163,7 @@
                                                     <a href="${pageContext.request.contextPath}/propostes/eliminar?id=${p.idProposta}"
                                                        class="btn btn-sm btn-outline-danger"
                                                        onclick="return confirm('Segur que vols eliminar aquesta proposta?');">
-                                                        <i class="bi bi-trash"></i>Eliminar
+                                                        <i class="bi bi-trash"></i>
                                                     </a>
                                                 </c:if>
                                             </td>

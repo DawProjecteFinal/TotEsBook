@@ -139,6 +139,8 @@
                     </div>
                 </form>
             </div>
+        </div>
+                   
 
             <!-- ===== Peu de pàgina ===== -->
             <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
