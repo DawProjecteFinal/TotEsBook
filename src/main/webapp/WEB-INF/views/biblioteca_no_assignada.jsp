@@ -21,58 +21,25 @@
 
     <body class="d-flex flex-column min-vh-100">
 
-        <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
+       <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}">
-                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg"
-                         alt="Logo TotEsBook" height="30"
-                         class="d-inline-block align-text-top logo">
+                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo TotEsBook" height="30" class="d-inline-block align-text-top logo">
                 </a>
-
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Menú">
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}">Inici</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
-                        </li>
-
-                        <!-- Dropdown categories -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">
-                                        Totes les categories
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Cooking">Cuina i gastronomia</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Juvenile Fiction">Ficció juvenil</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Fiction">Novel·la i ficció</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Young Adult Fiction">Novel·la juvenil</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
-                            </ul>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a></li>
                     </ul>
-
-                    <!-- Cerca + botó sessió -->
                     <div class="d-flex align-items-center ms-lg-auto">
-                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET"
-                              action="${pageContext.request.contextPath}/mostrarLlibres">
-                            <input class="form-control form-control-sm me-2" type="search" name="q"
+                        <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
+                            <input class="form-control form-control-sm me-2" type="search" name="q" 
                                    placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
                                    oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
                                    oninput="this.setCustomValidity('')" />
@@ -80,16 +47,51 @@
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
+                        <%-- Lògica de Sessió per a Login/Logout --%>
+                        <c:choose>
 
-                        <a href="${pageContext.request.contextPath}/logout"
-                           class="btn btn-tot btn-sm my-2 my-lg-0">
-                            Tanca sessió <i class="bi bi-box-arrow-right"></i>
-                        </a>
+                            <c:when test="${empty sessionScope.sessioUsuari}">
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
+                                    Inicia sessió <i class="bi bi-person-circle"></i>
+                                </a>
+                            </c:when>
+
+                            <c:otherwise>
+                                <div class="dropdown">
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
+                                        <li><hr class="dropdown-divider"></li>
+
+                                        <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
+                                                <i class="bi bi-box-arrow-right"></i> Tancar Sessió
+                                            </a></li>
+                                    </ul>
+                                </div>
+                            </c:otherwise>
+
+                        </c:choose>
+
                     </div>
                 </div>
             </div>
         </nav>
-        <!-- ===== FI CAPÇALERA INCRUSTADA ===== -->
 
 
         <!-- ===== SECCIÓ PRINCIPAL ===== -->

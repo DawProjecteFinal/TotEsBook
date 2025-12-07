@@ -45,7 +45,7 @@ public class EstadistiquesController {
             Model model, HttpSession session) {
         
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
-        if (sessio == null || sessio.getRol() != Rol.ADMIN) return "redirect:/login";
+        if (sessio.getRol() != Rol.ADMIN && sessio.getRol() != Rol.BIBLIOTECARI) return "redirect:/login";
 
         List<LlibreEstadisticaDTO> stats = prestecService.getEstadistiquesLlibres(autor, categoria);
         List<UsuariEstadisticaDTO> statsUsuaris = prestecService.getEstadistiquesUsuaris();

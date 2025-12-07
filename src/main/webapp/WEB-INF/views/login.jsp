@@ -48,7 +48,6 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
-                     <%-- L'usuari no està loguejat, no mostrem enllaços de sessió --%>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
                     <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
@@ -60,7 +59,6 @@
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
-                    <%-- Lògica de Sessió (mostra "Iniciar Sessió" com a actiu) --%>
                     <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0 active">
                         Inicia sessió <i class="bi bi-person-circle"></i>
                     </a>
@@ -114,7 +112,6 @@
     </section>
 
     <!-- ===== Peu de pàgina ===== -->
-    <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
     <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
         <div class="container">
             <div class="row align-items-center">
@@ -136,6 +133,7 @@
                         <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
                         <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
                     </div>
+                    <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
                 </div>
                 <hr class="my-3">
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>

@@ -19,8 +19,6 @@
 
     </head>
     <body  class="bg-light">
-
-        <!-- Encapçalat -->
         <header class="bg-tot py-1">
             <div class="container px-4 px-lg-5 my-1">
                 <div class="text-center text-white">
@@ -28,8 +26,6 @@
                 </div>
             </div>
         </header>
-
-
         <!-- Menu -->
         <nav class="navbar navbar-expand-lg navbar-light bg-totlight">
             <div class="container px-4 px-lg-5">
@@ -95,20 +91,14 @@
                                 </button>
                             </div>
                         </form>
-                        <c:if test="${not empty sessionScope.sessioUsuari}">
-                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                                <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
-                                <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
-                                </c:if>
-                            </c:if>
                     </ul>
-
-                    <!-- Cerca per títol -->        
+                    <!-- Cerca per títol -->            
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
                             <input class="form-control form-control-sm me-2" type="search" name="q" 
-                                   placeholder="Cerca per titol" aria-label="Search" autocomplete="off">
+                                   placeholder="Cerca per titol" aria-label="Search" autocomplete="off" required
+                                   oninvalid="this.setCustomValidity('Aquest camp és obligatori')"
+                                   oninput="this.setCustomValidity('')" />
                             <button class="btn btn-tot btn-sm" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -117,30 +107,36 @@
 
                         <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
+
                             <c:when test="${empty sessionScope.sessioUsuari}">
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
                             </c:when>
+
                             <c:otherwise>
                                 <div class="dropdown">
-                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
-                                        <c:choose>
-                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                                </c:when>
-                                            </c:choose>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><hr class="dropdown-divider"></li>
+
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                             </a></li>
@@ -152,7 +148,6 @@
                 </div>
             </div>
         </nav>
-
         <!-- Bucle per recórrer llistat de llibres -->
         <div class="container py-4">
             <h1 class="mb-4 text-center text-tot-principal">

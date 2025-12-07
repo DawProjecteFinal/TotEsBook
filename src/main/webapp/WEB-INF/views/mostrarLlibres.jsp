@@ -115,30 +115,36 @@
 
                         <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
+
                             <c:when test="${empty sessionScope.sessioUsuari}">
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
                             </c:when>
+
                             <c:otherwise>
                                 <div class="dropdown">
-                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
-                                        <c:choose>
-                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                                </c:when>
-                                            </c:choose>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><hr class="dropdown-divider"></li>
+
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                             </a></li>
@@ -146,169 +152,169 @@
                                 </div>
                             </c:otherwise>
                         </c:choose>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <div class="container py-4">
+            <div class="container py-4">
 
-            <!-- Títol dinàmic -->
-            <c:choose>
-                <%-- Cerca per títol --%>
-                <c:when test="${not empty textCerca}">
-                    <h1 class="mb-3 text-center text-tot-principal">
-                        Resultats de la cerca 
-                        <c:choose>
-                            <c:when test="${tipusCerca == 'autor'}"> per autor </c:when>
-                            <c:when test="${tipusCerca == 'idioma'}"> per idioma</c:when>
-                            <c:when test="${tipusCerca == 'isbn'}"> per ISBN </c:when>
-                            <c:otherwise> per títol </c:otherwise>
-                        </c:choose>
-                        <span class="text-tot-principal">
-                            "<c:choose>
-                                <c:when test="${tipusCerca == 'idioma' && textCerca == 'ca'}">català</c:when>
-                                <c:when test="${tipusCerca == 'idioma' && textCerca == 'es'}">castellà</c:when>
-                                <c:otherwise><c:out value="${textCerca}"/></c:otherwise>
-                            </c:choose>"
-                        </span>
-                    </h1>
-                </c:when>
-
-                <%-- Cerca per categoria seleccionada --%>
-                <c:when test="${not empty categoriaSeleccionada}">
-                    <h1 class="mb-3 text-center text-tot-principal">
-                        Llibres 
-                        <span class="text-tot-principal">
+                <!-- Títol dinàmic -->
+                <c:choose>
+                    <%-- Cerca per títol --%>
+                    <c:when test="${not empty textCerca}">
+                        <h1 class="mb-3 text-center text-tot-principal">
+                            Resultats de la cerca 
                             <c:choose>
-                                <c:when test="${categoriaSeleccionada == 'Self-Help'}"> d'autoajuda</c:when>
-                                <c:when test="${categoriaSeleccionada == 'Cooking'}">  de cuina i gastronomia</c:when>
-                                <c:when test="${categoriaSeleccionada == 'Fiction'}">  de novel·la i ficció</c:when>
-                                <c:when test="${categoriaSeleccionada == 'Juvenile Fiction'}">  de ficció juvenil</c:when>
-                                <c:when test="${categoriaSeleccionada == 'Young Adult Fiction'}"> de novel·la juvenil</c:when>
-                                <c:when test="${categoriaSeleccionada == 'True Crime'}">  de crims reals</c:when>
-                                <c:when test="${fn:contains(categoriaSeleccionada, 'Biography')}"> de biografies i memòries</c:when>
-                                <c:when test="${categoriaSeleccionada == 'Psychology'}"> de psicologia</c:when>
-                                <c:otherwise>   de <c:out value="${categoriaSeleccionada}"/></c:otherwise>
+                                <c:when test="${tipusCerca == 'autor'}"> per autor </c:when>
+                                <c:when test="${tipusCerca == 'idioma'}"> per idioma</c:when>
+                                <c:when test="${tipusCerca == 'isbn'}"> per ISBN </c:when>
+                                <c:otherwise> per títol </c:otherwise>
                             </c:choose>
-                        </span>
-                    </h1>
-                </c:when>
+                            <span class="text-tot-principal">
+                                "<c:choose>
+                                    <c:when test="${tipusCerca == 'idioma' && textCerca == 'ca'}">català</c:when>
+                                    <c:when test="${tipusCerca == 'idioma' && textCerca == 'es'}">castellà</c:when>
+                                    <c:otherwise><c:out value="${textCerca}"/></c:otherwise>
+                                </c:choose>"
+                            </span>
+                        </h1>
+                    </c:when>
 
-                <%-- Vista sense cerca --%>
-                <c:otherwise>
-                    <h1 class="mb-3 text-center text-tot-principal">
-                        Explora, tria i gaudeix
-                    </h1>
-                </c:otherwise>
-            </c:choose>
+                    <%-- Cerca per categoria seleccionada --%>
+                    <c:when test="${not empty categoriaSeleccionada}">
+                        <h1 class="mb-3 text-center text-tot-principal">
+                            Llibres 
+                            <span class="text-tot-principal">
+                                <c:choose>
+                                    <c:when test="${categoriaSeleccionada == 'Self-Help'}"> d'autoajuda</c:when>
+                                    <c:when test="${categoriaSeleccionada == 'Cooking'}">  de cuina i gastronomia</c:when>
+                                    <c:when test="${categoriaSeleccionada == 'Fiction'}">  de novel·la i ficció</c:when>
+                                    <c:when test="${categoriaSeleccionada == 'Juvenile Fiction'}">  de ficció juvenil</c:when>
+                                    <c:when test="${categoriaSeleccionada == 'Young Adult Fiction'}"> de novel·la juvenil</c:when>
+                                    <c:when test="${categoriaSeleccionada == 'True Crime'}">  de crims reals</c:when>
+                                    <c:when test="${fn:contains(categoriaSeleccionada, 'Biography')}"> de biografies i memòries</c:when>
+                                    <c:when test="${categoriaSeleccionada == 'Psychology'}"> de psicologia</c:when>
+                                    <c:otherwise>   de <c:out value="${categoriaSeleccionada}"/></c:otherwise>
+                                </c:choose>
+                            </span>
+                        </h1>
+                    </c:when>
 
-            <!-- Missatge si no hi ha llibres -->
-            <c:if test="${empty llibres}">
-                <div class="alert alert-warning text-center my-3" role="alert">
-                    <c:choose>
-                        <c:when test="${tipusCerca == 'autor'}">
-                            No s'han trobat llibres de l'autor
-                            "<strong><c:out value="${textCerca}"/></strong>".
-                        </c:when>
-                        <c:when test="${tipusCerca == 'idioma'}">
-                            No s'han trobat llibres en l'idioma
-                            "<strong><c:out value="${textCerca}"/></strong>".
-                        </c:when>
-                        <c:when test="${tipusCerca == 'isbn'}">
-                            No s'ha trobat cap llibre amb l'ISBN
-                            "<strong><c:out value="${textCerca}"/></strong>".
-                        </c:when>
-                        <c:when test="${not empty textCerca}">
-                            A les nostres biblioteques no disposem del llibre 
-                            "<strong><c:out value="${textCerca}"/></strong>",<br>
-                            Si voleu fer-ne una consulta, ho podeu fer a través del següent botó:
-                        </c:when>
-                        <c:when test="${not empty categoriaSeleccionada}">
-                            No s'han trobat llibres per a aquesta categoria.
-                        </c:when>
-                        <c:otherwise>
-                            No s'han trobat llibres.
-                        </c:otherwise>
-                    </c:choose>
+                    <%-- Vista sense cerca --%>
+                    <c:otherwise>
+                        <h1 class="mb-3 text-center text-tot-principal">
+                            Explora, tria i gaudeix
+                        </h1>
+                    </c:otherwise>
+                </c:choose>
 
-                    <!-- Botó per consultar la api de Google Books -->
-                    <div class="mt-3">
-                        <a href="${pageContext.request.contextPath}/llibres/cercar_api?titol=${fn:escapeXml(textCerca)}"
-                           class="btn btn-primary">
-                            Cercar a Google Books
-                        </a>
+                <!-- Missatge si no hi ha llibres -->
+                <c:if test="${empty llibres}">
+                    <div class="alert alert-warning text-center my-3" role="alert">
+                        <c:choose>
+                            <c:when test="${tipusCerca == 'autor'}">
+                                No s'han trobat llibres de l'autor
+                                "<strong><c:out value="${textCerca}"/></strong>".
+                            </c:when>
+                            <c:when test="${tipusCerca == 'idioma'}">
+                                No s'han trobat llibres en l'idioma
+                                "<strong><c:out value="${textCerca}"/></strong>".
+                            </c:when>
+                            <c:when test="${tipusCerca == 'isbn'}">
+                                No s'ha trobat cap llibre amb l'ISBN
+                                "<strong><c:out value="${textCerca}"/></strong>".
+                            </c:when>
+                            <c:when test="${not empty textCerca}">
+                                A les nostres biblioteques no disposem del llibre 
+                                "<strong><c:out value="${textCerca}"/></strong>",<br>
+                                Si voleu fer-ne una consulta, ho podeu fer a través del següent botó:
+                            </c:when>
+                            <c:when test="${not empty categoriaSeleccionada}">
+                                No s'han trobat llibres per a aquesta categoria.
+                            </c:when>
+                            <c:otherwise>
+                                No s'han trobat llibres.
+                            </c:otherwise>
+                        </c:choose>
+
+                        <!-- Botó per consultar la api de Google Books -->
+                        <div class="mt-3">
+                            <a href="${pageContext.request.contextPath}/llibres/cercar_api?titol=${fn:escapeXml(textCerca)}"
+                               class="btn btn-primary">
+                                Cercar a Google Books
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </c:if>
+                </c:if>
 
 
-            <!-- Llistat de llibres -->
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-                <c:forEach var="llibre" items="${llibres}">
-                    <div class="col">
-                        <div class="card h-100 shadow-sm">
+                <!-- Llistat de llibres -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+                    <c:forEach var="llibre" items="${llibres}">
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
 
-                            <img src="${llibre.imatgeUrl}"
-                                 class="card-img-top img-fixed mx-auto d-block"
-                                 alt="Portada de ${llibre.titol}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-1 text-tot-bold">
-                                    <c:out value="${llibre.titol}"/>
-                                </h5>
-                                <p class="text-muted mb-2 text-tot-light">
-                                    <c:out value="${llibre.autor}"/>
-                                </p>
-                                <ul class="list-unstyled small mb-3 text-tot-isbn">
-                                    <li>
-                                        <strong>ISBN:</strong>
-                                        <c:out value="${llibre.isbn}"/>
-                                    </li>
-                                </ul>
-                                <div class="mt-auto">
-                                    <a href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}&mode=reserva" class="btn btn-tot w-100">Més informació</a>
+                                <img src="${llibre.imatgeUrl}"
+                                     class="card-img-top img-fixed mx-auto d-block"
+                                     alt="Portada de ${llibre.titol}">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title mb-1 text-tot-bold">
+                                        <c:out value="${llibre.titol}"/>
+                                    </h5>
+                                    <p class="text-muted mb-2 text-tot-light">
+                                        <c:out value="${llibre.autor}"/>
+                                    </p>
+                                    <ul class="list-unstyled small mb-3 text-tot-isbn">
+                                        <li>
+                                            <strong>ISBN:</strong>
+                                            <c:out value="${llibre.isbn}"/>
+                                        </li>
+                                    </ul>
+                                    <div class="mt-auto">
+                                        <a href="${pageContext.request.contextPath}/llibre?isbn=${llibre.isbn}&mode=reserva" class="btn btn-tot w-100">Més informació</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </c:forEach>
-            </div>
-        </div>
-<!-- ===== Peu de pàgina ===== -->
-        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <h6 class="fw-bold">TotEsBook</h6>
-                        <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
-                    </div>
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
-                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
-                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-center justify-content-md-end"> 
-                            <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
-                        </div>
-                        <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
-                    </div>
+                    </c:forEach>
                 </div>
-                <hr class="my-3">
-                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
-        </footer>
-        <!-- ===== FI Peu de pàgina ===== -->
+            <!-- ===== Peu de pàgina ===== -->
+            <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <h6 class="fw-bold">TotEsBook</h6>
+                            <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                                <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                                <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                                <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-center justify-content-md-end"> 
+                                <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
+                            </div>
+                            <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
+                </div>
+            </footer>
+            <!-- ===== FI Peu de pàgina ===== -->
 
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
-    </body>
-</html>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
+        </body>
+    </html>
 

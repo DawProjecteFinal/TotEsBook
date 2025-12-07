@@ -41,68 +41,21 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}">Inici</a></li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a>
                         </li>
-                        <!-- Dropdown + categories -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>                                   
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Cooking">Cuina i gastronomia</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Juvenile Fiction">Ficció juvenil</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Fiction">Novel·la i ficció</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Young Adult Fiction">Novel·la juvenil</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
-                            </ul>
-                        </li>
-                        <!-- Dropdown + formulari cerca avançada -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="dropdownAdvanced" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Cerca avançada
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownAdvanced">
-                                <li><a class="dropdown-item" href="#" data-field="autor">Autor</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#" data-field="idioma">Idioma</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#" data-field="isbn">ISBN</a></li>
-                            </ul>
-                        </li>
-                        <form id="advancedSearch" class="d-flex me-3 my-2 my-lg-0" method="get" action="<c:url value='/cercar'/>">
-                            <input type="hidden" name="field" id="field" value="">
-
-                            <div id="searchGroup" class="input-group d-none">
-                                <!-- Input de text per autor / isbn -->
-                                <input id="searchInput" class="form-control form-control-sm me-2" name="q" type="search" placeholder="" aria-label="Advanced search" autocomplete="off"
-                                       required oninvalid="this.setCustomValidity('Aquest camp és obligatori')" oninput="this.setCustomValidity('')" />
-                                <select id="idiomaSelect" class="form-select form-select-sm me-2 d-none">
-                                    <option value="">Tria l'idioma</option>
-                                    <option value="ca">Català</option>
-                                    <option value="es">Castellà</option>
-                                </select>
-
-                                <button class="btn btn-tot btn-sm" type="submit">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </form>
-
-                        <c:if test="${not empty sessionScope.sessioUsuari}">
-                
-                                <%-- Enllaç a Gestió d'Usuaris (només per a Admin) --%>
-                                <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li>
-                                </c:if>
+                        <c:if test="${not empty sessionScope.sessioUsuari && sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li> 
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/estadistiques">Estadístiques</a></li>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.sessioUsuari && sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/estadistiques">Estadístiques</a></li>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.sessioUsuari && sessionScope.sessioUsuari.rol == 'USUARI'}">
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/mostrarLlibres">Catàleg</a></li> 
+                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/propostes/llista_propostes">Propostes</a></li>
                             </c:if>
                     </ul>
-
-
 
                     <!-- Cerca per títol -->        
                     <div class="d-flex align-items-center ms-lg-auto">
@@ -118,30 +71,36 @@
 
                         <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
+
                             <c:when test="${empty sessionScope.sessioUsuari}">
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
                             </c:when>
+
                             <c:otherwise>
                                 <div class="dropdown">
-                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
-                                        <c:choose>
-                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                                </c:when>
-                                            </c:choose>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><hr class="dropdown-divider"></li>
+
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                             </a></li>
@@ -149,18 +108,18 @@
                                 </div>
                             </c:otherwise>
                         </c:choose>
+
                     </div>
                 </div>
             </div>
         </nav>
-
         <!-- ===== FI Menu ===== -->
 
         <!-- ===== Secció Principal de Contingut ===== -->
         <div class="container mt-5" style="max-width: 800px;">
             <h2>Protecció de dades</h2>
             <p>Com que el nostre sistema gestiona usuaris registrats, reserves i préstecs, aplicarem el RGPD (Reglament Europeu de Protecció de Dades), degut que la nostra plataforma inicialment proveïrà servei a un país d’Europa, i si volem expandir-nos, cercarem clients potencials també en altres països d’Europa o el RGPD és vigent.</p>
-            <h3>Mesures qeu implementarem</h3>
+            <h3>Mesures que implementarem</h3>
             <ol>
                 <li>Mesures organitzatives</li>
                 <ol>
@@ -204,7 +163,7 @@
             <p>L’objectiu principal serà garantir la confidencialitat, integritat i disponibilitat de les dades personals dels usuaris del sistema <b>TotEsBook</b>.</p>
 
         </div>
-        
+
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">

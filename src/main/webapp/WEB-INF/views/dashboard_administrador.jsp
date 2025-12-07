@@ -43,30 +43,8 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Inici</a></li>
                         <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a></li>
-                        <!-- Dropdown + categories -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres">Totes les categories</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Self-Help">Autoajuda</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Biography%20%26%20Autobiography">Biografíes i Memòries</a></li>                                   
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=True Crime">Crims reals</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Cooking">Cuina i gastronomia</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Juvenile Fiction">Ficció juvenil</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Fiction">Novel·la i ficció</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Young Adult Fiction">Novel·la juvenil</a></li>
-                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
-                            </ul>
-                        </li>
-                        <%-- Només mostrem gestió d'usuaris si l'usuari és ADMIN --%>
-                        <c:if test="${not empty sessionScope.sessioUsuari && sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li> <%-- Enllaç al Servlet --%>
-                            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/estadistiques">Estadístiques</a></li> <%-- TODO: Implementar --%>
-                            </c:if>
-                            <c:if test="${not empty sessionScope.sessioUsuari}">
-                            <li class="nav-item"><a class="nav-link" href="#">Propostes</a></li>
-                            </c:if>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/mostrarUsuaris">Gestió Usuaris</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/estadistiques">Estadístiques</a></li> 
                     </ul>
                     <div class="d-flex align-items-center ms-lg-auto">
                         <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
@@ -78,28 +56,47 @@
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
+                        <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
+
                             <c:when test="${empty sessionScope.sessioUsuari}">
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
                             </c:when>
+
                             <c:otherwise>
                                 <div class="dropdown">
-                                    <button class="btn btn-tot btn-sm dropdown-toggle active" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> (Admin)
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
-                                        <li><a class="dropdown-item active" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li> <%-- Accés ràpid si també és biblio --%>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
                                         <li><hr class="dropdown-divider"></li>
+
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                             </a></li>
                                     </ul>
                                 </div>
                             </c:otherwise>
+
                         </c:choose>
+
                     </div>
                 </div>
             </div>
@@ -211,17 +208,27 @@
                                                     <td>${b.numLlibres}</td>
                                                     <td>${b.numPrestecs}</td>
                                                     <td>
-                                                        <div class="btn-group btn-group-sm" role="group">
+                                                        <div class="btn-accio-group">
+
                                                             <a href="${pageContext.request.contextPath}/gestio/biblioteques/${b.idBiblioteca}" 
-                                                               class="btn btn-outline-primary"><i class="bi bi-gear"></i> Gestionar</a>
+                                                               class="btn btn-outline-primary btn-accio-panell">
+                                                                <i class="bi bi-gear"></i>
+                                                            </a>
+
                                                             <a href="${pageContext.request.contextPath}/gestio/biblioteques/${b.idBiblioteca}/editar" 
-                                                               class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
-                                                            <form action="${pageContext.request.contextPath}/gestio/biblioteques/${b.idBiblioteca}/eliminar" 
-                                                                  method="POST" style="display:inline;"
-                                                                  onsubmit="return confirm('Segur que vols eliminar aquesta biblioteca?')">
-                                                                <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                               class="btn btn-outline-warning btn-accio-panell">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+
+                                                            <form action="${pageContext.request.contextPath}/gestio/biblioteques/${b.idBiblioteca}/eliminar"
+                                                                  method="POST" onsubmit="return confirm('Segur que vols eliminar aquesta biblioteca?')">
+                                                                <button type="submit" class="btn btn-outline-danger btn-accio-panell">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
                                                             </form>
+
                                                         </div>
+
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -336,7 +343,12 @@
                                                             <button type="submit" class="btn btn-sm btn-tot" disabled title="Funcionalitat pendent">Canviar</button>
                                                         </form>
                                                     </td>
-                                                    <td><button class="btn btn-sm btn-outline-danger" onclick="alert('Eliminació no implementada')"><i class="bi bi-trash"></i></button></td>
+                                                    <td><div class="btn-accio-group">
+                                                            <button class="btn btn-outline-danger btn-accio-panell"
+                                                                    onclick="alert('Eliminació no implementada')">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </div></button></td>
                                                 </tr>
                                             </c:forEach>
 
@@ -512,65 +524,114 @@
                         <!-- ===== PESTANYA 4: ESTADÍSTIQUES ===== -->
                         <div class="tab-pane fade" id="estadistiques" role="tabpanel">
                             <div class="card shadow-sm mb-5">
-                                <div class="card-header bg-totlight d-flex justify-content-between align-items-center">
-                                    <h4 class="mb-0 text-tot-bold">
-                                        <i class="bi bi-bar-chart-line-fill me-2"></i> Centre d'Estadístiques
-                                    </h4>
-                                    <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-sm btn-primary">
-                                        <i class="bi bi-box-arrow-up-right me-1"></i> Obrir Panell Complet d'Estadístiques
-                                    </a>
+
+                                <!-- Header amb fons blau clar -->
+                                <div class="card-header bg-totlight d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <div>
+                                        <h4 class="mb-0 text-tot-bold">
+                                            <i class="bi bi-bar-chart-line-fill me-2"></i> Resum d'Estadístiques
+                                        </h4>
+                                        <small class="text-muted">
+                                            Vista ràpida del Centre d'Estadístiques de la biblioteca.
+                                        </small>
+                                    </div>
                                 </div>
-                                <div class="card-body text-center py-5">
-                                    <i class="bi bi-graph-up-arrow display-1 text-muted mb-3"></i>
-                                    <h5>Consulta el rendiment de la biblioteca</h5>
-                                    <p class="text-muted">
-                                        Accedeix al panell detallat per veure els llibres més prestats, 
-                                        els usuaris més actius i exportar informes en PDF i Excel.
-                                    </p>
-                                    <a href="${pageContext.request.contextPath}/admin/estadistiques" class="btn btn-lg btn-tot">
-                                        Veure Estadístiques Detallades
-                                    </a>
+
+                                <!-- Cos blanc -->
+                                <div class="card-body bg-white">
+
+                                    <!-- Tres caixetes gris clar -->
+                                    <div class="row g-4 mb-4 text-center">
+
+                                        <div class="col-md-4">
+                                            <div class="border rounded-4 p-4 h-100 bg-light">
+                                                <i class="bi bi-book-half fs-1 text-muted mb-2 d-block"></i>
+                                                <h5 class="text-tot-bold mb-2">Llibres més prestats</h5>
+                                                <p class="small text-muted mb-0">
+                                                    Consulta el rànquing dels títols amb més préstecs,
+                                                    filtrant per <strong>autor</strong> i <strong>categoria/gènere</strong>.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="border rounded-4 p-4 h-100 bg-light">
+                                                <i class="bi bi-people-fill fs-1 text-muted mb-2 d-block"></i>
+                                                <h5 class="text-tot-bold mb-2">Lectors més actius</h5>
+                                                <p class="small text-muted mb-0">
+                                                    Visualitza el Top 20 d'usuaris amb més préstecs i revisa ràpidament
+                                                    el seu <strong>nom</strong>, <strong>correu</strong> i activitat.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="border rounded-4 p-4 h-100 bg-light">
+                                                <i class="bi bi-stars fs-1 text-muted mb-2 d-block"></i>
+                                                <h5 class="text-tot-bold mb-2">Autors destacats</h5>
+                                                <p class="small text-muted mb-0">
+                                                    Accedeix al rànquing dels <strong>autors més prestats</strong>
+                                                    (Top 10) segons el nombre total de préstecs registrats.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Botons d'accés -->
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <a href="${pageContext.request.contextPath}/admin/estadistiques"
+                                           class="btn btn-lg btn-tot">
+                                            <i class="bi bi-bar-chart-line-fill me-2"></i>
+                                            Veure Estadístiques Detallades
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/admin/estadistiques/autors"
+                                           class="btn btn-lg btn-outline-primary">
+                                            <i class="bi bi-stars me-2"></i>
+                                            Autors Destacats
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
-                        </div>                      
-
-                    </div> 
-                </div>
-            </section>
-
-
-            <!-- ===== Peu de pàgina ===== -->
-        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <h6 class="fw-bold">TotEsBook</h6>
-                        <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
-                    </div>
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
-                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
-                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-center justify-content-md-end"> 
-                            <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
                         </div>
-                        <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
-                    </div>
-                </div>
-                <hr class="my-3">
-                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
-            </div>
-        </footer>
-        <!-- ===== FI Peu de pàgina ===== -->
 
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        </body>
-    </html>
+                        </section>
+
+
+                        <!-- ===== Peu de pàgina ===== -->
+                        <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 mb-3 mb-md-0">
+                                        <h6 class="fw-bold">TotEsBook</h6>
+                                        <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3 mb-md-0">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex justify-content-center justify-content-md-end"> 
+                                            <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
+                                            <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
+                                            <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
+                                        </div>
+                                        <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                                    </div>
+                                </div>
+                                <hr class="my-3">
+                                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
+                            </div>
+                        </footer>
+                        <!-- ===== FI Peu de pàgina ===== -->
+
+
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                        </body>
+                        </html>

@@ -166,3 +166,16 @@ a.btn-accio-panell {
 .btn-nowrap {
     white-space: nowrap;
 }
+
+            .badge-pendent {
+                background-color: #ffc107;
+            }
+            .badge-acceptada {
+                background-color: #28a745;
+            }
+            .badge-rebutjada {
+                background-color: #dc3545;
+            }
+            .badge-comprat {
+                background-color: #0d6efd;
+            }
