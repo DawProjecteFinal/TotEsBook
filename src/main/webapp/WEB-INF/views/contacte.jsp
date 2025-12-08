@@ -118,9 +118,10 @@
 
         <!-- ===== Secció Principal de Contingut ===== -->
         <div class="container mt-5">
-            <h2>Contacta amb l'equip tècnic de TotEsBook</h2>
+            <h2 class="text-center text-tot-bold mb-3">Contacta amb l'equip tècnic de TotEsBook</h2>
 
-            <p><strong>Email de suport</strong> suport@totesbook.com</p>
+            <p class="text-center fw-bold"><strong>Email de suport</strong> 
+                <a href="mailto:suport@totesbook.com">suport@totesbook.com</a></p>
 
             <div class="container mt-5 mb-5" style="max-width: 600px;">
                 <form action="#" method="post">
