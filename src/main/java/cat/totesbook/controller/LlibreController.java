@@ -187,7 +187,7 @@ public class LlibreController {
      * @param isbn
      * @param titol
      * @param mode
-     * @param isbnCerca
+     * @param isbn
      * @param autor
      * @return
      */
