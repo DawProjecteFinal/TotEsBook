@@ -174,7 +174,6 @@ public class PropostesController {
      * @param editorial
      * @param motiu
      * @param session
-     * @param model
      * @return
      */
     @PostMapping("/guardar")

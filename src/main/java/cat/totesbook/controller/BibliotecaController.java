@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Biblioteca;
@@ -20,8 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- *
- * @author jmiro
+ * Classe que...
+ * 
+ * @author equip TotEsBook
  */
 @Controller
 public class BibliotecaController {
@@ -43,19 +39,18 @@ public class BibliotecaController {
      */
     @GetMapping("/biblioteques")
     public String mostrarBiblioteques(Model model) {
-        // Obtenim totes les biblioteques de la base de dades
+        // Obtenim totes les biblioteques de la base de dades.
         List<Biblioteca> biblioteques = bibliotecaService.getAllBiblioteques();
 
-        // Afegim la llista al model perquè la vista la pugui utilitzar
+        // Afegim la llista al model perquè la vista la pugui utilitzar.
         model.addAttribute("biblioteques", biblioteques);
 
-        // Retornem el nom de la vista JSP (sense .jsp ni ruta completa)
+        // Retornem el nom de la vista JSP (sense .jsp ni ruta completa).
         return "biblioteques/llistar_public";
     }
 
     /**
      * Mostra els llibres de una biblioteca determinada
-     * @param idBiblioteca
      * @param idBiblioteca
      * @param model
      * @return 

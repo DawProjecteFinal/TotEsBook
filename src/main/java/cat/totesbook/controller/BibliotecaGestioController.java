@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -23,8 +18,8 @@ import cat.totesbook.domain.Usuari;
 import cat.totesbook.service.UsuariService;
 
 /**
- *
- * @author jmiro
+ * Controlador... 
+ * @author equip TotEsBook
  */
 @Controller
 @RequestMapping("/gestio/biblioteques")
