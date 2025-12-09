@@ -389,7 +389,7 @@
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <c:forEach var="llibre" items="${llibres}">
                         <div class="col mb-5">
-                            <div class="card h-100 shadow-sm">
+                            <div class="card h-100 shadow-sm card-llibre">
                                 <img src="<c:url value='${llibre.imatgeUrl}'/>"
                                      class="card-img-top img-fixed mx-auto d-block"
                                      alt="Portada de ${llibre.titol}">

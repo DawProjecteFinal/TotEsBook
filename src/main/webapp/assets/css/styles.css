@@ -167,15 +167,30 @@ a.btn-accio-panell {
     white-space: nowrap;
 }
 
-            .badge-pendent {
-                background-color: #ffc107;
-            }
-            .badge-acceptada {
-                background-color: #28a745;
-            }
-            .badge-rebutjada {
-                background-color: #dc3545;
-            }
-            .badge-comprat {
-                background-color: #0d6efd;
-            }
+.badge-pendent {
+    background-color: #ffc107;
+}
+.badge-acceptada {
+    background-color: #28a745;
+}
+.badge-rebutjada {
+    background-color: #dc3545;
+}
+.badge-comprat {
+    background-color: #0d6efd;
+}
+
+/* Mode hover targetes dels llibres */
+.card {
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border 0.25s ease;
+    border: 2px solid transparent;
+}
+
+/* Només les targetes de llibres fan el hover  */
+.card.card-llibre:hover {
+    transform: scale(1.10);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    border: 2px solid #0d6efd; /* blau */
+}

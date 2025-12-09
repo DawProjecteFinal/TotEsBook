@@ -96,10 +96,18 @@
 
         <section>
             <div class="container mt-4 mb-4">
+                <!--
                 <a href="${pageContext.request.contextPath}/dashboard_administrador" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left"></i> Tornar al Panell
                 </a>
-
+                -->
+                <!-- Botó per tornar a la cerca -->
+                <div class="mt-4">
+                    <a href="${pageContext.request.contextPath}/dashboard_usuari" 
+                       class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Pàgina inicial
+                    </a>
+                </div>
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-totlight">
                         <h4 class="mb-0 text-tot-bold">
@@ -150,12 +158,13 @@
                                 Resultats trobats: <strong>${fn:length(resultats)}</strong>
                             </p>
 
-                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            <!--<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">-->
+                            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
                                 <c:forEach var="llibre" items="${resultats}">
                                     <div class="col">
 
-                                        <div class="card h-100 shadow-sm">
+                                        <div class="card h-100 shadow-sm card-llibre">
 
                                             <!-- Miniatura -->
                                             <c:if test="${not empty llibre.imatgeUrl}">
@@ -223,14 +232,6 @@
                                     </div>
 
                                 </c:forEach>
-                            </div>
-
-                            <!-- Botó per tornar a la cerca -->
-                            <div class="mt-4">
-                                <a href="${pageContext.request.contextPath}/dashboard_usuari" 
-                                   class="btn btn-secondary">
-                                    <i class="bi bi-arrow-left"></i> Pàgina inicial
-                                </a>
                             </div>
 
                         </c:if>

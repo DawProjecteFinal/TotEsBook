@@ -157,6 +157,37 @@
             </div>
         </div>
 
+        <!-- POP-UP MODAL (es mostra quan popup != null) -->
+        <c:if test="${not empty popup}">
+            <div class="modal fade show"
+                 id="popupSuccess"
+                 tabindex="-1"
+                 style="display:block; background:rgba(0,0,0,0.5);">
+
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-success">
+
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title">Missatge enviat!</h5>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>Gràcies per contactar amb nosaltres.</p>
+                            <p>Hem rebut el teu missatge i ens posarem en contacte amb tu aviat.</p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <!-- Botó que simplement recarrega la pàgina per tancar el pop-up -->
+                            <a href="${pageContext.request.contextPath}/contacte" class="btn btn-success">
+                                D'acord
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </c:if>
 
         <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
