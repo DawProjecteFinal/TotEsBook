@@ -104,7 +104,7 @@
             <div class="container mt-4 mb-5">
 
                 <!-- Botó tornar al panell -->
-                <a href="${pageContext.request.contextPath}/dashboard_usuari"
+                <a href="${pageContext.request.contextPath}/dashboard_administrador"
                    class="btn btn-outline-secondary mb-4 mt-3">
                     <i class="bi bi-arrow-left"></i> Tornar al Panell
                 </a>
