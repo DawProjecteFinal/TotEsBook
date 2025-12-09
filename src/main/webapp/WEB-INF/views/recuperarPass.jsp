@@ -80,7 +80,7 @@
                         <h2>Recuperar Contrasenya</h2>
                         <p class="text-center text-muted mb-4">Introdueix el teu correu electrònic i t'enviarem les instruccions per restablir-la.</p>
 
-                        <%-- Mostra missatge d'èxit/error (si un futur Servlet els envia) --%>
+                        <%-- Mostra missatge d'èxit/error --%>
                         <c:if test="${not empty missatge}">
                             <div class="alert alert-success" role="alert">
                                 <c:out value="${missatge}" />
@@ -92,7 +92,7 @@
                             </div>
                         </c:if>
 
-                        <%-- TODO: Crear un servlet per a "/recuperar" --%>
+                       
                         <form action="${pageContext.request.contextPath}/recuperarPass" method="POST">
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-bold">Correu Electrònic</label>

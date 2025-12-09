@@ -253,7 +253,7 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                     <c:forEach var="llibre" items="${llibres}">
                         <div class="col">
-                            <div class="card h-100 shadow-sm">
+                            <div class="card h-100 shadow-sm card-llibre">
 
                                 <img src="${llibre.imatgeUrl}"
                                      class="card-img-top img-fixed mx-auto d-block"

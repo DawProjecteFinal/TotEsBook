@@ -276,7 +276,7 @@
 
                     <c:forEach var="llibre" items="${llibres}"> 
                         <div class="col mb-5">
-                            <div class="card h-100 shadow-sm">
+                            <div class="card h-100 shadow-sm card-llibre">
                                 <img src="<c:url value='${llibre.imatgeUrl}'/>" class="card-img-top img-fixed mx-auto d-block" alt="Portada de <c:out value='${llibre.titol}'/>">
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title mb-1 text-tot-bold"><c:out value="${llibre.titol}"/></h5>
