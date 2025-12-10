@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -134,6 +133,11 @@ public class LlibreDAO implements LlibreRepository {
         if (llibre != null) {
             entityManager.remove(llibre);
         }
+    }
+
+    // Setter només per a tests
+    void setEntityManager(EntityManager em) {
+        this.entityManager = em;
     }
 
 }
