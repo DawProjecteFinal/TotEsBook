@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 
     </head>
-    <body  class="bg-light">
+    <body  class="bg-light d-flex flex-column min-vh-100">
 
         <!-- Encapçalat -->
 
@@ -157,7 +157,7 @@
                 </div>
             </nav>
 
-            <div class="container py-4">
+            <div class="container py-4 flex-grow-1">
 
                 <!-- Títol dinàmic -->
                 <c:choose>
