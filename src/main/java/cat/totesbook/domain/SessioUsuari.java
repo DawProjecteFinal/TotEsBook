@@ -1,13 +1,10 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.domain;
 
 /**
  * Objecte que representa l'usuari loguejat a la sessió (HttpSession). Unifica
  * la informació provinent de les taules 'Usuaris' i 'Agents'.
+ * 
+ * @author Equip TotEsBook
  */
 public class SessioUsuari {
 
@@ -73,41 +70,81 @@ public class SessioUsuari {
     }
 
     // --- Getters ---
+    /**
+     * Retorna el id de l'usuari.
+     * 
+     * @return id de l'usuari.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Retorna el nom complet de l'usuari.
+     * 
+     * @return nom complet de l'usuari.
+     */
     public String getNomComplet() {
         return nomComplet;
     }
 
+    /**
+     * Retorna el correu electrònic de l'usuari.
+     * 
+     * @return correu electrònic de l'usuari.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Retorna el id rol de l'usuari.
+     * 
+     * @return rol de l'usuari.
+     */
     public Rol getRol() {
         return rol;
     }
 
+    /**
+     * Retorna el nom de la biblioteca.
+     * 
+     * @return nom de la biblioteca.
+     */
     public String getBibliotecaNom() {
         return bibliotecaNom;
     }
 
+    /**
+     * Retorna el id de la biblioteca.
+     * 
+     * @return id de la biblioteca.
+     */
     public Integer getBibliotecaId() {
         return bibliotecaId;
     }
 
+    /**
+     * Assigna un nom de la biblioteca.
+     * 
+     * @param bibliotecaNom nom de la biblioteca.
+     */
     public void setBibliotecaNom(String bibliotecaNom) {
         this.bibliotecaNom = bibliotecaNom;
     }
 
+    /**
+     * Assigna un id de la biblioteca.
+     * 
+     * @param bibliotecaId id de la biblioteca.
+     */
     public void setBibliotecaId(Integer bibliotecaId) {
         this.bibliotecaId = bibliotecaId;
     }
 
     /**
      * Mètode per assignar una biblioteca després de la creació de l'objecte.
-     * @param biblioteca
+     * @param biblioteca biblioteca.
      */
     public void assignarBiblioteca(Biblioteca biblioteca) {
         this.bibliotecaNom = biblioteca.getNom();

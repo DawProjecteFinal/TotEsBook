@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Usuari;
@@ -18,18 +14,36 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Classe que implementa el servei de l'usuari.
+ * 
+ * @author Equip TotEsBook
+ */
 @Service
 public class UsuariServiceImpl implements UsuariService {
 
     @Autowired
     private UsuariRepository usuariRepository;
 
+    /**
+     * Retorna una llista de tots els Usuaris (lectors) del sistema.
+     * 
+     * (Aquest era el mètode que faltava - Error 5)
+     * @return Llista d'objectes Usuari.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Usuari> getAllUsuaris() {
         return usuariRepository.getAllUsuaris();
     }
 
+    /**
+     * Comprova el login d'un Usuari (lector) verificant la seva contrasenya hashejada.
+     * 
+     * @param email L'email del formulari.
+     * @param contrasenyaPlana La contrasenya en TEXT PLA del formulari.
+     * @return L'objecte Usuari si és correcte, o null si no ho és.
+     */
     @Override
     @Transactional(readOnly = true)
     public Usuari getUsuariByEmailAndContrasenya(String email, String contrasenyaPlana) {
@@ -37,6 +51,12 @@ public class UsuariServiceImpl implements UsuariService {
         return usuariRepository.getUsuariByEmailAndContrasenya(email, contrasenyaPlana);
     }
 
+     /**
+     * Desa un nou usuari a la base de dades.
+     * 
+     * @param usuari L'objecte Usuari (amb la contrasenya ja hashejada).
+     * @throws Exception En cas d'error.
+     */
     @Override
     @Transactional
     public void saveUsuari(Usuari usuari) throws Exception {
@@ -52,6 +72,12 @@ public class UsuariServiceImpl implements UsuariService {
         usuariRepository.saveUsuari(usuari);
     }
 
+    /**
+     * Cerca un usuari només pel seu email (útil per comprovar si ja existeix).
+     * 
+     * @param email L'email a cercar.
+     * @return L'objecte Usuari si es troba, o null.
+     */
     @Override
     @Transactional(readOnly = true)
     public Usuari getUsuariByEmail(String email) {
@@ -63,6 +89,14 @@ public class UsuariServiceImpl implements UsuariService {
     public void updatePerfil(Usuari usuari) {
         usuariRepository.updatePerfil(usuari);
     }
+     */
+    
+    /**
+     * Actualitzar l'usuari.
+     * 
+     * @param usuariModificat usuariModificat.
+     * @param nouPassword La contrasenya nova.
+     * @throws Exception En cas d'error.
      */
     @Override
     @Transactional
@@ -85,6 +119,17 @@ public class UsuariServiceImpl implements UsuariService {
     }
 
     // Implementació per afegir usuari lector manual des del Panell Bibliotecari
+    
+    /**
+     * Per crear lectors manualment des del Panell Bibliotecari
+     * 
+     * @param nom Nom d'un nou lector. 
+     * @param cognoms Cognoms d'un nou lector.
+     * @param telefon Teléfon d'un nou lector.
+     * @param email Correu d'un nou lector.
+     * @param password Contrasenya d'un nou lector.
+     * @throws Exception En cas d'error.
+     */
     @Override
     @Transactional // Aquí sí volem transacció per guardar
     public void crearLectorManual(String nom, String cognoms, String telefon, String email, String password) throws Exception {
@@ -108,6 +153,13 @@ public class UsuariServiceImpl implements UsuariService {
         usuariRepository.saveUsuari(u);
     }
 
+    /**
+     * Aplicar una sanció a l'usuari.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @param dataFiSancio La data de la finalització.
+     * @param motiuSancio El motiu de la sanció.
+     */
     @Override
     @Transactional
     public void aplicarSancio(Integer idUsuari, LocalDateTime dataFiSancio, String motiuSancio) {
@@ -123,12 +175,23 @@ public class UsuariServiceImpl implements UsuariService {
         usuariRepository.updateSancioUsuari(idUsuari, dataFiSancio, motiuSancio);
     }
 
+    /**
+     * Retorna una llista d'usuaris amb la sanció activa.
+     * 
+     * @return Una llista d'usuaris amb la sanció activa.
+     */
     @Override 
     @Transactional(readOnly = true)
     public List<Usuari> getUsuarisAmbSancioActiva() {
         return usuariRepository.getUsuarisAmbSancioActiva();
     }
 
+    /**
+     * Comprova si l'usuari té sanció o no.
+     * 
+     * @param idUsuari ID de l'usuari.
+     * @return true si té sanció i false i no la té.
+     */
     @Override
     @Transactional(readOnly = true)
     public boolean teSancioActiva(int idUsuari) {
@@ -136,6 +199,12 @@ public class UsuariServiceImpl implements UsuariService {
         return u != null && u.teSancioActiva();
     }
 
+    /**
+     * Busca un usuari complet per la seva ID.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @return L'objecte Usuari, o null si no es troba.
+     */
     @Override
     @Transactional(readOnly = true)
     public Usuari findUsuariById(int idUsuari) {

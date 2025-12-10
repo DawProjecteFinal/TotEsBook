@@ -32,12 +32,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controlador que gestiona les estadístiques.
+ * 
+ * @author Equip TotEsBook
+ */
 @Controller
 public class EstadistiquesController {
 
     @Autowired
     private PrestecService prestecService;
 
+    /**
+     * Veure les estadístiques.
+     * @param autor L'autor del llibre.
+     * @param categoria La categoria del llibre.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return La pàgina d'admin/estadistiques.
+     */
     @GetMapping("/admin/estadistiques")
     public String veureEstadistiquesLlibres(
             @RequestParam(required = false) String autor,
@@ -58,6 +71,14 @@ public class EstadistiquesController {
         return "admin_estadistiques";
     }
 
+    /**
+     * Veure la pàgina on mostra les estadístiques dels autors més populars.
+     * 
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return La pàgina de bibliotecari_autors_populars o redirigir a la pàgina
+     *         de login si l'usari no té la sessió iniciada.
+     */
     @GetMapping("/bibliotecari/autors-populars")
     public String veureAutorsPopulars(Model model, HttpSession session) {
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -71,6 +92,14 @@ public class EstadistiquesController {
         return "bibliotecari_autors_populars";
     }
 
+    /**
+     * Exportar les estadístiques a format d'Excel.
+     * 
+     * @param autor L'autor del llibre.
+     * @param categoria La categoria del llibre.
+     * @param response La resposta.
+     * @throws IOException Si hi ha un problema en exportar el format d'Excel.
+     */
     @GetMapping("/admin/estadistiques/excel")
     public void exportarExcel(@RequestParam(required = false) String autor,
                               @RequestParam(required = false) String categoria,
@@ -120,6 +149,14 @@ public class EstadistiquesController {
         }
     }
 
+    /**
+     * Exportar les estadístiques a format PDF.
+     * 
+     * @param autor L'autor del llibre.
+     * @param categoria La categoria del llibre.
+     * @param response La resposta.
+     * @throws IOException Si hi ha un problema en exportar el PDF.
+     */
     @GetMapping("/admin/estadistiques/pdf")
     public void exportarPdf(@RequestParam(required = false) String autor,
                             @RequestParam(required = false) String categoria,

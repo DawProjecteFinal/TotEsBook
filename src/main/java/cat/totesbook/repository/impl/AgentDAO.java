@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Agent;
@@ -13,7 +8,15 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Classe DAO que gestiona l'accés a la base de dades per a les entitats Agent.
+ * 
+ * @author Equip TotEsBook
+ */
 @Repository
+/**
+ * Implementació JPA del repositori de Agent.
+ */
 public class AgentDAO implements AgentRepository {
 
     @PersistenceContext(unitName = "totesbookPersistenceUnit")
@@ -21,6 +24,12 @@ public class AgentDAO implements AgentRepository {
 
     /**
      * Retorna un agent pel seu email i contrasenya (verificant hash BCrypt).
+     * 
+     * @param email correu electrònic de l'agent.
+     * @param contrasenyaPlana contrasenya en format pla.
+     * 
+     * @return un agent sí les credèncials són correcte i null 
+     * si no és correcta la contrasenya o no existeix l'agent.
      */
     @Override
     public Agent getAgentByEmailAndContrasenya(String email, String contrasenyaPlana) {
@@ -48,6 +57,9 @@ public class AgentDAO implements AgentRepository {
     /**
      * Actualitza el tipus d'un agent (per exemple, de BIBLIOTECARI a
      * ADMINISTRADOR).
+     * 
+     * @param idAgent id de l'agent.
+     * @param nouTipus nou tipus d'agent.
      */
     @Override
     public void updateAgentTipus(int idAgent, Agent.TipusAgent nouTipus) {
@@ -68,6 +80,8 @@ public class AgentDAO implements AgentRepository {
 
     /**
      * Retorna tots els agents registrats.
+     * 
+     * @return llista amb tots els agents.
      */
     @Override
     public List<Agent> getAllAgents() {
@@ -128,6 +142,12 @@ public class AgentDAO implements AgentRepository {
         }*/
     }
 
+    /**
+     * Mètode que actualitza la contrasenya de l'agent.
+     * 
+     * @param idAgent id de l'agent.
+     * @param novaPwd contrasenya nova.
+     */
     @Override
     public void updatePassword(int idAgent, String novaPwd) {
         Agent agent = entityManager.find(Agent.class, idAgent);
@@ -138,7 +158,7 @@ public class AgentDAO implements AgentRepository {
     /**
      * Nomes mostra els agents que són bibliotecaris
      *
-     * @return
+     * @return llista amb tots els bibliotecaris.
      */
     @Override
     public List<Agent> getAllBibliotecaris() {
@@ -155,9 +175,10 @@ public class AgentDAO implements AgentRepository {
     }
 
     /**
-     *
-     * @param idAgent
-     * @return
+     * Mètode que busca un agent segons el seu codi.
+     * 
+     * @param idAgent id de l'agent.
+     * @return agent amb l'id indicat o null en cas de que no existeixi.
      */
     @Override
     public Agent getAgentById(int idAgent) {
@@ -170,6 +191,12 @@ public class AgentDAO implements AgentRepository {
         }
     }
 
+    /**
+     *  Mètode que retorna el correu d'un agent.
+     * 
+     * @param email correu electrònic d'un agent.
+     * @return correu electrònic o null si no existeix.
+     */
     @Override
     public Agent getAgentByEmail(String email) {
        List<Agent> resultats = entityManager

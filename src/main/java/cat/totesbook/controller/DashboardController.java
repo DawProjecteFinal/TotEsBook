@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Biblioteca;
@@ -35,6 +31,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controlador que gestiona els dashboards.
+ * 
+ * @author Equip TotEsBook
+ */
 @Controller
 public class DashboardController {
 
@@ -62,6 +63,14 @@ public class DashboardController {
     @Autowired
     private PropostaAdquisicioService propostaAdquisicioService;
 
+    /**
+     * Panell del bibliotecari.
+     * 
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return El dashboard de l'usuari o si no hi ha bibliotecari assignat a 
+     *         una biblioteca torna una pàgina d'error.
+     */
     @GetMapping("/dashboard_bibliotecari")
     public String mostrarDashboardBibliotecari(Model model, HttpSession session) {
 
@@ -103,6 +112,15 @@ public class DashboardController {
         return "dashboard_bibliotecari";
     }
 
+    /**
+     * Gestionar la devolució.
+     * 
+     * @param isbn L'ISBN del llibre.
+     * @param emailUsuari El correu electrònic de l'usuari.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return Una redirecció "dashboard_bibliotecari#devolucions".
+     */
     @PostMapping("/gestionarDevolucio")
     public String gestionarDevolucio(
             @RequestParam("isbn") String isbn,
@@ -127,6 +145,13 @@ public class DashboardController {
         return "redirect:/dashboard_bibliotecari#devolucions";
     }
 
+    /**
+     * Mostra del panell de l'administrador.
+     * 
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return El panell d'administrador.
+     */
     @GetMapping("/dashboard_administrador")
     public String mostrarDashboardAdministrador(Model model, HttpSession session) {
 

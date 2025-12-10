@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Controller...
+ * Controlador que gestiona la reserva que fa el bibliotecari.
  * 
- * @author equip TotEsBook
+ * @author Equip TotEsBook
  */
 @Controller
 public class BibliotecariReservaController {
@@ -36,7 +36,15 @@ public class BibliotecariReservaController {
     @Autowired
     private AgentService agentService;
 
- @GetMapping("/bibliotecari/reserves/gestionar")
+    /**
+     * Mostra la vista de les reserves.
+     * 
+     * @param idReserva L'ID de la reserva.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirect Atribut per enviar missatges de feedback.
+     * @return Redirecció al panell del bibliotecari.
+     */
+    @GetMapping("/bibliotecari/reserves/gestionar")
 
     public String gestionarReserva(@RequestParam("id") int idReserva,
             HttpSession session,
@@ -76,6 +84,14 @@ public class BibliotecariReservaController {
         return "redirect:/dashboard_bibliotecari";
     }
 
+    /**
+     * Eliminar una reserva.
+     * 
+     * @param idReserva L'ID de la reserva.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirect Atribut per enviar missatges de feedback.
+     * @return Redirecció al panell del bibliotecari.
+     */
     @GetMapping("/bibliotecari/reserves/eliminar")
     public String eliminarReserva(@RequestParam("id") int idReserva,
             HttpSession session,

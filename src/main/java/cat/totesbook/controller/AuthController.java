@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -31,6 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller per autentificació (login/logout).
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class AuthController {
@@ -50,11 +48,23 @@ public class AuthController {
     @Autowired
     private BibliotecaLlibreService bibliotecaLlibreService; 
 
+    /**
+     * Mostra el formulari de login.
+     * @return vista del formulari de login.
+     */
     @GetMapping("/login")
     public ModelAndView loginForm() {
         return new ModelAndView("login");
     }
 
+    /**
+     * Processa a demanar el correu i la contranya de l'usuari.
+     * 
+     * @param email correu electrònic.
+     * @param contrasenya contrasenya.
+     * @param session sessió.
+     * @return redicció segons si l'autentificació es correcta o no.
+     */
     @PostMapping("/login")
     public ModelAndView doLogin(@RequestParam String email,
             @RequestParam("contrasenya") String contrasenya,
@@ -129,6 +139,12 @@ public class AuthController {
         return mv;
     }
 
+    /**
+     * Tancar la sessió.
+     * 
+     * @param session sessió
+     * @return redirigir a la pàgina principal després de tancar la sessió.
+     */
     @GetMapping("/logout")
     public ModelAndView doLogout(HttpSession session) {
         if (session != null) {

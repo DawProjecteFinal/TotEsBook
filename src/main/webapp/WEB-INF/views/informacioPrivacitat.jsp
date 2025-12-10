@@ -1,6 +1,5 @@
 <%-- 
-    Document   : informacioPrivacitat
-    Author     : equip TotEsBook
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

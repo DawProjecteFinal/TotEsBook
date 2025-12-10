@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Reserva;
@@ -21,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * Controlador per a gestionar les operacions relacionades amb les reserves de
  * llibres.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class ReservaController {
@@ -83,6 +80,15 @@ public class ReservaController {
         }
     }
 
+    /**
+     * Gestiona la cancel·lació d'una reserva feta per un usuari.
+     * 
+     * @param idReserva ID de la reserva.
+     * @param session La sessió HTTP per obtenir l'usuari loguejat.
+     * @param redirect Atributs de redirecció.
+     * @return a la dashboard de l'usuari amb un missatge si la cancel·lació s'ha
+     * fet de manera correcta. 
+     */
     @PostMapping("/cancelReserva")
     public String cancelReserva(@RequestParam("idReserva") int idReserva,
             HttpSession session,

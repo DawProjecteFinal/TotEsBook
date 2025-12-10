@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent; 
@@ -22,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Controlador Spring MVC per gestionar el canvi de rols des del panell d'administració.
  * Substitueix l'antic CanviRolServlet.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class CanviRolController {
@@ -37,7 +34,7 @@ public class CanviRolController {
     /**
      * Processa la sol·licitud POST des del formulari de 'dashboard_admin.jsp'
      * per canviar el rol d'un compte.
-     * * @param idCompte L'ID de l'Usuari o Agent a modificar.
+     * @param idCompte L'ID de l'Usuari o Agent a modificar.
      * @param nouRolString El nou rol seleccionat (com a String: "ADMIN", "BIBLIOTECARI", "USUARI").
      * @param tipusCompte El tipus de compte actual ("AGENT" o "USUARI").
      * @param session La HttpSession, per verificar els permisos de l'administrador.

@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.SessioUsuari;
@@ -18,6 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Controlador que gestiona les pàgines dels prèstecs.
+ * 
+ * @author Equip TotEsBook
+ */
 @Controller
 @RequestMapping("/gestionarPrestec")
 public class PrestecController {
@@ -28,6 +29,15 @@ public class PrestecController {
     @Autowired
     private UsuariService usuariService;
 
+    /**
+     * Mostra la gestió de préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return El nom de la vista JSP ("gestionarPrestec") si no hi ha cap error.
+     */
     @GetMapping
     public String mostrarGestioPrestec(@RequestParam("idPrestec") Integer idPrestec,
             HttpSession session,
@@ -60,6 +70,15 @@ public class PrestecController {
         }
     }
 
+    /**
+     * Registrar un préstec.
+     * 
+     * @param isbn L'ISBN del llibre.
+     * @param emailUsuari El correu electrònic de l'usuari.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix a "dashboard_bibliotecari#registrar-prestec".
+     */
     @PostMapping
     public String registrarPrestec(@RequestParam String isbn,
             @RequestParam String emailUsuari,
@@ -104,7 +123,14 @@ public class PrestecController {
         return "redirect:/dashboard_bibliotecari#registrar-prestec";
     }
 
-
+    /**
+     * Renovació del préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix a "gestionarPrestec?idPrestec=" + idPrestec".
+     */
     @PostMapping("/renovar")
     public String renovarPrestec(@RequestParam("idPrestec") Integer idPrestec,
             HttpSession session,
@@ -127,6 +153,14 @@ public class PrestecController {
         return "redirect:/gestionarPrestec?idPrestec=" + idPrestec;
     }
     
+    /**
+     * Gestionar el retorn del préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix al panell del bibliotecari.
+     */
     @PostMapping("/retornar")
     public String retornarPrestec(@RequestParam("idPrestec") Integer idPrestec,
             HttpSession session,
@@ -146,6 +180,15 @@ public class PrestecController {
         return "redirect:/dashboard_bibliotecari";
     }
 
+    /**
+     * Gestionar la sanció a un usuari.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param tipus El tipus de sanció.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix a "gestionarPrestec?idPrestec=" + idPrestec".
+     */
     @PostMapping("/sancionar")
     public String sancionarPrestec(@RequestParam("idPrestec") Integer idPrestec,
             @RequestParam("tipus") String tipus,

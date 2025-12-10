@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Agent;
@@ -29,6 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Classe que implementa el servei dels préstecs.
+ * 
+ * @author Equip TotEsBook
+ */
 @Service
 @Transactional
 public class PrestecServiceImpl implements PrestecService {
@@ -52,6 +53,14 @@ public class PrestecServiceImpl implements PrestecService {
     // Hem de realitzar diferents 
     // accions a dintre de una mateixa transacció. Per això ho coordinem tot a 
     // dintre de la capa de servei
+    
+    /**
+     * Registrar un préstec.
+     * 
+     * @param isbn L'ISBN de l'usari.
+     * @param emailUsuari El correu electrònic de l'usuari.
+     * @param idAgentBibliotecari L'ID del bibliotecari.
+     */
     @Override
     public void registrarPrestec(String isbn, String emailUsuari, int idAgentBibliotecari) {
 
@@ -105,12 +114,26 @@ public class PrestecServiceImpl implements PrestecService {
         prestecRepository.registrarPrestec(prestec);
     }
 
+    /**
+     * Cerca els préstecs actius segons la biblioteca.
+     * 
+     * @param biblioteca La biblioteca.
+     * @return Una llistat amb els préstecs actius segons la biblioteca.
+     */
     @Override
     public List<Prestec> findActiusByBiblioteca(Biblioteca biblioteca) {
         return prestecRepository.findActiusByBiblioteca(biblioteca);
     }
 
     // hem de orquestrar diferents entitats per a poder registrar una devolució
+    
+    /**
+     * Registrar una devolució de llibre.
+     * 
+     * @param isbn L'ISBN.
+     * @param emailUsuari El correu de l'usuari.
+     * @param idAgentBibliotecari L'ID del bibliotecari.
+     */
     @Override
     public void registrarDevolucio(String isbn, String emailUsuari, Integer idAgentBibliotecari) {
 
@@ -155,17 +178,34 @@ public class PrestecServiceImpl implements PrestecService {
         bibliotecaLlibreRepository.updateBibliotecaLlibre(bl);
     }
 
+    /**
+     * Retorna els préstecs actius segons l'usuari indicat.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @return Una llista amb els préstecs actius segons l'usuari indicat.
+     */
     @Override
     public List<Prestec> findPrestecsActiusByUsuari(int idUsuari) {
         return prestecRepository.findPrestecsActiusByUsuari(idUsuari);
     }
 
+    /**
+     * Retorna les devolucions segons a les biblioteques on s'han fet.
+     * 
+     * @param biblioteca La biblioteca.
+     * @return Una llista amb les devolucions segons a les biblioteques on s'han fet.
+     */
     @Override
     public List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca) {
         return prestecRepository.findDevolucionsByBiblioteca(biblioteca);
     }
 
     // Implementació per renovar préstec
+    /**
+     * Renovar el préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     */
     @Override
     public void renovarPrestec(Integer idPrestec) {
 
@@ -180,12 +220,25 @@ public class PrestecServiceImpl implements PrestecService {
         //prestecRepository.save(p);
     }
 
+    /**
+     * Retorna els préstecs retornats segons l'usuari indicat.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @return Una llista amb els préstecs retornts segons l'usuari indicat.
+     */
     @Override
     public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
         return prestecRepository.findPrestecsRetornatsByUsuari(idUsuari);
     }
 
     // Retornar prèstec en botó
+    
+    /**
+     * Retornar el préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param idAgentBibliotecari L'ID del bibliotecari.
+     */
     @Override
     public void retornarPrestec(Integer idPrestec, Integer idAgentBibliotecari) {
         Prestec prestec = prestecRepository.findById(idPrestec)
@@ -199,6 +252,12 @@ public class PrestecServiceImpl implements PrestecService {
     }
 
     // Mètode privat per no duplicar codi entre les dues formes de retornar
+    /**
+     * Mètode que finalitza el préstec.
+     * 
+     * @param prestec El préstec.
+     * @param idAgentBibliotecari L'ID del bibliotecari. 
+     */
     private void finalitzarPrestec(Prestec prestec, Integer idAgentBibliotecari) {
         Agent agent = agentRepository.getAgentById(idAgentBibliotecari);
 
@@ -217,6 +276,13 @@ public class PrestecServiceImpl implements PrestecService {
         }
     }
 
+    /**
+     * Crear un préstec des de la reserva.
+     * 
+     * @param reserva La reseva.
+     * @param agentBibliotecari El bibliotecari.
+     * @return Objecte Préstec.
+     */
     public Prestec crearPrestecDesDeReserva(Reserva reserva, Agent agentBibliotecari) {
 
         if (reserva == null) {
@@ -277,21 +343,45 @@ public class PrestecServiceImpl implements PrestecService {
 
     // --- ===== SPRINT 3 (TEA 5) ===== ---
     // Mètodes per treure estadístiques
+    
+    /**
+     * Retorna les estadístiques dels llibres segons la categoria.
+     * 
+     * @param autor L'autor.
+     * @param categoria La categoria.
+     * @return Llista de les estadístiques dels llibres segons la categoria..
+     */
     @Override
     public List<LlibreEstadisticaDTO> getEstadistiquesLlibres(String autor, String categoria) {
         return prestecRepository.findEstadistiquesLlibres(autor, categoria);
     }
 
+    /**
+     * Retorna les estadístiques dels autors.
+     * 
+     * @return Llista de les estadístiques dels autors.
+     */
     @Override
     public List<AutorEstadisticaDTO> getEstadistiquesAutors() {
         return prestecRepository.findEstadistiquesAutors();
     }
 
+    /**
+     * Retorna les estadístiques dels usuaris.
+     * 
+     * @return Llista de les estadístiques dels usuaris.
+     */
     @Override
     public List<UsuariEstadisticaDTO> getEstadistiquesUsuaris() {
         return prestecRepository.findEstadistiquesUsuaris();
     }
 
+    /**
+     * Retornar el préstec amb l'ID indicat.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @return Objecte préstec segons l'ID passat.
+     */
     @Override
     public Prestec getPrestecPerId(Integer idPrestec) {
         return prestecRepository.findById(idPrestec).orElse(null);

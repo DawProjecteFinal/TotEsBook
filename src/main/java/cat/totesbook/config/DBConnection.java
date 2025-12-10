@@ -1,20 +1,26 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.config; // Corregim el paquet a 'config'
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
+/**
+ * Classe que estableix la connexió a la base de dades.
+ * 
+ * @author Equip TotEsBook
+ */
 public class DBConnection {
 
     private static final String JNDI_NAME = "jdbc/TotEsBookDS";
     private static final boolean DEBUG = false; // variable per al registre de logs
 
     // Utilitzem el pool de connexions que tenim creat aa Glassfish
+    /**
+     * Establir la connexió a la base de dades.
+     * 
+     * @return connexió a la base de dades.
+     * @throws Exception error a l'establir la connexió.
+     */
     public static Connection getConnection() throws Exception {
         InitialContext ctx = new InitialContext();
         DataSource ds = (DataSource) ctx.lookup(JNDI_NAME);

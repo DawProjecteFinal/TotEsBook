@@ -1,7 +1,5 @@
 <%-- 
-    Document   : llibres_resultats_api
-    Created on : 1 dic 2025, 11:42:20
-    Author     : equip TotEsBook
+    Author     : Equip TotEsBook
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

@@ -1,7 +1,5 @@
 <%-- 
-    Document   : admin_estadistiques
-    Created on : 30 nov 2025, 19:28:25
-    Author     : edinsonioc
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

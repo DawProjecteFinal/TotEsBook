@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -20,12 +16,26 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Classe DAO que gestiona l'accés a la base de dades per a les entitats Prestec.
+ * 
+ * @author equip TotEsBook
+ */
+
 @Repository
+/**
+ * Implementació JPA del repositori de Préstec.
+ */
 public class PrestecDAO implements PrestecRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Registrar un préstec.
+     * 
+     * @param prestec Un préstec.
+     */
     public void registrarPrestec(Prestec prestec) {
         System.out.println("***** DEBUG → Persistint préstec: " + prestec);
         entityManager.persist(prestec);
@@ -33,6 +43,12 @@ public class PrestecDAO implements PrestecRepository {
 
     }
 
+    /**
+     * Cerca els préstecs actius segons la biblioteca.
+     * 
+     * @param biblioteca La biblioteca.
+     * @return Una llistat amb els préstecs actius segons la biblioteca.
+     */
     @Override
     public List<Prestec> findActiusByBiblioteca(Biblioteca biblioteca) {
         String jpql = "SELECT p FROM Prestec p WHERE p.biblioteca = :b AND p.dataDevolucio IS NULL";
@@ -44,9 +60,10 @@ public class PrestecDAO implements PrestecRepository {
     /**
      * Metode per a comprovar si un usuari te en prestec un llibre en concret
      *
-     * @param isbn
-     * @param idUsuari
-     * @return
+     * @param isbn L'ISBN.
+     * @param idUsuari L'ID de l'usuari.
+     * @return Un optional Prestec on hi ha el préstec actiu amb l'usuari
+     *         i el llibre.
      */
     @Override
     public Optional<Prestec> findPrestecActiu(String isbn, Integer idUsuari) {
@@ -74,6 +91,11 @@ public class PrestecDAO implements PrestecRepository {
         }
     }
 
+    /**
+     * Actualitzar la informació dels préstecs.
+     * 
+     * @param prestec El préstec.
+     */
     @Override
     public void updatePrestec(Prestec prestec) {
         entityManager.merge(prestec);
@@ -82,8 +104,8 @@ public class PrestecDAO implements PrestecRepository {
     /**
      * Mètode per a poder representar les devolucions que ha fet un bibliotecari
      *
-     * @param biblioteca
-     * @return
+     * @param biblioteca La biblioteca.
+     * @return Una llista amb les devolucions segons a les biblioteques on s'han fet.
      */
     @Override
     public List<Prestec> findDevolucionsByBiblioteca(Biblioteca biblioteca) {
@@ -105,7 +127,9 @@ public class PrestecDAO implements PrestecRepository {
     /**
      * Metode que retorna tots els prestecs actius d'un ususari per a
      * mostrar-los a la pàgina inicial del usuari
-     *
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @return Una llista amb els préstecs actius segons l'usuari indicat.
      */
     @Override
     public List<Prestec> findPrestecsActiusByUsuari(int idUsuari) {
@@ -121,18 +145,35 @@ public class PrestecDAO implements PrestecRepository {
                 .setParameter("estat", EstatPrestec.actiu)
                 .getResultList();
     }
-
+    
+    /**
+     * Retorna un préstec amb l'ID indicat.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @return Un opcional de Prestec amb el préstec de l'ID indicat.
+     */
     @Override
     public Optional<Prestec> findById(Integer idPrestec) {
         Prestec prestec = entityManager.find(Prestec.class, idPrestec);
         return prestec != null ? Optional.of(prestec) : Optional.empty();
     }
 
+    /**
+     * Desar la informació del préstec.
+     * 
+     * @param prestec El préstec.
+     */
     @Override
     public void save(Prestec prestec) {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
-
+    
+    /**
+     * Retorna els préstecs retornats segons l'usuari indicat.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @return Una llista amb els préstecs retornts segons l'usuari indicat.
+     */
     public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
         try {
             return entityManager.createQuery(
@@ -153,6 +194,13 @@ public class PrestecDAO implements PrestecRepository {
     }
 
     // SPRINT 3 (TEA 5): Implementacions per a estadístiques
+    /**
+     * Retorna les estadístiques dels llibres segons la categoria.
+     * 
+     * @param autor L'autor.
+     * @param categoria La categoria.
+     * @return Llista de les estadístiques dels llibres segons la categoria..
+     */
     @Override
     public List<LlibreEstadisticaDTO> findEstadistiquesLlibres(String autor, String categoria) {
         StringBuilder jpql = new StringBuilder(
@@ -181,6 +229,11 @@ public class PrestecDAO implements PrestecRepository {
         return query.getResultList();
     }
 
+    /**
+     * Retorna les estadístiques dels autors.
+     * 
+     * @return Llista de les estadístiques dels autors.
+     */
     @Override
     public List<AutorEstadisticaDTO> findEstadistiquesAutors() {
         String jpql = "SELECT new cat.totesbook.dto.AutorEstadisticaDTO(p.llibre.autor, COUNT(p)) "
@@ -190,7 +243,12 @@ public class PrestecDAO implements PrestecRepository {
 
         return entityManager.createQuery(jpql, AutorEstadisticaDTO.class).setMaxResults(10).getResultList();
     }
-
+    
+    /**
+     * Retorna les estadístiques dels usuaris.
+     * 
+     * @return Llista de les estadístiques dels usuaris.
+     */
     @Override
     public List<UsuariEstadisticaDTO> findEstadistiquesUsuaris() {
         String jpql = "SELECT new cat.totesbook.dto.UsuariEstadisticaDTO(p.usuari, COUNT(p)) "

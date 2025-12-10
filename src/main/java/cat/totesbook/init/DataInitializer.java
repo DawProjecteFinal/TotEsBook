@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.init;
 
 import cat.totesbook.domain.*;
@@ -22,6 +17,12 @@ import java.io.InputStreamReader;
 import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 
+/**
+ * Classe que inicalitza les dades de la base de dades a l'inicialitzar 
+ * l'aplicatiu.
+ * 
+ * @author Equip TotEsBook
+ */
 @Component
 public class DataInitializer {
 
@@ -39,8 +40,11 @@ public class DataInitializer {
     @Autowired
     private BibliotecaLlibreService bibliotecaLlibreService;
 
-    // MÈTODE PRINCIPAL D’ARRENCADA 
     @PostConstruct
+    /**
+     * MÈTODE PRINCIPAL D’ARRENCADA 
+     * Crida el mètode transaccional
+     */
     public void initData() {
         System.out.println(">>> Iniciant DataInitializer...");
         try {
@@ -51,7 +55,9 @@ public class DataInitializer {
         }
     }
 
-    // MÈTODE TRANSACCIONAL PRINCIPAL 
+    /**
+     * MÈTODE TRANSACCIONAL PRINCIPAL
+     */
     @Transactional
     public void inicialitzarDades() {
         boolean dadesInicialitzades = false;
@@ -95,7 +101,9 @@ public class DataInitializer {
         }
     }
 
-// LLEGIR FITXER D'ISBNS I IMPORTAR 
+    /**
+     * LLEGIR FITXER D'ISBNS I IMPORTAR
+     */
     private void importarLlibresDesDeFitxer() {
         Map<String, List<String>> isbnsPerBiblioteca = new LinkedHashMap<>();
         String bibliotecaActual = null;
@@ -177,6 +185,13 @@ public class DataInitializer {
     }
 
     //  MÈTODES AUXILIARS 
+    
+    /**
+     * Comprova si l'error és de la taula que no existeix.
+     * 
+     * @param e Excepció de persistència.
+     * @return false.
+     */
     private boolean esErrorTaulaNoExisteix(PersistenceException e) {
         Throwable causaArrel = e;
         while (causaArrel.getCause() != null && causaArrel.getCause() != causaArrel) {
@@ -191,6 +206,11 @@ public class DataInitializer {
         return false;
     }
 
+    /**
+     * Temps d'espera.
+     * 
+     * @param ms Mil·lisegons.
+     */
     private void esperar(long ms) {
         try {
             Thread.sleep(ms);

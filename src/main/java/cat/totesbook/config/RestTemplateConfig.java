@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.config;
 
 import org.springframework.context.annotation.Bean;
@@ -22,11 +17,21 @@ import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuil
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 
-//Creem un SSLContext manual per controlar els certificats en els que confiem per  
-// no dependre de Glassfish ni del JDK. Amb això controlem el SSL
+/**
+ * Classe que crea un SSLContext manual per controlar els certificats en els  
+ * que confiem per no dependre de Glassfish ni del JDK. Amb això controlem el SSL.
+ * 
+ * @author Equip TotEsBook
+ */
 @Configuration
 public class RestTemplateConfig {
 
+    /**
+     * Configuració de Rest Template.
+     * 
+     * @return rest template nou.
+     * @throws Exception si hi ha un error.
+     */
     @Bean
     public RestTemplate restTemplate() throws Exception {
 

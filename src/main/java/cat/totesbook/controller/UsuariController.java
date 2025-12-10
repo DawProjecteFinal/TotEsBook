@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -36,6 +32,8 @@ import java.util.List;
 /**
  * Controlador Spring MVC per a les funcions de gestió d'usuaris i el procés de
  * registre. Només accessible per a l'ADMIN (excepte el registre).
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class UsuariController {
@@ -106,10 +104,14 @@ public class UsuariController {
             return "redirect:/";
         }
     }
-
+    
     /**
      * Gestiona les peticions GET a /dashboard_usuari. Comprova la sessió i
      * mostra el panell de l'usuari.
+     * 
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return El nom de la vista JSP ("dashboard_usuari") o una redirecció.
      */
     @GetMapping("/dashboard_usuari")
     public String mostrarDashboardUsuari(Model model, HttpSession session) {
@@ -396,6 +398,13 @@ public class UsuariController {
 
     // --- MÈTODES PER A CREAR USUARIS DES DEL PANELL BIBLIOTECARI ---
     // 1. Mostrar el formulari (GET)
+    /**
+     * Mostra el panell de bibliotecari/nou-usuari.
+     * 
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return El nom de la vista JSP ("nou_usuari") o una redirecció.
+     */
     @GetMapping("/bibliotecari/nou-usuari")
     public String vistaCrearUsuari(HttpSession session, Model model) {
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -408,6 +417,18 @@ public class UsuariController {
     }
 
     // 2. Processar la creació (POST)
+    /**
+     * Processa la creació d'un usuari nou.
+     * 
+     * @param nom El nom de l'usuari nou.
+     * @param cognoms El cognoms de l'usuari nou.
+     * @param telefon El telèfon de l'usuari nou.
+     * @param email El correu de l'usuari nou.
+     * @param password La contrasenya de l'usuari nou.
+     * @param session La sessió HTTP per actualitzar les dades de sessió.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return redirecció al panell del bibliotecari.
+     */
     @PostMapping("/bibliotecari/crear-usuari")
     public String crearUsuari(@RequestParam String nom,
             @RequestParam String cognoms,

@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Agent;
@@ -9,6 +5,8 @@ import java.util.List;
 
 /**
  * Interfície per a les operacions de dades de la taula Agents.
+ * 
+ * @author Equip TotEsBook
  */
 public interface AgentRepository {
 
@@ -37,14 +35,41 @@ public interface AgentRepository {
      */
     List<Agent> getAllAgents();
 
+    /**
+     * Desa l'agent.
+     * @param agent L'agent.
+     */
     void saveAgent(Agent agent);
 
+    /**
+     * Retorna tots els bibliotecaris.
+     * 
+     * @return Llista de tots els bibliotecaris.
+     */
     List<Agent> getAllBibliotecaris();
 
+    /**
+     * Retorna tots els agents segons l'ID.
+     * 
+     * @param idAgent ID de l'usuari.
+     * @return Object agent amb el seu ID.
+     */
     Agent getAgentById(int idAgent);
 
+    /**
+     * Actualitza l'agent.
+     * 
+     * @param desti El destí.
+     * @param origen L'origen.
+     */
     void actualitzarAgentDesDe(Agent desti, Agent origen);
 
+    /**
+     * Actualitza la contrasenya de l'agent.
+     * 
+     * @param idAgent L'ID de l'agent.
+     * @param novaPwd La contrasenya nova.
+     */
     void updatePassword(int idAgent, String novaPwd);
 
     /**

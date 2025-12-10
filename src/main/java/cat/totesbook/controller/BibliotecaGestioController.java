@@ -18,8 +18,10 @@ import cat.totesbook.domain.Usuari;
 import cat.totesbook.service.UsuariService;
 
 /**
- * Controlador... 
- * @author equip TotEsBook
+ * Controlador que implementa les pàgines que gestionen les biblioteques
+ * (afegir, editar i eliminar).
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 @RequestMapping("/gestio/biblioteques")
@@ -33,9 +35,13 @@ public class BibliotecaGestioController {
 
     @Autowired
     private UsuariService usuariService;
-
+    
     /**
-     * Mostra el llistat de biblioteques per a administradors o bibliotecaris
+     * Mostra el llistat de biblioteques, usuaris, agents al dashboard de 
+     * l'administrador.
+     * 
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que mostra el dashboard de d'administrador.
      */
     @GetMapping
     public ModelAndView llistarBiblioteques(HttpSession session) {
@@ -70,9 +76,14 @@ public class BibliotecaGestioController {
         // El rol ja està a la sessió, no cal passar-lo per separat
         return mv;
     }
-
+    
     /**
-     * Mostra la gestió d'una biblioteca concreta
+     * Mostra la gestió d'una biblioteca concreta.
+     * 
+     * @param idBiblioteca L'ID de la biblioteca.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que mostra la pàgina 
+     *         biblioteques/gestionar_biblioteca.
      */
     @GetMapping("/{id}")
     public ModelAndView gestionarBiblioteca(@PathVariable("id") int idBiblioteca, HttpSession session) {
@@ -93,7 +104,10 @@ public class BibliotecaGestioController {
     }
 
     /**
-     * Formulari per afegir una biblioteca (només admin)
+     * Formulari per afegir una biblioteca (només admin).
+     * 
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que mostra la pàgina biblioteques/afegir_biblioteca.
      */
     @GetMapping("/afegir")
     public ModelAndView mostrarFormulariAfegir(HttpSession session) {
@@ -114,9 +128,14 @@ public class BibliotecaGestioController {
         mv.addObject("llistaBibliotecaris", bibliotecaris);
         return mv;
     }
-
+    
     /**
      * Guarda una nova biblioteca
+     * 
+     * @param biblioteca La biblioteca.
+     * @param idBibliotecari L'ID del bibliotecari.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que redirrecciona a gestio/biblioteques.
      */
     @PostMapping("/afegir")
     public ModelAndView afegirBiblioteca(@ModelAttribute Biblioteca biblioteca,
@@ -142,9 +161,13 @@ public class BibliotecaGestioController {
         return new ModelAndView("redirect:/gestio/biblioteques")
                 .addObject("success", "Biblioteca creada correctament.");
     }
-
+    
     /**
-     * Elimina una biblioteca (només admin)
+     * Elimina una biblioteca (només ho pot fer l'administrador).
+     * 
+     * @param idBiblioteca L'ID de la biblioteca.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que redirrecciona a gestio/biblioteques.
      */
     @PostMapping("/{id}/eliminar")
     public ModelAndView eliminarBiblioteca(@PathVariable("id") int idBiblioteca, HttpSession session) {
@@ -166,9 +189,9 @@ public class BibliotecaGestioController {
     /**
      * Mètode que serveix el formulari per a editar les dades de la biblioteca
      *
-     * @param idBiblioteca
-     * @param session
-     * @return
+     * @param idBiblioteca L'ID de la biblioteca.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que mostra la pàgina biblioteques/editar_biblioteca.
      */
     @GetMapping("/{id}/editar")
     public ModelAndView mostrarFormulariEditar(@PathVariable("id") int idBiblioteca, HttpSession session) {
@@ -191,10 +214,16 @@ public class BibliotecaGestioController {
     }
 
     /**
-     * Mètode per guaradr els canvis de la edició
+     * Mètode per guarda els canvis de la edició.
+     * 
+     * @param idBiblioteca L'ID de la biblioteca.
+     * @param form El formulari.
+     * @param idBibliotecari L'ID del bibliotecari.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que redirrecciona a gestio/biblioteques.
      */
     @PostMapping("/{id}/editar")
-public ModelAndView editarBiblioteca(
+    public ModelAndView editarBiblioteca(
         @PathVariable("id") int idBiblioteca,
         @ModelAttribute Biblioteca form,
         @RequestParam(name = "idBibliotecari", required = false) Integer idBibliotecari,

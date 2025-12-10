@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- *
- * @author equip totesbook
+ * Controlador qeu gestiona les propostes que fa l'usuari.
+ * 
+ * @author Equip totesbook
  */
 @Controller
 @RequestMapping("/propostes")
@@ -36,7 +37,7 @@ public class PropostesController {
     /**
      * Retorna el formulari per a buscar el llibre de la proposta
      *
-     * @return
+     * @return El nom de la vista JSP ("propostes/formulari_proposta").
      */
     @GetMapping("/formulari_proposta")
 
@@ -48,11 +49,11 @@ public class PropostesController {
      * Recupera titol, autor i isbn del formulari i fa la consulta a la Api
      * retornant tota la llista de resultats
      *
-     * @param titol
-     * @param autor
-     * @param isbn
-     * @param model
-     * @return
+     * @param titol El títol de llibre.
+     * @param autor L'autor del llibre.
+     * @param isbn L'ISBN del llibre.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return El nom de la vista JSP ("propostes/proposta_resultats").
      */
     @GetMapping("/buscar_proposta")
     public String cercarLlibres(
@@ -87,14 +88,15 @@ public class PropostesController {
      * Busca un llibre pel seu ISBN, però en aquest cas el busca a la API de
      * Google
      *
-     * @param isbn
-     * @param titol
-     * @param autor
-     * @param isbnQuery
-     * @param mode
-     * @param model
-     * @param redirectAttrs
-     * @return
+     * @param isbn L'ISBN del llibre.
+     * @param titol El títol del llibre.
+     * @param autor L'autor del llibre.
+     * @param isbnQuery L'ISBN de la cerca.
+     * @param mode El mode de visualització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param redirectAttrs Atributs per enviar missatges de feedback.
+     * @return El nom de la vista JSP ("fitxa_llibre") si troba el llibre o 
+     *         a la pàgina de formulari_proposta si no el troba.
      */
     @GetMapping("/llibre")
     public String mostrarFitxaLlibre(
@@ -128,13 +130,13 @@ public class PropostesController {
     /**
      * Mètode que obre el formulari per afegir el motiu de la proposta
      *
-     * @param isbn
-     * @param titol
-     * @param autor
-     * @param isbnCerca
-     * @param model
-     * @param session
-     * @return
+     * @param isbn L'IBSN del llibre.
+     * @param titol El títol del llibre.
+     * @param autor L'autor del llibre.
+     * @param isbnCerca L'ISBN de la cerca.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return El nom de la vista JSP ("propostes/confirmar_proposta").
      */
     @GetMapping("/confirmar")
     public String confirmarProposta(@RequestParam String isbn,
@@ -166,15 +168,16 @@ public class PropostesController {
 
     /**
      * Mètode que crida al repositori per a guardar la proposta a la taula de la
-     * BD
+     * BD.
      *
-     * @param isbn
-     * @param titol
-     * @param autor
-     * @param editorial
-     * @param motiu
-     * @param session
-     * @return
+     * @param isbn L'ISBN del llibre.
+     * @param titol El títol del llibre.
+     * @param autor L'autor del llibre.
+     * @param editorial L'editorial del llibre.
+     * @param motiu El motiu de la proposta.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Redirecció a la pàgina "propostes/llista_propostes" després de
+     *         guardar la proposta.
      */
     @PostMapping("/guardar")
     public String guardarProposta(
@@ -208,9 +211,9 @@ public class PropostesController {
     /**
      * Mostra la llista de propostes que ha fet un usuari
      *
-     * @param session
-     * @param model
-     * @return
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return El nom de la vista JSP ("propostes/llista_propostes").
      */
     @GetMapping("/llista_propostes")
     public String llistaPropostes(HttpSession session, Model model) {
@@ -227,7 +230,15 @@ public class PropostesController {
         return "propostes/llista_propostes";
     }
 
-    
+    /**
+     * Eliminar una proposta.
+     * 
+     * @param idProposta L'ID de la proposta.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirect Atribut per enviar missatge de feedback.
+     * @return Redirigeix a la pàgina de llista de propostes o al login de l'
+     *         usuari si no té la sessió iniciada.
+     */
     @GetMapping("/eliminar")
     public String eliminarProposta(@RequestParam("id") int idProposta,
             HttpSession session,
@@ -265,11 +276,13 @@ public class PropostesController {
         redirect.addFlashAttribute("missatge", "Proposta eliminada correctament.");
         return "redirect:/propostes/llista_propostes";
     }
+    
     /**
-     * Mostra el detall de una proposta a l'administrador
-     * @param idProposta
-     * @param model
-     * @return 
+     * Mostra el detall de una proposta a l'administrador.
+     * 
+     * @param idProposta L'ID de la proposta.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return El nom de la vista JSP ("propostes/detall_proposta").
      */
     @GetMapping("/detall")
     public String veureDetall(@RequestParam("id") int idProposta, Model model) {
@@ -287,11 +300,13 @@ public class PropostesController {
     }
 
     /**
-     * Actualitzem l'estat de la proposta
-     * @param idProposta
-     * @param estat
-     * @param resposta
-     * @return 
+     * Actualitzem l'estat de la proposta.
+     * 
+     * @param idProposta L'ID de la proposta.
+     * @param estat L'estat de la proposta.
+     * @param resposta La resposta de la proposta.
+     * @return  Redirecció al dashboard de l'administrador després d'actualitzar
+     * l'estat de la proposta.
      */
     @PostMapping("/actualitzar")
     public String actualitzarProposta(@RequestParam("idProposta") int idProposta,

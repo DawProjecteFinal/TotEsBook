@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -16,13 +11,28 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Classe DAO que gestiona l'accés a la base de dades per a les entitats BibliotecaLlibre.
+ * 
+ * @author equip TotEsBook
+ */
 @Repository
+/**
+ * Implementació JPA del repositori de BibliotecaLlibre.
+ */
 public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
-
+    
     @PersistenceContext
     private EntityManager entityManager;
 
     // Enlloc de fer servir aquest metode per retornar tots els llibres de una biblioteca utilitzem el metode findByBiblioteca de LlibreDAO
+    
+    /**
+     * Retornar llibres de cada biblioteca.
+     * 
+     * @param biblioteca La biblioteca.
+     * @return Una llista de libres de cada biblioteca.
+     */
     @Override
     public List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca) {
         TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(
@@ -33,6 +43,13 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
         return query.getResultList();
     }
 
+    /**
+     * Cerca el llibre i la biblioteca especificats.
+     * 
+     * @param biblioteca La biblioteca.
+     * @param llibre El llibre.
+     * @return Un opcional amb una BibliotecaLlibre trobada.
+     */
     @Override
     public Optional<BibliotecaLlibre> findByBibliotecaAndLlibre(Biblioteca biblioteca, Llibre llibre) {
         try {
@@ -55,11 +72,22 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
         }
     }
 
+    /**
+     * Afegir un llibre a una biblioteca.
+     * 
+     * @param bibliotecaLlibre El llbire d'una biblioteca.
+     */
     @Override
     public void addBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre) {
         entityManager.persist(bibliotecaLlibre);
     }
 
+    /**
+     * 
+     * Actualitza la informació d'un llibre d'una biblitoca.
+     * 
+     * @param bibliotecaLlibre El llibre d'una biblioteca.
+     */
     @Override
     public void updateBibliotecaLlibre(BibliotecaLlibre bibliotecaLlibre) {
         entityManager.merge(bibliotecaLlibre);
@@ -67,6 +95,12 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
 
 
     //Busquem per llibre per retornar la biblioteca
+    /**
+     * Cerca un llibre espeficicat.
+     * 
+     * @param llibre El llibre.
+     * @return Una llista BibliotecaLlibre amb el llibre especificat.
+     */
     @Override
     public List<BibliotecaLlibre> findByLlibre(Llibre llibre) {
         TypedQuery<BibliotecaLlibre> query = entityManager.createQuery(
@@ -80,8 +114,8 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
     /**
      * Retorna el primer llibre que troba a una biblioteca
      *
-     * @param isbn
-     * @return
+     * @param isbn L'ISBN.
+     * @return Un optional amb el primer llibre que troba amb l'ISBN indicat.
      */
     @Override
     public Optional<BibliotecaLlibre> findFirstByLlibreIsbn(String isbn) {
@@ -101,8 +135,8 @@ public class BibliotecaLlibreDAO implements BibliotecaLlibreRepository {
      * Versió que retorna tots els registres per si el mateix llibre està a
      * diverses biblioteques
      *
-     * @param isbn
-     * @return
+     * @param isbn L'ISBN.
+     * @return Una llista BibliotecaLlibre que conté el llibre.
      */
     @Override
     public List<BibliotecaLlibre> findByLlibreIsbn(String isbn) {

@@ -1,6 +1,4 @@
 <%-- 
-    Document   : contacte
-    Created on : 1 dic 2025, 8:27:38
     Author     : Equip TotEsBook
 --%>
 

@@ -1,7 +1,7 @@
 <%-- 
     Document   : informacioLegal
     Created on : 1 dic 2025, 8:45:59
-    Author     : Diana Martin Vilá
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
