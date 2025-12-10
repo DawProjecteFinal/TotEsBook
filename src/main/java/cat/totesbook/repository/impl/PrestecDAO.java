@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Repository
 public class PrestecDAO implements PrestecRepository {
@@ -123,7 +121,7 @@ public class PrestecDAO implements PrestecRepository {
                 .setParameter("estat", EstatPrestec.actiu)
                 .getResultList();
     }
-    
+
     @Override
     public Optional<Prestec> findById(Integer idPrestec) {
         Prestec prestec = entityManager.find(Prestec.class, idPrestec);
@@ -132,8 +130,9 @@ public class PrestecDAO implements PrestecRepository {
 
     @Override
     public void save(Prestec prestec) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
+
     public List<Prestec> findPrestecsRetornatsByUsuari(Integer idUsuari) {
         try {
             return entityManager.createQuery(
@@ -152,14 +151,14 @@ public class PrestecDAO implements PrestecRepository {
             return Collections.emptyList();
         }
     }
-    
+
     // SPRINT 3 (TEA 5): Implementacions per a estadístiques
     @Override
     public List<LlibreEstadisticaDTO> findEstadistiquesLlibres(String autor, String categoria) {
         StringBuilder jpql = new StringBuilder(
-            "SELECT new cat.totesbook.dto.LlibreEstadisticaDTO(p.llibre, COUNT(p)) " +
-            "FROM Prestec p " +
-            "WHERE 1=1 ");
+                "SELECT new cat.totesbook.dto.LlibreEstadisticaDTO(p.llibre, COUNT(p)) "
+                + "FROM Prestec p "
+                + "WHERE 1=1 ");
 
         if (autor != null && !autor.isEmpty()) {
             jpql.append("AND LOWER(p.llibre.autor) LIKE LOWER(:autor) ");
@@ -184,24 +183,28 @@ public class PrestecDAO implements PrestecRepository {
 
     @Override
     public List<AutorEstadisticaDTO> findEstadistiquesAutors() {
-        String jpql = "SELECT new cat.totesbook.dto.AutorEstadisticaDTO(p.llibre.autor, COUNT(p)) " +
-                      "FROM Prestec p " +
-                      "GROUP BY p.llibre.autor " +
-                      "ORDER BY COUNT(p) DESC";
-        
-        return entityManager.createQuery(jpql, AutorEstadisticaDTO.class).setMaxResults(10).getResultList(); 
+        String jpql = "SELECT new cat.totesbook.dto.AutorEstadisticaDTO(p.llibre.autor, COUNT(p)) "
+                + "FROM Prestec p "
+                + "GROUP BY p.llibre.autor "
+                + "ORDER BY COUNT(p) DESC";
+
+        return entityManager.createQuery(jpql, AutorEstadisticaDTO.class).setMaxResults(10).getResultList();
     }
-    
+
     @Override
     public List<UsuariEstadisticaDTO> findEstadistiquesUsuaris() {
-        String jpql = "SELECT new cat.totesbook.dto.UsuariEstadisticaDTO(p.usuari, COUNT(p)) " +
-                      "FROM Prestec p " +
-                      "GROUP BY p.usuari " +
-                      "ORDER BY COUNT(p) DESC";
-        
+        String jpql = "SELECT new cat.totesbook.dto.UsuariEstadisticaDTO(p.usuari, COUNT(p)) "
+                + "FROM Prestec p "
+                + "GROUP BY p.usuari "
+                + "ORDER BY COUNT(p) DESC";
+
         return entityManager.createQuery(jpql, UsuariEstadisticaDTO.class)
-                 .setMaxResults(20)
-                 .getResultList();
+                .setMaxResults(20)
+                .getResultList();
     }
-    // ----
+    
+    // Mètode setter per a poder realitzar Test unitaris
+    void setEntityManager(EntityManager em) {
+        this.entityManager = em;
+    }
 }
