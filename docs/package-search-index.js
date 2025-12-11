@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"cat.totesbook.config"},{"l":"cat.totesbook.controller"},{"l":"cat.totesbook.domain"},{"l":"cat.totesbook.dto"},{"l":"cat.totesbook.init"},{"l":"cat.totesbook.repository"},{"l":"cat.totesbook.repository.impl"},{"l":"cat.totesbook.service"},{"l":"cat.totesbook.service.impl"}];updateSearchResults();

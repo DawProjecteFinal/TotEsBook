@@ -26,3 +26,13 @@ function confirmarCancelacio(idReserva) {
 }
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    var sancioAlert = document.getElementById('alertSancio');
+    if (sancioAlert) {
+        
+        setTimeout(function () {
+            var bsAlert = bootstrap.Alert.getOrCreateInstance(sancioAlert);
+            bsAlert.close();
+        }, 15000);
+    }
+});

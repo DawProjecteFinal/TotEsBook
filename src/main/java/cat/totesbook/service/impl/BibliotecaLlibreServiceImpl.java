@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -16,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Classe que implementa el servei dels llibres de les biblioteques.
+ * 
+ * @author Equip TotEsBook
+ */
 @Service
 @Transactional
 public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
@@ -26,13 +26,27 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
     @Autowired
     private BibliotecaLlibreRepository bibliotecaLlibreRepository;
 
+    /**
+     * Mètode que busca el llibre dintre de la biblioteca.
+     * 
+     * @param biblioteca biblioteca.
+     * @param llibre llibre.
+     * @return  llibre i biblioteca.
+     */
     @Override
     public Optional<BibliotecaLlibre> findByBibliotecaAndLlibre(Biblioteca biblioteca, Llibre llibre) {
         return repo.findByBibliotecaAndLlibre(biblioteca, llibre);
     }
-
-    // En el cas de que intentem carregar de nou un fitxer de Isbn i un llibre ja 
-    // existeix, s'augmentarà el número d'exemplars
+    
+    /**
+     * En el cas de que intentem carregar de nou un fitxer de Isbn i un llibre ja 
+     * existeix, s'augmentarà el número d'exemplars
+     * 
+     * @param biblioteca biblioteca.
+     * @param llibre llibre.
+     * @param exemplars exemplars.
+     * @param disponibles llibres disponibles.
+     */
     @Override
     public void afegirLlibre(Biblioteca biblioteca, Llibre llibre, int exemplars, int disponibles) {
 
@@ -64,6 +78,12 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
                 + " amb " + exemplars + " exemplars.");
     }
 
+    /**
+     * Mètode que resta el llibre disponible.
+     * 
+     * @param biblioteca biblioteca.
+     * @param llibre llibre.
+     */
     @Override
     public void restarDisponible(Biblioteca biblioteca, Llibre llibre) {
         BibliotecaLlibre bl = repo.findByBibliotecaAndLlibre(biblioteca, llibre)
@@ -77,6 +97,12 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
         repo.updateBibliotecaLlibre(bl);
     }
 
+    /**
+     * Mètode que suma llibres disponibles a una biblioteca.
+     * 
+     * @param biblioteca biblioteca.
+     * @param llibre llibre.
+     */
     @Override
     public void sumarDisponible(Biblioteca biblioteca, Llibre llibre) {
         BibliotecaLlibre bl = repo.findByBibliotecaAndLlibre(biblioteca, llibre)
@@ -86,16 +112,35 @@ public class BibliotecaLlibreServiceImpl implements BibliotecaLlibreService {
         repo.updateBibliotecaLlibre(bl);
     }
 
+    /**
+     * Mètode que retorna un llibre d'una biblioteca.
+     * 
+     * @param biblioteca biblioteca.
+     * @return llibre de la biblioteca.
+     */
     @Override
     public List<BibliotecaLlibre> getLlibresPerBiblioteca(Biblioteca biblioteca) {
         return repo.getLlibresPerBiblioteca(biblioteca);
     }
 
+    /**
+     * Mètode que retorna tots els llibres d'una biblioteca.
+     * 
+     * @param llibre llibre.
+     * @return Una llista de BibliotecaLlibre que contenen llibres.
+     */
     @Override
     public List<BibliotecaLlibre> findByLlibre(Llibre llibre) {
         return bibliotecaLlibreRepository.findByLlibre(llibre);
     }
 
+    /**
+     * Mètode qeu actualitza la relació.
+     * 
+     * @param relacio La relació.
+     * @param biblioteca La biblioteca.
+     * @param exemplars Els exemplars.
+     */
     @Override
     public void actualitzarRelacio(BibliotecaLlibre relacio, Biblioteca biblioteca, int exemplars) {
         relacio.setBiblioteca(biblioteca);

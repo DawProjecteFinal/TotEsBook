@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.BibliotecaLlibre;
@@ -24,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- *
- * @author equip totEsBook
+ * Controlador que gestiona les pàgines que mostren els llibres, la pàgina de cerca, etc.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class LlibreController {
@@ -39,11 +36,12 @@ public class LlibreController {
     @Autowired
     private GoogleBooksService googleBooksService;
 
-    // 
     /**
      * Mapping relatiu a l'arrel de l'aplicació: /TotEsBook/mostrarLlibres
-     *
-     * @return
+     * 
+     * @param categoria La categoria del llibre.
+     * @param titol El títol del llibre.
+     * @return Un ModelAndView que mostra la vista "mostrarLlibres".
      */
     @RequestMapping("/mostrarLlibres")
     public ModelAndView mostrarLlibres(
@@ -75,6 +73,13 @@ public class LlibreController {
         return modelview;
     }
 
+    /**
+     * Gestió de la cerca.
+     * 
+     * @param field El camp del tipus de cerca.
+     * @param valor El valor.
+     * @return Un ModelAndView que mostra la vista "mostrarLlibres".
+     */
     @RequestMapping("/cercar")
     public ModelAndView buscarAvancat(@RequestParam("field") String field,
             @RequestParam("q") String valor) {
@@ -121,6 +126,7 @@ public class LlibreController {
      * mètode respon a URLs com /llibre/978-84-9932-123-4
      *
      * @param isbn L'ISBN del llibre, rebut des de la URL.
+     * @param mode Paràmetre que indica el mode de visualització de la fitxa.
      * @param model El model de Spring per passar dades a la vista.
      * @param redirectAttrs Per enviar missatges en cas de redirecció.
      * @return El nom de la vista ("fitxa_llibre") o una redirecció si no es
@@ -159,10 +165,10 @@ public class LlibreController {
      * Quan no troba un llibre a la base de dades de les biblioteques, dóna la
      * opció de buscar-lo a la Api de Google Books
      *
-     * @param titol
-     * @param autor
-     * @param isbn
-     * @return
+     * @param titol El títol del llibre.
+     * @param autor L'autor del llibre.
+     * @param isbn L'ISBN del llibre.
+     * @return Un ModelAndView que mostra la vista "llibres/afegir_llibre".
      */
     @GetMapping("/llibres/cercar_api")
     public ModelAndView cercarApi(
@@ -184,12 +190,11 @@ public class LlibreController {
     /**
      * Obre la fitxa del llibre que ha trobat a la api de Google Books
      *
-     * @param isbn
-     * @param titol
-     * @param mode
-     * @param isbnCerca
-     * @param autor
-     * @return
+     * @param isbn L'ISBN del llibre.
+     * @param titol El títol del llibre.
+     * @param mode Paràmetre que indica el mode de visualització de la fitxa.
+     * @param autor L'autor del llibre.
+     * @return Un ModelAndView que mostra la vista de la fitxa tècnica del llibre.
      */
     @GetMapping("/llibres/fitxa_api")
     public ModelAndView fitxaApi(@RequestParam String isbn,

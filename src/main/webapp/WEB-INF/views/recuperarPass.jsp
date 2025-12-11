@@ -80,7 +80,7 @@
                         <h2>Recuperar Contrasenya</h2>
                         <p class="text-center text-muted mb-4">Introdueix el teu correu electrònic i t'enviarem les instruccions per restablir-la.</p>
 
-                        <%-- Mostra missatge d'èxit/error (si un futur Servlet els envia) --%>
+                        <%-- Mostra missatge d'èxit/error --%>
                         <c:if test="${not empty missatge}">
                             <div class="alert alert-success" role="alert">
                                 <c:out value="${missatge}" />
@@ -92,7 +92,7 @@
                             </div>
                         </c:if>
 
-                        <%-- TODO: Crear un servlet per a "/recuperar" --%>
+                       
                         <form action="${pageContext.request.contextPath}/recuperarPass" method="POST">
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-bold">Correu Electrònic</label>
@@ -112,6 +112,7 @@
         </div>
     </section>
 
+    <!-- ===== Peu de pàgina ===== -->
     <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
     <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
         <div class="container">
@@ -122,9 +123,10 @@
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                        <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -133,14 +135,13 @@
                         <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
                         <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
                     </div>
-                    <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
                 </div>
+                <hr class="my-3">
+                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
-            <hr class="my-3">
-            <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
-        </div>
-    </footer>
-    <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+        </footer>
+        <!-- ===== FI Peu de pàgina ===== -->
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

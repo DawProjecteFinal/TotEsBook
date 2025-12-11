@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.config;
 
 import cat.totesbook.domain.Rol;
@@ -25,8 +20,9 @@ import java.util.Set;
  * de l'usuari guardat a la sessió.
  * Adaptat per a Spring MVC (protegeix URLs de Controladors, no JSPs).
  * 
+ * @author Equip TotEsBook
+ * 
  */
-
 @Component
 public class FiltreSeguretat implements Filter {
 
@@ -51,6 +47,12 @@ public class FiltreSeguretat implements Filter {
         // "/recuperarPass" 
     );
 
+    /**
+     * Inicialitzar el filtre i configurar els camins protegits dels
+     * administradors, bibliotecaris i usuaris.
+     * 
+     * @param filterConfig Filtre de configuració.
+     */
     @Override
     public void init(FilterConfig filterConfig) {
         // Definim permisos per als controladors protegits
@@ -74,6 +76,15 @@ public class FiltreSeguretat implements Filter {
         // caminsProtegits.put("/ferPrestec", totsElsLoguejats);
     }
 
+    /**
+     * Aplica el filtre a la sol·licitud i resposta HTTP.
+     * 
+     * @param request sol·licitud HTTP.
+     * @param response respota HTPP.
+     * @param chain cadena de filtres.
+     * @throws IOException error d'entrada i sortida.
+     * @throws ServletException error en el servlet.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -149,6 +160,9 @@ public class FiltreSeguretat implements Filter {
         }
     }
     
+    /**
+     * Mètode de destrucció del filtre
+     */
     @Override
     public void destroy() {
         // Mètode de destrucció del filtre

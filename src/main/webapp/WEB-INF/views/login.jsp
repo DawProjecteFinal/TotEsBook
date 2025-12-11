@@ -48,7 +48,6 @@
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/mostrarLlibres?categoria=Psychology">Psicologia</a></li>
                             </ul>
                         </li>
-                     <%-- L'usuari no està loguejat, no mostrem enllaços de sessió --%>
                 </ul>
                 <div class="d-flex align-items-center ms-lg-auto">
                     <form class="d-flex me-3 my-2 my-lg-0" role="search" method="GET" action="${pageContext.request.contextPath}/mostrarLlibres">
@@ -60,7 +59,6 @@
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
-                    <%-- Lògica de Sessió (mostra "Iniciar Sessió" com a actiu) --%>
                     <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0 active">
                         Inicia sessió <i class="bi bi-person-circle"></i>
                     </a>
@@ -113,7 +111,7 @@
         </div>
     </section>
 
-    <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
+    <!-- ===== Peu de pàgina ===== -->
     <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3">
         <div class="container">
             <div class="row align-items-center">
@@ -123,9 +121,10 @@
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0">
                     <ul class="list-unstyled mb-0">
-                        <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                        <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                        <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                        <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                        <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                        <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -136,12 +135,12 @@
                     </div>
                     <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
                 </div>
+                <hr class="my-3">
+                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
-            <hr class="my-3">
-            <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
-        </div>
-    </footer>
-    <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+        </footer>
+        <!-- ===== FI Peu de pàgina ===== -->
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

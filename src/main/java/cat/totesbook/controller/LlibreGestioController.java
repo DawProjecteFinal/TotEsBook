@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Biblioteca;
@@ -25,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- *
+ * Controlador que s'encarrega de la gestió dels llibres (afegir, editar i 
+ * eliminar).
+ * 
  * @author EquipTotEsBook
  */
 @Controller
@@ -37,6 +34,14 @@ public class LlibreGestioController {
     private final BibliotecaLlibreService bibliotecaLlibreService;
     private final GoogleBooksService googleBooksService;
 
+    /**
+     * Constructor del controlador de gestió de llibres.
+     * 
+     * @param llibreService llibreService
+     * @param bibliotecaService bibliotecaService
+     * @param bibliotecaLlibreService bibliotecaLlibreService
+     * @param googleBooksService googleBooksService
+     */
     public LlibreGestioController(LlibreService llibreService,
             BibliotecaService bibliotecaService,
             BibliotecaLlibreService bibliotecaLlibreService,
@@ -47,6 +52,13 @@ public class LlibreGestioController {
         this.googleBooksService = googleBooksService;
     }
 
+    /**
+     * Eliminar el llibre indicat amb l'ISBN.
+     * 
+     * @param isbn L'ISBN del llibre.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que redirigeix al dashboard de l'administrador.
+     */
     @PostMapping("/{isbn}/eliminar")
     public ModelAndView eliminarLlibre(@PathVariable("isbn") String isbn,
             HttpSession session) {
@@ -67,6 +79,13 @@ public class LlibreGestioController {
                 .addObject("success", "Llibre eliminat correctament.");
     }
 
+    /**
+     * Editar la informació del llibre.
+     * 
+     * @param isbn L'ISBN del llibre.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que mostra la vista "llibres/editar_llibre".
+     */
     @GetMapping("/{isbn}/editar")
     public ModelAndView mostrarFormEditar(@PathVariable("isbn") String isbn,
             HttpSession session) {
@@ -97,6 +116,15 @@ public class LlibreGestioController {
         return mv;
     }
 
+    /**
+     * Guarda les modificaions de la biblioteca i els exemplars dels llibres.
+     * 
+     * @param isbn L'ISBN del llibre.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param idBiblioteca L'ID de la biblioteca.
+     * @param exemplars Nombre d'exemplars.
+     * @return Un ModelAndView que redirigeix al dashboard de l'administrador.
+     */
     @PostMapping("/{isbn}/editar")
     public ModelAndView guardarEdicioLlibre(@PathVariable("isbn") String isbn,
             HttpSession session,
@@ -134,6 +162,12 @@ public class LlibreGestioController {
         return new ModelAndView("redirect:/dashboard_administrador");
     }
 
+    /**
+     * Afegir llibre a biblioteca.
+     * 
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return Un ModelAndView que mostra la vista "llibres/afegir_llibre".
+     */
     @GetMapping("/afegir")
     public ModelAndView mostrarFormAfegir(HttpSession session) {
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -151,6 +185,16 @@ public class LlibreGestioController {
         return mv;
     }
 
+    /**
+     * Processa les modificacions que s'han fet al formulari. 
+     * 
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param isbn L'ISBN del llibre.
+     * @param idBiblioteca L'ID de la biblioteca.
+     * @param exemplars Nombre d'exemplars.
+     * @return Un ModelAndView que mostra la vista "llibres/afegir_llibre" o 
+     *         una redirecció si l'usuari no ha iniciat la sessió.
+     */
     @PostMapping("/afegir")
     public ModelAndView processarAfegirLlibre(HttpSession session,
             String isbn,

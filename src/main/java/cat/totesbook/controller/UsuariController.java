@@ -1,7 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Agent;
@@ -36,6 +32,8 @@ import java.util.List;
 /**
  * Controlador Spring MVC per a les funcions de gestió d'usuaris i el procés de
  * registre. Només accessible per a l'ADMIN (excepte el registre).
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class UsuariController {
@@ -106,10 +104,14 @@ public class UsuariController {
             return "redirect:/";
         }
     }
-
+    
     /**
      * Gestiona les peticions GET a /dashboard_usuari. Comprova la sessió i
      * mostra el panell de l'usuari.
+     * 
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @return El nom de la vista JSP ("dashboard_usuari") o una redirecció.
      */
     @GetMapping("/dashboard_usuari")
     public String mostrarDashboardUsuari(Model model, HttpSession session) {
@@ -122,6 +124,13 @@ public class UsuariController {
 
         int idUsuari = sessioUsuari.getId();
 
+        Usuari usuari = usuariRepo.findUsuariById(idUsuari);
+        if (usuari != null && usuari.teSancioActiva()) {
+            model.addAttribute("teSancioActiva", true);
+            model.addAttribute("dataFiSancio", usuari.getDataFiSancioFormatted());
+            model.addAttribute("motiuSancio", usuari.getMotiuSancio());
+        }
+
         // Carreguem els llibres destacats primer, fora del try-catch principal.
         // Així, encara que falli la càrrega de préstecs/reserves, els llibres es mostraran.
         try {
@@ -132,30 +141,56 @@ public class UsuariController {
             model.addAttribute("errorCarregantLlibres", "No s'han pogut carregar els llibres destacats.");
         }
 
+        // Guardem les llistes fora per poder-les reutilitzar per construir el mapa ISBN -> biblioteques
+        List<Prestec> meusPrestecs = null;
+        List<Prestec> historial = null;
+        List<Reserva> mevesReserves = null;
+
         try {
-            // Carregar prestecs actius
-            List<Prestec> meusPrestecs = prestecService.findPrestecsActiusByUsuari(idUsuari);
+            // Carregar préstecs actius
+            meusPrestecs = prestecService.findPrestecsActiusByUsuari(idUsuari);
             model.addAttribute("meusPrestecs", meusPrestecs);
+
             // Carregar historial de prèstecs
-            List<Prestec> historial = prestecService.findPrestecsRetornatsByUsuari(idUsuari);
+            historial = prestecService.findPrestecsRetornatsByUsuari(idUsuari);
             model.addAttribute("historialPrestecs", historial);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorCarregantPrestecs", "No s'han pogut carregar els teus préstecs.");
         }
+
         try {
             // Carregar reserves
-            List<Reserva> mevesReserves = reservaService.findReservaByUsuari(idUsuari);
+            mevesReserves = reservaService.findReservaByUsuari(idUsuari);
             model.addAttribute("mevesReserves", mevesReserves);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
+        }
 
-            // Mapa ISBN -> biblioteques on és el llibre reservat
+        // Construïm el mapa ISBN -> llista de BibliotecaLlibre
+        try {
             Map<String, List<BibliotecaLlibre>> bibliosPerIsbn = new HashMap<>();
 
-            for (Reserva r : mevesReserves) {
-                Llibre llibre = r.getLlibre();
-                if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
-                    List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
-                    bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+            // 1) Afegim les biblioteques dels llibres reservats
+            if (mevesReserves != null) {
+                for (Reserva r : mevesReserves) {
+                    Llibre llibre = r.getLlibre();
+                    if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
+                        List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
+                        bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+                    }
+                }
+            }
+
+            // 2) Afegim també les biblioteques dels llibres en préstec actiu
+            if (meusPrestecs != null) {
+                for (Prestec p : meusPrestecs) {
+                    Llibre llibre = p.getLlibre();
+                    if (llibre != null && !bibliosPerIsbn.containsKey(llibre.getIsbn())) {
+                        List<BibliotecaLlibre> relacions = bibliotecaLlibreService.findByLlibre(llibre);
+                        bibliosPerIsbn.put(llibre.getIsbn(), relacions);
+                    }
                 }
             }
 
@@ -163,49 +198,12 @@ public class UsuariController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("errorCarregantReserves", "No s'han pogut carregar les teves reserves.");
+            // No llencem error al model perquè, si falla això, com a molt no es veurà la biblioteca
         }
+
         return "dashboard_usuari";
     }
 
-    /**
-     * Gestiona les peticions GET a /dashboard_bibliotecari. Comprova la sessió
-     * i mostra el panell del bibliotecari.
-     */
-    /*
-    @GetMapping("/dashboard_bibliotecari")
-    public String mostrarDashboardBibliotecari(HttpSession session) {
-        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
-        if (sessioUsuari == null || (sessioUsuari.getRol() != Rol.BIBLIOTECARI && sessioUsuari.getRol() != Rol.ADMIN)) {
-            return "redirect:/login";
-        }
-        
-        // El ViewResolver buscarà: /WEB-INF/views/dashboard_bibliotecario.jsp
-        // TODO: Carregar dades necessàries per a aquest panell (ex: reserves pendents)
-        return "dashboard_bibliotecario";
-    }
-     */
-    /**
-     * Gestiona les peticions GET a /dashboard_admin. Comprova la sessió i
-     * mostra el panell de l'administrador.
-     */
-    /*
-    @GetMapping("/dashboard_admin")
-    public String mostrarDashboardAdmin(HttpSession session) {
-        SessioUsuari sessioUsuari = (SessioUsuari) session.getAttribute("sessioUsuari");
-        
-        if (sessioUsuari == null || sessioUsuari.getRol() != Rol.ADMIN) {
-            return "redirect:/login";
-        }
-        
-        // El ViewResolver buscarà: /WEB-INF/views/dashboard_admin.jsp
-        // NOTA: El teu 'dashboard_admin.jsp' actualment carrega les dades
-        // amb scriptlets (<% ... %>) al propi JSP. Això funcionarà.
-        // (En una futura refactorització, aquesta lògica hauria de moure's aquí).
-        return "dashboard_admin";
-    }
-     */
     // --- Lògica de Registre ---
     /**
      * Gestiona les peticions GET a /registre. Mostra la pàgina (formulari) de
@@ -400,6 +398,13 @@ public class UsuariController {
 
     // --- MÈTODES PER A CREAR USUARIS DES DEL PANELL BIBLIOTECARI ---
     // 1. Mostrar el formulari (GET)
+    /**
+     * Mostra el panell de bibliotecari/nou-usuari.
+     * 
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return El nom de la vista JSP ("nou_usuari") o una redirecció.
+     */
     @GetMapping("/bibliotecari/nou-usuari")
     public String vistaCrearUsuari(HttpSession session, Model model) {
         SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -412,6 +417,18 @@ public class UsuariController {
     }
 
     // 2. Processar la creació (POST)
+    /**
+     * Processa la creació d'un usuari nou.
+     * 
+     * @param nom El nom de l'usuari nou.
+     * @param cognoms El cognoms de l'usuari nou.
+     * @param telefon El telèfon de l'usuari nou.
+     * @param email El correu de l'usuari nou.
+     * @param password La contrasenya de l'usuari nou.
+     * @param session La sessió HTTP per actualitzar les dades de sessió.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return redirecció al panell del bibliotecari.
+     */
     @PostMapping("/bibliotecari/crear-usuari")
     public String crearUsuari(@RequestParam String nom,
             @RequestParam String cognoms,

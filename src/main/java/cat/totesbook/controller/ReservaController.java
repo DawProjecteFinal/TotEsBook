@@ -1,14 +1,11 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Reserva;
 import cat.totesbook.domain.Rol;
 import cat.totesbook.domain.SessioUsuari;
+import cat.totesbook.domain.Usuari;
 import cat.totesbook.service.ReservaService;
+import cat.totesbook.service.UsuariService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * Controlador per a gestionar les operacions relacionades amb les reserves de
  * llibres.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class ReservaController {
@@ -26,6 +25,9 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+    @Autowired
+    private UsuariService usuariService;
+    
     /**
      * Processa la petició per crear una nova reserva per a un llibre.
      *
@@ -49,6 +51,21 @@ public class ReservaController {
 
         try {
             int idUsuari = sessioUsuari.getId();
+            
+            if (usuariService.teSancioActiva(idUsuari)) {
+            
+            Usuari u = usuariService.findUsuariById(idUsuari);
+
+            String missatge = "No pots fer la reserva. Tens una sanció activa fins al "
+                    + u.getDataFiSancioFormatted()
+                    + " motiu: " + u.getMotiuSancio()
+                    + ". No podràs fer cap reserva fins aquesta data.";
+
+            redirectAttrs.addFlashAttribute("error", missatge);
+
+            
+            return "redirect:/llibre?isbn=" + isbn;
+        }
 
             // Cridem al servei per crear la reserva.
             reservaService.crearReserva(idUsuari, isbn);
@@ -63,6 +80,15 @@ public class ReservaController {
         }
     }
 
+    /**
+     * Gestiona la cancel·lació d'una reserva feta per un usuari.
+     * 
+     * @param idReserva ID de la reserva.
+     * @param session La sessió HTTP per obtenir l'usuari loguejat.
+     * @param redirect Atributs de redirecció.
+     * @return a la dashboard de l'usuari amb un missatge si la cancel·lació s'ha
+     * fet de manera correcta. 
+     */
     @PostMapping("/cancelReserva")
     public String cancelReserva(@RequestParam("idReserva") int idReserva,
             HttpSession session,

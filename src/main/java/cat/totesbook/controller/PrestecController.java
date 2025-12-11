@@ -1,23 +1,23 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.SessioUsuari;
 import cat.totesbook.service.PrestecService;
+import cat.totesbook.service.UsuariService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
- *
- * @author jmiro
+ * Controlador que gestiona les pàgines dels prèstecs.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 @RequestMapping("/gestionarPrestec")
@@ -26,6 +26,59 @@ public class PrestecController {
     @Autowired
     private PrestecService prestecService;
 
+    @Autowired
+    private UsuariService usuariService;
+
+    /**
+     * Mostra la gestió de préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return El nom de la vista JSP ("gestionarPrestec") si no hi ha cap error.
+     */
+    @GetMapping
+    public String mostrarGestioPrestec(@RequestParam("idPrestec") Integer idPrestec,
+            HttpSession session,
+            org.springframework.ui.Model model,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+            if (sessio == null) {
+                return "redirect:/login";
+            }
+
+            var prestec = prestecService.getPrestecPerId(idPrestec);
+
+            if (prestec == null) {
+                redirectAttributes.addFlashAttribute("error", "El préstec no existeix.");
+                return "redirect:/dashboard_bibliotecari";
+            }
+
+            model.addAttribute("prestec", prestec);
+
+            boolean usuariSancionat = usuariService.teSancioActiva(prestec.getUsuari().getId());
+            model.addAttribute("usuariSancionat", usuariSancionat);
+
+            return "gestionarPrestec";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error carregant el préstec: " + e.getMessage());
+            return "redirect:/dashboard_bibliotecari";
+        }
+    }
+
+    /**
+     * Registrar un préstec.
+     * 
+     * @param isbn L'ISBN del llibre.
+     * @param emailUsuari El correu electrònic de l'usuari.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix a "dashboard_bibliotecari#registrar-prestec".
+     */
     @PostMapping
     public String registrarPrestec(@RequestParam String isbn,
             @RequestParam String emailUsuari,
@@ -37,20 +90,51 @@ public class PrestecController {
             if (sessio == null) {
                 return "redirect:/login";
             }
-            
+
+            var usuari = usuariService.getUsuariByEmail(emailUsuari);
+
+            if (usuari == null) {
+                redirectAttributes.addFlashAttribute("error", "L'usuari no existeix.");
+                return "redirect:/dashboard_bibliotecari#registrar-prestec";
+            }
+
+            if (usuariService.teSancioActiva(usuari.getId())) {
+
+                var usuariRefrescat = usuariService.findUsuariById(usuari.getId());
+
+                String missatge = "Aquest usuari té una sanció activa fins al "
+                        + usuariRefrescat.getDataFiSancioFormatted()
+                        + ". Motiu: " + usuariRefrescat.getMotiuSancio();
+
+                redirectAttributes.addFlashAttribute("sancioError", missatge);
+
+                return "redirect:/dashboard_bibliotecari#registrar-prestec";
+            }
+
             prestecService.registrarPrestec(isbn, emailUsuari, sessio.getId());
+
             redirectAttributes.addFlashAttribute("missatge", "Préstec registrat correctament.");
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "No s'ha pogut registrar el préstec: " + e.getMessage());
+            redirectAttributes.addFlashAttribute(
+                    "error", "No s'ha pogut registrar el préstec: " + e.getMessage());
         }
-        return "redirect:/dashboard_bibliotecari";
+
+        return "redirect:/dashboard_bibliotecari#registrar-prestec";
     }
-    
-    // --- ENDPOINT PER RENOVAR PRÉSTEC ---
+
+    /**
+     * Renovació del préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix a "gestionarPrestec?idPrestec=" + idPrestec".
+     */
     @PostMapping("/renovar")
     public String renovarPrestec(@RequestParam("idPrestec") Integer idPrestec,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         try {
             SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
@@ -66,25 +150,97 @@ public class PrestecController {
                     "No s'ha pogut renovar el préstec: " + e.getMessage());
         }
 
-        return "redirect:/dashboard_bibliotecari";
+        return "redirect:/gestionarPrestec?idPrestec=" + idPrestec;
     }
     
-    // --- NOU ENDPOINT PER A DEVOLUCIÓ RÀPIDA AMB BOTÓ ---
+    /**
+     * Gestionar el retorn del préstec.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix al panell del bibliotecari.
+     */
     @PostMapping("/retornar")
     public String retornarPrestec(@RequestParam("idPrestec") Integer idPrestec,
-                                  HttpSession session,
-                                  RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
-            if (sessio == null) return "redirect:/login";
+            if (sessio == null) {
+                return "redirect:/login";
+            }
 
-            // Cridem al nou mètode del servei passant l'ID del préstec i l'ID del bibliotecari
             prestecService.retornarPrestec(idPrestec, sessio.getId());
-            
+
             redirectAttributes.addFlashAttribute("missatge", "Devolució registrada correctament.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error devolució: " + e.getMessage());
         }
         return "redirect:/dashboard_bibliotecari";
     }
+
+    /**
+     * Gestionar la sanció a un usuari.
+     * 
+     * @param idPrestec L'ID del préstec.
+     * @param tipus El tipus de sanció.
+     * @param session La sessió HTTP per comprovar l'autorització.
+     * @param redirectAttributes Atributs per enviar missatges de feedback.
+     * @return Redirigeix a "gestionarPrestec?idPrestec=" + idPrestec".
+     */
+    @PostMapping("/sancionar")
+    public String sancionarPrestec(@RequestParam("idPrestec") Integer idPrestec,
+            @RequestParam("tipus") String tipus,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+
+            SessioUsuari sessio = (SessioUsuari) session.getAttribute("sessioUsuari");
+            if (sessio == null) {
+                return "redirect:/login";
+            }
+
+            var prestec = prestecService.getPrestecPerId(idPrestec);
+            if (prestec == null) {
+                redirectAttributes.addFlashAttribute("error", "El préstec no existeix.");
+                return "redirect:/dashboard_bibliotecari";
+            }
+
+            int dies;
+            String motiu;
+
+            if ("RETARD".equalsIgnoreCase(tipus)) {
+                dies = 15;
+                motiu = "Retorn del llibre amb retard";
+            } else if ("MAL_ESTAT".equalsIgnoreCase(tipus)) {
+                dies = 45;
+                motiu = "Llibre retornat en mal estat";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Tipus de sanció no vàlid.");
+                return "redirect:/gestionarPrestec?idPrestec=" + idPrestec;
+            }
+
+            LocalDateTime dataFiSancio = LocalDateTime.now().plusDays(dies);
+
+            Integer idUsuari = prestec.getUsuari().getId();
+            usuariService.aplicarSancio(idUsuari, dataFiSancio, motiu);
+
+            String dataFiText = dataFiSancio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            redirectAttributes.addFlashAttribute(
+                    "missatge",
+                    "Sanció aplicada a l'usuari fins al " + dataFiText + ". Motiu: " + motiu
+            );
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "No s'ha pogut aplicar la sanció: " + e.getMessage()
+            );
+        }
+
+        return "redirect:/gestionarPrestec?idPrestec=" + idPrestec;
+    }
+
 }

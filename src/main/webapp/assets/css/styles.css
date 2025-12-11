@@ -63,19 +63,19 @@
     color: #7bbcc7;
 }
 .logo-header {
-  max-width: 100%;
-  height: auto;
-  max-height: 120px; 
-  display: block;
-  margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 120px;
+    display: block;
+    margin: 0 auto;
 }
 
 .img-fixed {
-  max-width: 100%;
-  height: 200px;    
-  object-fit: contain;   /* Manté la proporció sense tallar res */
-  border-radius: 0.5rem; /* cantonades arrodonides com les cards */
-  background-color: #f8f9fa; /* color de fons neutre si la imatge no omple tot l’espai */
+    max-width: 100%;
+    height: 200px;
+    object-fit: contain;   /* Manté la proporció sense tallar res */
+    border-radius: 0.5rem; /* cantonades arrodonides com les cards */
+    background-color: #f8f9fa; /* color de fons neutre si la imatge no omple tot l’espai */
 }
 
 /* Afegit Edi */
@@ -141,13 +141,13 @@
 
 /*Format botons panell llibres administrador*/
 .btn-accio-panell {
-    width: 48px;          
-    height: 48px;         
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;           
-    border-radius: 10px;   
+    padding: 0;
+    border-radius: 10px;
 }
 
 .btn-accio-panell i {
@@ -165,4 +165,32 @@ a.btn-accio-panell {
 
 .btn-nowrap {
     white-space: nowrap;
+}
+
+.badge-pendent {
+    background-color: #ffc107;
+}
+.badge-acceptada {
+    background-color: #28a745;
+}
+.badge-rebutjada {
+    background-color: #dc3545;
+}
+.badge-comprat {
+    background-color: #0d6efd;
+}
+
+/* Mode hover targetes dels llibres */
+.card {
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border 0.25s ease;
+    border: 2px solid transparent;
+}
+
+/* Només les targetes de llibres fan el hover  */
+.card.card-llibre:hover {
+    transform: scale(1.10);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    border: 2px solid #0d6efd; /* blau */
 }

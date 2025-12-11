@@ -1,20 +1,19 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.repository;
 
 import cat.totesbook.domain.Usuari;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * Interfície per a les operacions de dades de la taula Usuaris.
+ * 
+ * @author Equip TotEsBook
  */
 public interface UsuariRepository {
 
     /**
      * Comprova el login d'un Usuari (lector) verificant la seva contrasenya hashejada.
+     * 
      * @param email L'email del formulari.
      * @param passwordPla La contrasenya en TEXT PLA del formulari.
      * @return L'objecte Usuari si és correcte, o null si no ho és.
@@ -23,12 +22,14 @@ public interface UsuariRepository {
 
     /**
      * Desa un nou usuari a la base de dades.
+     * 
      * @param usuari L'objecte Usuari (amb la contrasenya ja hashejada).
      */
     void saveUsuari(Usuari usuari);
 
     /**
      * Cerca un usuari només pel seu email (útil per comprovar si ja existeix).
+     * 
      * @param email L'email a cercar.
      * @return L'objecte Usuari si es troba, o null.
      */
@@ -36,15 +37,15 @@ public interface UsuariRepository {
 
     /**
      * Retorna una llista de tots els Usuaris (lectors) del sistema.
+     * 
      * (Aquest era el mètode que faltava - Error 5)
      * @return Llista d'objectes Usuari.
      */
     List<Usuari> getAllUsuaris();
     
-
-    
     /**
      * Busca un usuari complet per la seva ID.
+     * 
      * @param id L'ID de l'usuari.
      * @return L'objecte Usuari, o null si no es troba.
      */
@@ -56,7 +57,21 @@ public interface UsuariRepository {
      */
     void updatePerfil(Usuari usuari);
     
+    /**
+     * Actualiza les dades bàsiques de la sanció de l'usuari.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @param dataFiSancio La data de la finalització.
+     * @param motiuSancio El motiu de la sanció.
+     */
+    void updateSancioUsuari(int idUsuari, LocalDateTime dataFiSancio, String motiuSancio);
     
-    
+    /**
+     * Retorna una llista d'usuaris amb la sanció activa.
+     * 
+     * @return Una llista d'usuaris amb la sanció activa.
+     */
+    List<Usuari> getUsuarisAmbSancioActiva();
+   
    
 }

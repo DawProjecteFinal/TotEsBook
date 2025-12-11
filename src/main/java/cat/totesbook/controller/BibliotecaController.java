@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Biblioteca;
@@ -20,8 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- *
- * @author jmiro
+ * Controlador que gestiona les pàgines de les biblioteques.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class BibliotecaController {
@@ -36,29 +32,29 @@ public class BibliotecaController {
     private LlibreService llibreService;
 
     /**
-     * Envia a la vista tot el llistat de biblioteques per e aveure-les els usuaris normals
+     * Envia a la vista tot el llistat de biblioteques per a els usuaris normals
+     * les pugin veure.
      *
-     * @param model
-     * @return
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return vista del llistat de biblioteques obertes al públic.
      */
     @GetMapping("/biblioteques")
     public String mostrarBiblioteques(Model model) {
-        // Obtenim totes les biblioteques de la base de dades
+        // Obtenim totes les biblioteques de la base de dades.
         List<Biblioteca> biblioteques = bibliotecaService.getAllBiblioteques();
 
-        // Afegim la llista al model perquè la vista la pugui utilitzar
+        // Afegim la llista al model perquè la vista la pugui utilitzar.
         model.addAttribute("biblioteques", biblioteques);
 
-        // Retornem el nom de la vista JSP (sense .jsp ni ruta completa)
+        // Retornem el nom de la vista JSP (sense .jsp ni ruta completa).
         return "biblioteques/llistar_public";
     }
 
     /**
-     * Mostra els llibres de una biblioteca determinada
-     * @param idBiblioteca
-     * @param idBiblioteca
-     * @param model
-     * @return 
+     * Mostra els llibres d'una biblioteca determinada
+     * @param idBiblioteca L'id de la biblioteca.
+     * @param model L'objecte Model de Spring per passar atributs a la vista.
+     * @return La vista dels llibres que hi ha a cada biblioteca.
      */
     @GetMapping("/biblioteques/{id}/llibres")
     public String mostrarLlibresPerBiblioteca(@PathVariable("id") int idBiblioteca, Model model) {

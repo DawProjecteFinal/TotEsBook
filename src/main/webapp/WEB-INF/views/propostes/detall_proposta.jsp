@@ -1,7 +1,5 @@
 <%-- 
-    Document   : detall_proposta
-    Created on : 27 nov 2025, 15:57:03
-    Author     : eqip TotEsBook
+    Author     : Equip TotEsBook
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -22,48 +20,149 @@
 
 
     <body class="d-flex flex-column min-vh-100">
-        <!-- Mostrar logo al inici de la pàgina -->
-        <header class="bg-tot py-1">
-            <div class="container px-4 px-lg-5 my-1">
-                <div class="text-center text-white">
-                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg" alt="Logo" class="logo-header"> 
+        <!-- ===== INICI CAPÇALERA INCRUSTADA ===== -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-totlight sticky-top shadow-sm">
+            <div class="container px-4 px-lg-5">
+
+                <a class="navbar-brand" href="${pageContext.request.contextPath}">
+                    <img src="${pageContext.request.contextPath}/assets/images/logo-gran.jpeg"
+                         alt="Logo TotEsBook"
+                         height="30"
+                         class="d-inline-block align-text-top logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Menú">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- MENÚ -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}">Inici</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/biblioteques">Biblioteques</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/mostrarLlibres">Catàleg</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/propostes/llista_propostes">Propostes</a></li>
+                    </ul>
+
+                    <!-- Menú d’usuari -->
+                    <div class="d-flex align-items-center ms-lg-auto">
+
+                        <%-- Lògica de Sessió per a Login/Logout --%>
+                        <c:choose>
+
+                            <c:when test="${empty sessionScope.sessioUsuari}">
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
+                                    Inicia sessió <i class="bi bi-person-circle"></i>
+                                </a>
+                            </c:when>
+
+                            <c:otherwise>
+                                <div class="dropdown">
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
+                                        <li><hr class="dropdown-divider"></li>
+
+                                        <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
+                                                <i class="bi bi-box-arrow-right"></i> Tancar Sessió
+                                            </a></li>
+                                    </ul>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+
+                    </div>
                 </div>
             </div>
-        </header>
+        </nav>
 
-        <section>
-            <h3>Gestió de Proposta</h3>
+        <section class="flex-grow-1">
+            <div class="container mt-4 mb-5">
 
-            <div class="card p-3">
-                <h5>${proposta.titol}</h5>
-                <p><strong>Autor:</strong> ${proposta.autor}</p>
-                <p><strong>ISBN:</strong> ${proposta.isbn}</p>
-                <p><strong>Usuari ID:</strong> ${proposta.idUsuari}</p>
+                <!-- Botó tornar al panell -->
+                <a href="${pageContext.request.contextPath}/dashboard_administrador"
+                   class="btn btn-outline-secondary mb-4 mt-3">
+                    <i class="bi bi-arrow-left"></i> Tornar al Panell
+                </a>
 
-                <form action="${pageContext.request.contextPath}/propostes/actualitzar" method="POST">
-                    <input type="hidden" name="idProposta" value="${proposta.idProposta}"/>
+                <!-- Títol -->
+                <h3 class="text-tot-bold text-center mb-4">Gestió de Proposta</h3>
 
-                    <div class="mb-3">
-                        <label class="form-label">Estat</label>
-                        <select class="form-select" name="estat">
-                            <c:forEach items="${estats}" var="e">
-                                <option value="${e}" ${proposta.estat == e ? 'selected' : ''}>${e}</option>
-                            </c:forEach>
-                        </select>
+                <!-- Contingut centrat -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+
+                        <div class="card p-4 shadow-sm">
+
+                            <h5 class="fw-bold mb-3">${proposta.titol}</h5>
+
+                            <p><strong>Autor:</strong> ${proposta.autor}</p>
+                            <p><strong>ISBN:</strong> ${proposta.isbn}</p>
+                            <p><strong>Usuari ID:</strong> ${proposta.idUsuari}</p>
+                            <p><strong>Nom usuari:</strong> ${proposta.nomUsuari}</p>
+                            <p><strong>Motiu:</strong> ${proposta.motiu}</p>
+
+                            <form action="${pageContext.request.contextPath}/propostes/actualitzar" method="POST">
+
+                                <input type="hidden" name="idProposta" value="${proposta.idProposta}"/>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Estat</label>
+                                    <select class="form-select" name="estat">
+                                        <c:forEach items="${estats}" var="e">
+                                            <option value="${e}" ${proposta.estat == e ? 'selected' : ''}>${e}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Resposta / Observacions</label>
+                                    <textarea class="form-control" rows="4" name="resposta">${proposta.resposta}</textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary">Guardar canvis</button>
+                                    <a href="${pageContext.request.contextPath}/dashboard_administrador"
+                                       class="btn btn-secondary">
+                                        Cancel·lar
+                                    </a>
+                                </div>
+
+                            </form>
+
+                        </div>
+
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Resposta / Observacions</label>
-                        <textarea class="form-control" name="resposta">${proposta.resposta}</textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Guardar canvis</button>
-                    <a href="${pageContext.request.contextPath}/dashboard_administrador" class="btn btn-secondary">Cancel·lar</a>
-                </form>
             </div>
-        </section>       
-                
-        <!-- ===== INICI PEU DE PÀGINA INCRUSTAT ===== -->
+        </section>
+
+        <!-- ===== Peu de pàgina ===== -->
         <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
             <div class="container">
                 <div class="row align-items-center">
@@ -73,9 +172,10 @@
                     </div>
                     <div class="col-md-4 mb-3 mb-md-0">
                         <ul class="list-unstyled mb-0">
-                            <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li> 
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                            <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                            <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4">
@@ -91,9 +191,8 @@
                 <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
             </div>
         </footer>
-        <!-- ===== FI PEU DE PÀGINA INCRUSTAT ===== -->
+        <!-- ===== FI Peu de pàgina ===== -->
 
-        <!-- Script de Bootstrap Bundle -->
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

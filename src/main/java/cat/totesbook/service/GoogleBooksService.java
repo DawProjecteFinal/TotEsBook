@@ -17,10 +17,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
 /**
- *
+ * Interfície  del servei de Google Books.
+ * 
  * @author Equip TotEsBook
  */
-
 @Service
 public class GoogleBooksService {
 
@@ -37,6 +37,12 @@ public class GoogleBooksService {
     private final RestTemplate restTemplate;
     private final LlibreService llibreService;
 
+    /**
+     * Constructor de GoogleBooksService.
+     * 
+     * @param restTemplate restTemplate
+     * @param llibreService llibreService
+     */
     public GoogleBooksService(RestTemplate restTemplate, LlibreService llibreService) {
         this.restTemplate = restTemplate;
         this.llibreService = llibreService;
@@ -44,6 +50,9 @@ public class GoogleBooksService {
 
     /**
      * Consulta l'API de Google Books per ISBN i retorna un Llibre.
+     * 
+     * @param isbn ISBN.
+     * @return Optional llibre amb l'ISBN indicat.
      */
     public Optional<Llibre> getLlibreByIsbn(String isbn) {
         try {
@@ -86,9 +95,14 @@ public class GoogleBooksService {
 
         return Optional.empty();
     }
-
+    
     /**
      * Importa i guarda un llibre a la BD si no existeix.
+     * 
+     * @param titol El títol del llibre.
+     * @param autor L'autor del llibre.
+     * @param isbn L'ISBN del llibre.
+     * @return Un llistat de resultats.
      */
     public List<Llibre> cercarLlibres(String titol, String autor, String isbn) {
         try {

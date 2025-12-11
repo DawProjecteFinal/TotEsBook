@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.config;
 
 import org.springframework.context.annotation.Bean;
@@ -15,6 +10,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+/**
+ * Classe que personalitza el comportament de String MVC.
+ * 
+ * @author Equip TotEsBook
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(
@@ -26,8 +26,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class WebConfig implements WebMvcConfigurer {
 
     /**
+     * Mètode que crea i configura el resolutor de vistes per localitzar els fitxer
+     * JSP.
      * 
-     * @return 
+     * @return el resolutor de vistes.
      */
     @Bean
     public InternalResourceViewResolver viewResolver() {
@@ -41,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
      * Mètode que li diu al DispatcherServlet que no intercepti les rutes dels
      * recursos estàtics (com /css/, /js/, /images/).
      *
-     * @param registry
+     * @param registry registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

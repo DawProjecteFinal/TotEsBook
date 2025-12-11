@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.controller;
 
 import cat.totesbook.domain.Llibre;
@@ -18,6 +13,8 @@ import java.util.stream.Collectors;
 /**
  * Controlador de Spring MVC per a la pàgina d'inici.
  * S'encarrega de carregar les dades necessàries per a la portada.
+ * 
+ * @author Equip TotEsBook
  */
 @Controller
 public class IniciController {

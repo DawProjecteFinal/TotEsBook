@@ -1,8 +1,3 @@
-/**
- *
- * @author Equip TotEsBook
- */
-
 package cat.totesbook.repository.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -15,7 +10,15 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Classe DAO que gestiona l'accés a la base de dades per a les entitats Llibre.
+ * 
+ * @author Equip TotEsBook
+ */
 @Repository
+/**
+ * Implementació JPA del repositori de Llibre.
+ */
 public class LlibreDAO implements LlibreRepository {
 
     @PersistenceContext(unitName = "totesbookPersistenceUnit")
@@ -23,7 +26,10 @@ public class LlibreDAO implements LlibreRepository {
 
     /**
      * Obté tots els llibres de la base de dades.
+     * 
+     * @return llista de llibres.
      */
+    
     @Override
     public List<Llibre> getAllLlibres() {
         return entityManager
@@ -33,6 +39,8 @@ public class LlibreDAO implements LlibreRepository {
 
     /**
      * Afegeix o actualitza (UPSERT) un llibre segons si ja existeix l'ISBN.
+     * 
+     * @param llibre El llibre.
      */
     @Override
     public void addLlibre(Llibre llibre) {
@@ -50,6 +58,9 @@ public class LlibreDAO implements LlibreRepository {
 
     /**
      * Busca un llibre pel seu ISBN.
+     * 
+     * @param isbn L'ISBN.
+     * @return Un optional amb el llibre amb l'ISBN.
      */
     @Override
     public Optional<Llibre> getLlibreByIsbn(String isbn) {
@@ -57,7 +68,12 @@ public class LlibreDAO implements LlibreRepository {
         return Optional.ofNullable(llibre);
     }
 
-    // Retorna els llibre de una biblioteca en concret
+    /**
+     * Retorna els llibre de una biblioteca en concret
+     * 
+     * @param biblioteca La biblioteca.
+     * @return Llista amb totes els llibres de la biblioteca especificada.
+     */
     @Override
     public List<Llibre> findByBiblioteca(Biblioteca biblioteca) {
         return entityManager.createQuery(
@@ -68,6 +84,9 @@ public class LlibreDAO implements LlibreRepository {
 
     /**
      * Copia totes les propietats d'un llibre origen a un llibre existent.
+     * 
+     * @param desti El destí.
+     * @param origen L'origen.
      */
     private void actualitzarLlibreDesDe(Llibre desti, Llibre origen) {
         desti.setTitol(origen.getTitol());
@@ -81,25 +100,50 @@ public class LlibreDAO implements LlibreRepository {
         desti.setDisponibles(origen.getDisponibles());
     }
 
-    //Retorna els llibres per una categoria concreta
+    /**
+     * Retorna els llibres per una categoria concreta
+     * 
+     * @param categoria La categoria.
+     * @return Llista amb totes els llibres de la categoria indicada.
+     */
     @Override
     public List<Llibre> findByCategoria(String categoria) {
         return entityManager.createQuery(
                 "SELECT l FROM Llibre l WHERE l.categoria = :categoria", Llibre.class).setParameter("categoria", categoria).getResultList();
     }
 
+    /**
+     * Retorna una llista de llibres amb el títol indicat sense tenir en compte
+     * les majúscules ni les minúscules.
+     * 
+     * @param titol El títol.
+     * @return Retorna una llista de llibres amb el títol indicat.
+     */
     @Override
     public List<Llibre> findByTitolContainingIgnoreCase(String titol) {
         return entityManager.createQuery(
                 "SELECT l FROM Llibre l " + "WHERE LOWER(l.titol) LIKE LOWER(CONCAT('%', :titol, '%'))", Llibre.class).setParameter("titol", titol).getResultList();
     }
 
+    /**
+     * Retorna una llista de llibres amb l'autor indicat sense tenir en compte
+     * les majúscules ni les minúscules.
+     * 
+     * @param autor L'autor.
+     * @return Retorna una llista de llibres amb l'autor indicat.
+     */
     @Override
     public List<Llibre> findByAutorContainingIgnoreCase(String autor) {
         return entityManager.createQuery(
                 "SELECT l FROM Llibre l " + "WHERE LOWER(l.autor) LIKE LOWER(CONCAT('%', :autor, '%'))", Llibre.class).setParameter("autor", autor).getResultList();
     }
 
+    /**
+     * Retorna una llista de llibres de l'idioma indicat.
+     * 
+     * @param idioma L'idioma.
+     * @return Retorna una llista de llibres amb l'idioma indicat.
+     */
     @Override
     public List<Llibre> findByIdioma(String idioma) {
         return entityManager.createQuery(
@@ -109,8 +153,8 @@ public class LlibreDAO implements LlibreRepository {
     /**
      * Mostra llibres de forma aleatoria
      *
-     * @param limit
-     * @return
+     * @param limit El límit.
+     * @return Una llista de llibres aleatoris.
      */
     @Override
     public List<Llibre> findRandom(int limit) {
@@ -122,6 +166,11 @@ public class LlibreDAO implements LlibreRepository {
 
     }
 
+    /**
+     * Elimina el llibre segons l'ISBN indicat.
+     * 
+     * @param isbn L'ISBN.
+     */
     @Override
     @Transactional
     public void deleteLlibreByIsbn(String isbn) {
@@ -134,6 +183,11 @@ public class LlibreDAO implements LlibreRepository {
         if (llibre != null) {
             entityManager.remove(llibre);
         }
+    }
+
+    // Setter només per a tests
+    void setEntityManager(EntityManager em) {
+        this.entityManager = em;
     }
 
 }

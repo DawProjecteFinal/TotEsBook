@@ -2,7 +2,6 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.service.impl;
 
 import cat.totesbook.domain.Biblioteca;
@@ -24,6 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Classe que implementa el servei de les reserves.
+ * 
+ * @author Equip TotEsBook
+ */
 @Service
 @Transactional // Transaccio entre totes les operacions (crear reserva, actualitzar llibre) es fan juntes o cap.
 
@@ -41,6 +45,12 @@ public class ReservaServiceImpl implements ReservaService {
     @Autowired
     private BibliotecaLlibreRepository bibliotecaLlibreRepository;
 
+    /**
+     * Crea una nova reserva per a un usuari i un llibre
+     *
+     * @param idUsuari L'ID de l'usuari que reserva.
+     * @param isbn L'ISBN del llibre a reservar.
+     */
     @Override
     public void crearReserva(int idUsuari, String isbn) throws Exception {
 
@@ -49,7 +59,16 @@ public class ReservaServiceImpl implements ReservaService {
         if (usuari == null) {
             throw new Exception("L'usuari amb ID " + idUsuari + " no existeix.");
         }
-
+/*
+        if (usuari.teSancioActiva()) {
+            throw new Exception(
+                    "No pots fer la reserva. Tens una sanció activa fins al "
+                    + usuari.getDataFiSancioFormatted()
+                    + " per " + usuari.getMotiuSancio()
+                    + ". No podràs fer cap reserva fins aquesta data."
+            );
+        }
+*/
         // Llibre
         Llibre llibre = llibreRepository.getLlibreByIsbn(isbn)
                 .orElseThrow(() -> new Exception("El llibre amb ISBN " + isbn + " no existeix."));
@@ -92,17 +111,33 @@ public class ReservaServiceImpl implements ReservaService {
         blDisponible.setDisponibles(blDisponible.getDisponibles() - 1);
     }
 
+    /**
+     * Cerca una llista de reserves segons l'usuari.
+     * 
+     * @param idUsuari L'ID de l'usuari.
+     * @return Una llista amb les reserves segons l'usuari.
+     */
     @Override
     public List<Reserva> findReservaByUsuari(int idUsuari) {
         return reservaRepository.findByUsuari(idUsuari);
     }
 
+    /**
+     * Cerca les reserves pendents segons la biblioteca indicada.
+     * 
+     * @param biblioteca La biblioteca.
+     * @return Llista amb les rserves pendents segons la biblioteca indicada.
+     */
     @Override
     public List<Reserva> findReservesPendentsByBiblioteca(Biblioteca biblioteca) {
         return reservaRepository.findReservesPendentsByBiblioteca(biblioteca);
     }
 
-    
+    /**
+     * El biblitecari pot cancel·lar la reserva de l'usuari.
+     * 
+     * @param reserva Reserva.
+     */
     @Override
     public void cancelReserva(Reserva reserva) {
         reserva.setEstat(EstatReserva.cancelada);
@@ -111,11 +146,22 @@ public class ReservaServiceImpl implements ReservaService {
         reservaRepository.crearReserva(reserva);
     }
 
+    /**
+     * Eliminar la reserva segons el seu ID.
+     * 
+     * @param idReserva ID de la reserva.
+     */
     @Override
     public void eliminarReserva(int idReserva) {
         reservaRepository.deleteById(idReserva);
     }
 
+    /**
+     * Cerca la reserva segons el seu ID.
+     * 
+     * @param idReserva L'ID de al reserva.
+     * @return Objecte Reserva amb el seu ID.
+     */
     @Override
     public Reserva findByIdReserva(int idReserva) {
         return reservaRepository.findByIdReserva(idReserva);

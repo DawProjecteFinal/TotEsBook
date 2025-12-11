@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 
     </head>
-    <body  class="bg-light">
+    <body  class="bg-light d-flex flex-column min-vh-100">
 
         <!-- Encapçalat -->
         <header class="bg-tot py-1">
@@ -110,30 +110,36 @@
 
                         <%-- Lògica de Sessió per a Login/Logout --%>
                         <c:choose>
+
                             <c:when test="${empty sessionScope.sessioUsuari}">
                                 <a href="${pageContext.request.contextPath}/login" class="btn btn-tot btn-sm my-2 my-lg-0">
                                     Inicia sessió <i class="bi bi-person-circle"></i>
                                 </a>
                             </c:when>
+
                             <c:otherwise>
                                 <div class="dropdown">
-                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-person-fill"></i> <c:out value="${sessionScope.sessioUsuari.nomComplet}"/> 
+                                    <button class="btn btn-tot btn-sm dropdown-toggle" type="button" id="dropdownUsuari"
+                                            data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-fill"></i>
+                                        <c:out value="${sessionScope.sessioUsuari.nomComplet}"/>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUsuari">
-                                        <c:choose>
-                                            <c:when test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">El Meu Panell</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
-                                                </c:when>
-                                                <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
-                                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
-                                                </c:when>
-                                            </c:choose>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_administrador">Panell Admin</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_bibliotecari">Panell Bibliotecari</a></li>
+                                            </c:if>
+
+                                        <c:if test="${sessionScope.sessioUsuari.rol == 'USUARI'}">
+                                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/dashboard_usuari">Panell Usuari</a></li>
+                                            </c:if>
+
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><hr class="dropdown-divider"></li>
+
                                         <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                                 <i class="bi bi-box-arrow-right"></i> Tancar Sessió
                                             </a></li>
@@ -141,67 +147,81 @@
                                 </div>
                             </c:otherwise>
                         </c:choose>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <div class="container py-5">
-            <h1 class="mb-4 text-center text-tot-principal">Xarxa de Biblioteques TotEsBook</h1>
+            <div class="container py-5">
 
-            <div class="row justify-content-center text-center">
-                <c:forEach var="biblioteca" items="${biblioteques}">
-                    <div class="col-md-4 mb-4">
-                        <div class="card border-0 shadow-lg p-4 h-100">
-                            <i class="bi bi-book-half display-3 text-tot-principal mb-3"></i>
-                            <h4 class="fw-bold mb-2"><c:out value="${biblioteca.nom}"/></h4>
-                            <p class="text-muted mb-1"><c:out value="${biblioteca.adreca}"/></p>
-                            <p class="small text-tot-light"><i class="bi bi-telephone"></i> <c:out value="${biblioteca.telefon}"/></p>
-                            <a href="${pageContext.request.contextPath}/biblioteques/${biblioteca.idBiblioteca}/llibres" 
-                               class="btn btn-tot w-100">
-                                Entra a la biblioteca
+                <div class="mt-4 mb-4">
+                    <c:choose>
+                        <c:when test="${sessionScope.sessioUsuari.rol == 'ADMIN'}">
+                            <a href="${pageContext.request.contextPath}/dashboard_administrador" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Tornar al Panell d'Administració
                             </a>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
-        </div>
+                        </c:when>
 
-
-
-        <footer class="bg-tot text-center text-lg-start border-top mt-5 py-3">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <h6 class="fw-bold">TotEsBook</h6>
-                        <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
-                    </div>
-
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <ul class="list-unstyled mb-0">
-                            <li><a href="#" class="text-decoration-none text-secondary">Contacte</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Informació legal</a></li>
-                            <li><a href="#" class="text-decoration-none text-secondary">Política de privacitat</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="d-flex justify-content-center">
-                            <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
-                            <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
-                        </div>
-                        <p class="fst-italic small mt-2 mb-0">“Llegir és viure mil vides.”</p>
-                    </div>
+                        <c:when test="${sessionScope.sessioUsuari.rol == 'BIBLIOTECARI'}">
+                            <a href="${pageContext.request.contextPath}/dashboard_bibliotecari" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Tornar al Panell de Bibliotecari
+                            </a>
+                        </c:when>
+                    </c:choose>
                 </div>
 
-                <hr class="my-3">
-                <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
+                <h1 class="mb-4 text-center text-tot-principal">Xarxa de Biblioteques TotEsBook</h1>
+
+                <div class="row justify-content-center text-center">
+                    <c:forEach var="biblioteca" items="${biblioteques}">
+                        <div class="col-md-4 mb-4">
+                            <div class="card border-0 shadow-lg p-4 h-100">
+                                <i class="bi bi-book-half display-3 text-tot-principal mb-3"></i>
+                                <h4 class="fw-bold mb-2"><c:out value="${biblioteca.nom}"/></h4>
+                                <p class="text-muted mb-1"><c:out value="${biblioteca.adreca}"/></p>
+                                <p class="small text-tot-light"><i class="bi bi-telephone"></i> <c:out value="${biblioteca.telefon}"/></p>
+                                <a href="${pageContext.request.contextPath}/biblioteques/${biblioteca.idBiblioteca}/llibres" 
+                                   class="btn btn-tot w-100">
+                                    Entra a la biblioteca
+                                </a>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
             </div>
-        </footer>
 
+            <!-- ===== Peu de pàgina ===== -->
+            <footer class="bg-tot text-center text-lg-start border-top mt-auto py-3"> 
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <h6 class="fw-bold">TotEsBook</h6>
+                            <p class="mb-0 small">Projecte de gestió de biblioteques · DAW M12</p>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="${pageContext.request.contextPath}/contacte" class="text-decoration-none text-secondary">Contacte</a></li>
+                                <li><a href="${pageContext.request.contextPath}/sobre-nosaltres" class="text-decoration-none text-secondary">Sobre nosaltres</a></li>
+                                <li><a href="${pageContext.request.contextPath}/informacio-legal" class="text-decoration-none text-secondary">Informació legal</a></li>
+                                <li><a href="${pageContext.request.contextPath}/informacio-privacitat" class="text-decoration-none text-secondary">Política de privacitat</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-center justify-content-md-end"> 
+                                <a href="#"><i class="bi bi-twitter mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-facebook mx-2 text-secondary"></i></a>
+                                <a href="#"><i class="bi bi-instagram mx-2 text-secondary"></i></a>
+                            </div>
+                            <p class="fst-italic small mt-2 mb-0 text-center text-md-end">“Llegir és viure mil vides.”</p>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <p class="text-center small text-muted mb-0">© 2025 TotEsBook. Tots els drets reservats.</p>
+                </div>
+            </footer>
+            <!-- ===== FI Peu de pàgina ===== -->
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
-    </body>
-</html>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="${pageContext.request.contextPath}/assets/js/cerca-avancada.js"></script>
+        </body>
+    </html>
