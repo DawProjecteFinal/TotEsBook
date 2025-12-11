@@ -42,7 +42,7 @@ public class PrestecDAO implements PrestecRepository {
     }
 
     /**
-     * Metode per a comprovar si un usuari te en prestec un llibre en concret
+     * Metode per a comprovar si un usuari té en prestec un llibre en concret
      *
      * @param isbn
      * @param idUsuari
@@ -105,7 +105,6 @@ public class PrestecDAO implements PrestecRepository {
     /**
      * Metode que retorna tots els prestecs actius d'un ususari per a
      * mostrar-los a la pàgina inicial del usuari
-     *
      */
     @Override
     public List<Prestec> findPrestecsActiusByUsuari(int idUsuari) {

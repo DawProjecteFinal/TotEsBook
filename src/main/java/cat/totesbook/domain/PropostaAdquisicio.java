@@ -2,9 +2,7 @@
  *
  * @author Equip TotEsBook
  */
-
 package cat.totesbook.domain;
-
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -41,6 +39,9 @@ public class PropostaAdquisicio {
     private EstatProposta estat = EstatProposta.pendent;
 
     private String resposta;
+
+    @Column(nullable = false)
+    private String nomUsuari;
 
     public PropostaAdquisicio() {
     }
@@ -126,8 +127,17 @@ public class PropostaAdquisicio {
         this.resposta = resposta;
     }
 
+    public String getNomUsuari() {
+        return nomUsuari;
+    }
+
+    public void setNomUsuari(String nomUsuari) {
+        this.nomUsuari = nomUsuari;
+    }
+
     /**
      * Per a formatar les dates
+     *
      * @return
      */
     public String getDataPropostaFormatted() {

@@ -463,7 +463,7 @@
                                             <tr>
                                                 <th>Títol proposat</th>
                                                 <th>Autor</th>
-                                                <th>ISBN</th>
+                                                <!--<th>ISBN</th>-->
                                                 <th>Usuari</th>
                                                 <th>Data Proposta</th>
                                                 <th>Estat</th>
@@ -486,10 +486,8 @@
                                                         <tr>
                                                             <td><c:out value="${p.titol}"/></td>
                                                             <td><c:out value="${p.autor}"/></td>
-                                                            <td><c:out value="${p.isbn}"/></td>
 
-                                                            <td>Usuari #${p.idUsuari}</td>
-
+                                                            <td>${p.nomUsuari}</td>
                                                             <td>${p.dataPropostaFormatted}</td>
 
                                                             <td>
