@@ -1,5 +1,5 @@
-package cat.totesbook.domain;
 
+package cat.totesbook.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -55,9 +55,11 @@ public class PropostaAdquisicio {
 
     private String resposta;
 
-    /**
-     * Constructor buit requerit per JPA
-     */
+
+    @Column(nullable = false)
+    private String nomUsuari;
+
+
     public PropostaAdquisicio() {
     }
 
@@ -240,6 +242,14 @@ public class PropostaAdquisicio {
      */
     public void setResposta(String resposta) {
         this.resposta = resposta;
+    }
+
+    public String getNomUsuari() {
+        return nomUsuari;
+    }
+
+    public void setNomUsuari(String nomUsuari) {
+        this.nomUsuari = nomUsuari;
     }
 
     /**

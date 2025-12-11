@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS Reserves (
 CREATE TABLE IF NOT EXISTS PropostesAdquisicio (
     idProposta INT AUTO_INCREMENT PRIMARY KEY,
     idUsuari INT NOT NULL,
+    nomUsuari VARCHAR(200) NOT NULL,
     titol VARCHAR(255) NOT NULL,
     autor VARCHAR(150),
     isbn VARCHAR(20),

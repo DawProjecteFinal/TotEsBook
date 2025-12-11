@@ -20,11 +20,13 @@ import static org.mockito.Mockito.*;
 // Per a fer els tests utilitzem Mockito que és una biblioteca per crear 
 // objectes falsos (mocks), comportaments simulats (stubs) i podem fer verificacions.
 class PrestecDAOTest {
-
+    /**
+     * Comprovació del mètode findPrestecsActiusByUsuari(int idUsuari)
+     */
     @Test
     void testFindPrestecsActiusByUsuari() {
 
-        // Mocks necessaris
+        // Creem Mocks necessaris
         EntityManager em = mock(EntityManager.class);
         TypedQuery<Prestec> query = mock(TypedQuery.class);
 

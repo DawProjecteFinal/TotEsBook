@@ -123,6 +123,8 @@
                             <p><strong>Autor:</strong> ${proposta.autor}</p>
                             <p><strong>ISBN:</strong> ${proposta.isbn}</p>
                             <p><strong>Usuari ID:</strong> ${proposta.idUsuari}</p>
+                            <p><strong>Nom usuari:</strong> ${proposta.nomUsuari}</p>
+                            <p><strong>Motiu:</strong> ${proposta.motiu}</p>
 
                             <form action="${pageContext.request.contextPath}/propostes/actualitzar" method="POST">
 

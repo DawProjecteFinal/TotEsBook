@@ -195,6 +195,7 @@ public class PropostesController {
 
         PropostaAdquisicio p = new PropostaAdquisicio();
         p.setIdUsuari(sessio.getId());
+        p.setNomUsuari(sessio.getNomComplet());
         p.setIsbn(isbn);
         p.setTitol(titol);
         p.setAutor(autor);
